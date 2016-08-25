@@ -51,7 +51,9 @@ class Controller extends IlluminateController
      *
      * @var array
      */
-    protected $key_mapping = [];
+    protected $key_mapping = [
+        'id' => 'id'
+    ];
 
     /**
      * The relations to load with the model from the DB.
