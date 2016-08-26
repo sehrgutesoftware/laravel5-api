@@ -29,10 +29,10 @@ Route::put('/posts/{post_id}', 'PostsController@update');
 Route::delete('/posts/{post_id}', 'PostsController@destroy');
 ```
 
-You might want to also create a *Validator* and a *Transformer* and assign them to your Model in your *ModelMapping*. More on this under [Components](#Components).
+You might want to also create a *Validator* and a *Transformer* and assign them to your Model in your *ModelMapping*. More on this under [Components](#components).
 
 ### Structure
-In a larger Project with several endpoints, it is reasonable to have a common BaseController where the [ModelMapping](#ModelMapping) is defined for all endpoints.
+In a larger Project with several endpoints, it is reasonable to have a common BaseController where the [ModelMapping](#modelmapping) is defined for all endpoints.
 
 #### Example Directory Structure:
 
@@ -76,7 +76,7 @@ The logic is divided up into smaller components, each with their own responsibil
 - `destroy()` - Delete a single resource
 
 ### Validator
-In order to create a custom Validator for a model, you can subclass the `Validator` class and set the `$rules` array. After that, the Validator needs to be registered in the `ModelMapping` which is assigned to your Controller. Please refer to the [ModelMapping](#ModelMapping) section on how to do this. A Validator could look like this:
+In order to create a custom Validator for a model, you can subclass the `Validator` class and set the `$rules` array. After that, the Validator needs to be registered in the `ModelMapping` which is assigned to your Controller. Please refer to the [ModelMapping](#modelmapping) section on how to do this. A Validator could look like this:
 
 ```php
 use SehrGut\Laravel5_Api\Validator;
@@ -176,7 +176,7 @@ TBD
 
 
 ## Customization
-There are serveral hooks in the Controller which help you customizing its behaviour. All you need to do is implement the desired method in your controller. For details on the hooks please browse the code and refer to the [API Documentation](/doc).
+There are serveral hooks in the Controller which help you customizing its behaviour. All you need to do is implement the desired method in your controller. For details on the hooks please browse the code and refer to the [API Documentation](https://sehrgutesoftware.github.io/laravel5-api/api/).
 
 ### Hooks
 #### `makeModelMapping()`
