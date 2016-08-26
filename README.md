@@ -1,5 +1,7 @@
 # laravel5-api
 
+[![Join the chat at https://gitter.im/sehrgutesoftware/laravel5-api](https://badges.gitter.im/sehrgutesoftware/laravel5-api.svg)](https://gitter.im/sehrgutesoftware/laravel5-api?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A modular controller for exposing your Laravel 5 Eloquent models as a REST API. All you need to do is to create one subclass of the controller per model and set up the routes.
 
 **Disclaimer: This is an early release! Do not use in production without extensive testing! The API is subject to change!**
