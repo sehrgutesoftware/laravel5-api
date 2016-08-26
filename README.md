@@ -158,11 +158,11 @@ class ModelMapping extends BaseModelMapping
 {
 	protected $transformers = [
 		Post::class =>	PostTransformer::class
-	]
+	];
 
 	protected $validators = [
 		Post::class =>	PostValidator::class
-	]
+	];
 }
 ```
 
