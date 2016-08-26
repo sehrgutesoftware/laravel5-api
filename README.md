@@ -10,6 +10,10 @@ A modular controller for exposing your Laravel 5 Eloquent models as a REST API. 
 [API Reference](https://sehrgutesoftware.github.io/laravel5-api/api/)
 
 ## Getting Started
+```bash
+composer require sehrgut/laravel5-api
+```
+
 Subclass `SehrGut\Laravel5_Api\Controller` and set the eloquent model your controller should expose. Example:
 
 ```php
