@@ -33,6 +33,12 @@ class Formatter
      */
     protected $controller;
 
+    /**
+     * Create a new instance.
+     *
+     * @param ModelMapping $mapping    The ModelMapping to use to determine the correct Validator/Transformer for each formatted record
+     * @param Controller   $controller The controller instance that this call originates from
+     */
 	public function __construct(ModelMapping $mapping, Controller $controller)
     {
         $this->mapping = $mapping;
@@ -44,7 +50,7 @@ class Formatter
      *
      * @param   mixed  $data  An Eloquent Collection or Model
      * @return  string  A response body
-     * @throws  SehrGut\Laravel5_Api\Exceptions\Formatter\InvalidData  In case the input is neither Model nor Collection
+     * @throws  InvalidData  In case the input is neither Model nor Collection
      */
     public function format($data)
     {
@@ -60,11 +66,23 @@ class Formatter
         return $this->serialize($formatted_data);
     }
 
+    /**
+     * Format a single record.
+     *
+     * @param  Model  $model  The Eloquent Model instance to format
+     * @return Array
+     */
     protected function formatResource(Model $model)
     {
         return $this->transform($model);
     }
 
+    /**
+     * Format an entire collection.
+     *
+     * @param  Collection $collection  The Eloquent Collection to format
+     * @return Array
+     */
     protected function formatCollection(Collection $collection)
     {
         $that = $this;
@@ -73,11 +91,23 @@ class Formatter
         });
     }
 
+    /**
+     * Turn the transformed data into a JSON string.
+     *
+     * @param  Array  $data  The raw data array
+     * @return String
+     */
     protected function serialize($data)
     {
         return json_encode($data);
     }
 
+    /**
+     * Apply the transformer to an Eloquent Model.
+     *
+     * @param  Model  $model  The Eloquent Model instance to transform
+     * @return Array
+     */
     protected function transform(Model $model)
     {
         $transformer = $this->mapping->getTransformerFor(get_class($model));

@@ -1,16 +1,22 @@
 <?php
+/**
+ * Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.
+ */
 
 namespace SehrGut\Laravel5_Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as IlluminateController;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-use SehrGut\Laravel5_Api\Transformer;
 use SehrGut\Laravel5_Api\Formatters\Formatter;
 use SehrGut\Laravel5_Api\Exceptions\Http\NotFound;
 
+/**
+ * The main Controler to inherit from.
+ */
 class Controller extends IlluminateController
 {
     /**
@@ -93,11 +99,6 @@ class Controller extends IlluminateController
     protected $resource;
     protected $collection;
 
-    /**
-     * Construct a new instance of the controller.
-     *
-     * @param Request $request
-     */
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -114,6 +115,11 @@ class Controller extends IlluminateController
     |--------------------------------------------------------------------------
     ***/
 
+    /**
+     * Request Handler: List all resources.
+     *
+     * @return Response
+     */
     public function index()
     {
         $this->authorizeAction('index');
@@ -122,6 +128,11 @@ class Controller extends IlluminateController
         return $this->makeResponse();
     }
 
+    /**
+     * Request Handler: Create a new resource.
+     *
+     * @return Response
+     */
     public function store()
     {
         $this->authorizeAction('store');
@@ -132,6 +143,11 @@ class Controller extends IlluminateController
         return $this->makeResponse();
     }
 
+    /**
+     * Request Handler: Show a single resource.
+     *
+     * @return Response
+     */
     public function show()
     {
         $this->authorizeAction('show');
@@ -141,6 +157,11 @@ class Controller extends IlluminateController
         return $this->makeResponse();
     }
 
+    /**
+     * Request Handler: Update a resource.
+     *
+     * @return Response
+     */
     public function update()
     {
         $this->authorizeAction('update');
@@ -153,6 +174,11 @@ class Controller extends IlluminateController
         return $this->makeResponse();
     }
 
+    /**
+     * Request Handler: Delete a resource.
+     *
+     * @return Response
+     */
     public function destroy()
     {
         $this->authorizeAction('destroy');
@@ -173,11 +199,11 @@ class Controller extends IlluminateController
      * Fetch a single record from the DB and store it to $this->resource.
      *
      * @return  void
-     * @throws  SehrGut\Laravel5_Api\Exceptions\Http\NotFound  In case no record matches the query
+     * @throws  NotFound  In case no record matches the query
      */
     protected function getResource()
     {
-        $query = $this->model::with($this->relations);
+        $query = $this->model->with($this->relations);
         $query = $this->filterByRequest($query);
         $query = $this->adaptResourceQuery($query);
         try {
@@ -195,7 +221,7 @@ class Controller extends IlluminateController
      */
     protected function getCollection()
     {
-        $query = $this->model::with($this->relations);
+        $query = $this->model->with($this->relations);
         $query = $this->filterByRequest($query);
         $query = $this->adaptCollectionQuery($query);
         $this->collection = $query->get();
@@ -225,9 +251,9 @@ class Controller extends IlluminateController
      * Apply filters based on the $key_mapping. If a key is present in the
      * request, an appropriate where clause will be added to the query.
      *
-     * @param   Illuminate\Database\Query\Builder  $query  The query to apply the filters to
+     * @param   Builder  $query  The query to apply the filters to
      * @param   Array  $mapping  (optional) A mapping to use instead of $this->key_mapping
-     * @return  Illuminate\Database\Query\Builder
+     * @return  Builder
      */
     protected function filterByRequest($query, $mapping = null)
     {
@@ -418,10 +444,10 @@ class Controller extends IlluminateController
     /**
      * A hook to customize the query for all single resource queries.
      *
-     * @param  Illuminate\Database\Query\Builder  $query  The original query
-     * @return Illuminate\Database\Query\Builder  The customized query
+     * @param  Builder  $query  The original query
+     * @return Builder  The customized query
      */
-    protected function adaptResourceQuery($query)
+    protected function adaptResourceQuery(Builder $query)
     {
         return $query;
     }
@@ -429,10 +455,10 @@ class Controller extends IlluminateController
     /**
      * A hook to customize the query for all collection queries.
      *
-     * @param  Illuminate\Database\Query\Builder  $query  The original query
-     * @return Illuminate\Database\Query\Builder  The customized query
+     * @param  Builder  $query  The original query
+     * @return Builder  The customized query
      */
-    protected function adaptCollectionQuery($query)
+    protected function adaptCollectionQuery(Builder $query)
     {
         return $query;
     }

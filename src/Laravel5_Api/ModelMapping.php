@@ -68,7 +68,7 @@ class ModelMapping
      * Get the Transformer for a specific model.
      *
      * @param  String $class  Class name of the model
-     * @return SehrGut\Laravel5_Api\Transformer
+     * @return Transformer
      */
     public function getTransformerFor(String $class)
     {
@@ -84,7 +84,7 @@ class ModelMapping
      * Get the Validator for a specific model.
      *
      * @param  String $class  Class name of the model
-     * @return SehrGut\Laravel5_Api\Validator
+     * @return Validator
      */
     public function getValidatorFor(String $class)
     {
@@ -105,7 +105,7 @@ class ModelMapping
      *
      * @param  String $class  Class name of the model
      * @param  Bool   $absolute  Whether to generate an absolute url (Default: true)
-     * @return SehrGut\Laravel5_Api\Validator
+     * @return Validator
      */
     public function getUrlFor(Model $model, $absolute = true)
     {
