@@ -2,9 +2,12 @@
 
 A modular controller for exposing your Laravel 5 Eloquent models as a REST API. All you need to do is to create one subclass of the controller per model and set up the routes.
 
-**Disclaimer: This is an early release! Do not use in production without extensive testing!**
+**Disclaimer: This is an early release! Do not use in production without extensive testing! The API is subject to change!**
 
 **Please use Github Issues for bug reports and feature requests.**
+
+## Documentation
+[API Reference](https://sehrgutesoftware.github.io/laravel5-api/api/)
 
 ## Getting Started
 Subclass `SehrGut\Laravel5_Api\Controller` and set the eloquent model your controller should expose. Example:
@@ -57,7 +60,7 @@ app/
 ```
 
 
-## Components<a href="#Components"></a>
+## Components
 The logic is divided up into smaller components, each with their own responsibility:
 
 - **Controller** – controls the entire request/response flow
@@ -135,7 +138,7 @@ class PostTransformer extends Transformer
 }
 ```
 
-### ModelMapping<a href="#ModelMapping"></a>
+### ModelMapping
 The Controller asks the ModelMapping which Validator and Transformer it should use for each Model and their respective relations. If no Transformer/Validator is assigned to a model, the respctive defaults are returned (No validation, no transformation).
 
 In order to apply custom Transformers or Validators to your models, you have to create a custom model mapping and assign it to your Controllers (preferrably via a common BaseController).
