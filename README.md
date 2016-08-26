@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/sehrgutesoftware/laravel5-api](https://badges.gitter.im/sehrgutesoftware/laravel5-api.svg)](https://gitter.im/sehrgutesoftware/laravel5-api?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A modular controller for exposing your Laravel 5 Eloquent models as a REST API. All you need to do is to create one subclass of the controller per model and set up the routes.
+A modular controller for exposing your Laravel 5 Eloquent models as a REST API. All you need to do is create one subclass of the controller per model and set up the routes.
 
 **Disclaimer: This is an early release! Do not use in production without extensive testing! The API is subject to change!**
 
@@ -12,10 +12,15 @@ A modular controller for exposing your Laravel 5 Eloquent models as a REST API. 
 [API Reference](https://sehrgutesoftware.github.io/laravel5-api/api/)
 
 ## Getting Started
+
+### Install Package
 ```bash
 composer require sehrgut/laravel5-api
 ```
 
+### Create an Endpoint
+
+#### Controller
 Subclass `SehrGut\Laravel5_Api\Controller` and set the eloquent model your controller should expose. Example:
 
 ```php
@@ -28,17 +33,55 @@ class PostsController extends ApiController
 }
 ```
 
+#### Routes
 You now have a controller with the same handlers as a [Laravel Resource Controller](https://laravel.com/docs/5.2/controllers#restful-resource-controllers). Those methods can now be used to handle the following routes:
 
 ```php
 Route::get('/posts', 'PostsController@index');
 Route::post('/posts', 'PostsController@store');
-Route::get('/posts/{post_id}', 'PostsController@show');
-Route::put('/posts/{post_id}', 'PostsController@update');
-Route::delete('/posts/{post_id}', 'PostsController@destroy');
+Route::get('/posts/{id}', 'PostsController@show');
+Route::put('/posts/{id}', 'PostsController@update');
+Route::delete('/posts/{id}', 'PostsController@destroy');
 ```
 
-You might want to also create a *Validator* and a *Transformer* and assign them to your Model in your *ModelMapping*. More on this under [Components](#components).
+#### Mapping route parameters to model attributes
+By default, it is assumed that there is an `{id}` parameter in all urls pointing to a single resource (`show`, `update`, `destroy`). This parameter is then used to find the corresponding model by its `id` attribute.
+
+If your model's primary key or your route parameter have a different name than `id`, you need to manually map these in your Controller's `$key_mapping`. Example:
+
+```php
+protected $key_mapping = [
+	// Maps the `{post_id}` url parameter to the model's `primary_key` attribute/db column
+	'post_id' => 'primary_key'
+];
+```
+
+In the same manner, additional url parameters can be mapped to model attributes. This is especially useful when creating endpoints for nested resources like `/api/v1/posts/{post_id}/comments/{comment_id}`.
+
+### Validators & Transformers
+You might want to create a *Validator* and a *Transformer* and assign them to your Model in your *ModelMapping*. More on how this works under [Components](#components).
+
+### Error Responses
+In order to have Exceptions displayed correctly, make sure to handle `SehrGut\Laravel5_Api\Exceptions\Exception` in your `app/Exceptions/Handler.php`:
+
+```php
+use SehrGut\Laravel5_Api\Exceptions\Exception as SehrGutApiException;
+
+class Handler extends ExceptionHandler
+{
+    public function render($request, Exception $exception)
+    {
+        if ($exception instanceof SehrGutApiException) {
+            return $exception->errorResponse();
+        }
+
+        // Possibly other checks
+
+        return parent::render($request, $exception);
+    }
+}
+```
+
 
 ### Structure
 In a larger Project with several endpoints, it is reasonable to have a common BaseController where the [ModelMapping](#modelmapping) is defined for all endpoints.
@@ -201,7 +244,7 @@ Dynamically customize the RequestAdapter.
 Hook in here to perform authorization on action level (`$action = index|store|show|update|destroy`). Calling this hook is the first act of every handler method. You could use the Laravel built-in [Authorization](https://laravel.com/docs/5.2/authorization) and throw an exception here if the user is not authorized to perform this action.
 
 #### `authorizeResource(String $action)`
-Hook in here to perform authorization on resource. This method is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
+Hook in here to perform authorization on a single resource. This method is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
 
 #### `adaptResourceQuery(Builder $query)`
 Customize the query for fetching a single resource (`show`, `update` and `destroy` actions). Return the adapted query.
@@ -230,7 +273,7 @@ Last call in the controller's `__construct()` method.
 
 ## Compatibility
 
-* Tested with Laravel 5.2
+* Tested with Laravel 5.2 and 5.3
 * Works with PHP 5.4 upwards
 
 
