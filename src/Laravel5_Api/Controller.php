@@ -203,7 +203,7 @@ class Controller extends IlluminateController
      */
     protected function getResource()
     {
-        $query = $this->model->with($this->relations);
+        $query = $this->model::with($this->relations);
         $query = $this->filterByRequest($query);
         $query = $this->adaptResourceQuery($query);
         try {
@@ -221,7 +221,7 @@ class Controller extends IlluminateController
      */
     protected function getCollection()
     {
-        $query = $this->model->with($this->relations);
+        $query = $this->model::with($this->relations);
         $query = $this->filterByRequest($query);
         $query = $this->adaptCollectionQuery($query);
         $this->collection = $query->get();
