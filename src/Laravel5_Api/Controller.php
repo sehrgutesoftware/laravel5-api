@@ -69,6 +69,13 @@ class Controller extends IlluminateController
     protected $relations = [];
 
     /**
+     * The relations to fetch counts for.
+     *
+     * @var array
+     */
+    protected $counts = [];
+
+    /**
      * Use this to simply override the Formatter.
      *
      * @var Formatter
@@ -203,7 +210,7 @@ class Controller extends IlluminateController
      */
     protected function getResource()
     {
-        $query = $this->model::with($this->relations);
+        $query = $this->model::with($this->relations)->withCount($this->counts);
         $query = $this->filterByRequest($query);
         $query = $this->adaptResourceQuery($query);
         try {
@@ -221,7 +228,7 @@ class Controller extends IlluminateController
      */
     protected function getCollection()
     {
-        $query = $this->model::with($this->relations);
+        $query = $this->model::with($this->relations)->withCount($this->counts);
         $query = $this->filterByRequest($query);
         $query = $this->adaptCollectionQuery($query);
         $this->collection = $query->get();

@@ -271,6 +271,12 @@ Same as `beforeSave()` but only in the `update` action.
 Last call in the controller's `__construct()` method.
 
 
+## Changelog
+### v0.2.0
+- Can now count relations defined in `Controller::$counts` (see ["Counting Related Models"](https://laravel.com/docs/5.3/eloquent-relationships#counting-related-models))
+- Requires now Laravel ~5.2
+
+
 ## Compatibility
 
 * Tested with Laravel 5.2 and 5.3

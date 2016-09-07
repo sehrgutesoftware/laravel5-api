@@ -9,15 +9,15 @@ $iterator = Symfony\Component\Finder\Finder::create()
     ->exclude('tests')
     ->in($dir);
 
-// $versions = Sami\Version\GitVersionCollection::create($dir)
-//     ->add('0.1', 'Master');
+$versions = Sami\Version\GitVersionCollection::create($dir)
+    ->add('v0.2.0', 'Master');
 
 $options = [
     'theme'                => 'default',
     'title'                => 'Laravel5_API Package Documentation',
-    // 'versions'             => $versions,
-    'build_dir'            => __DIR__ . '/api',
-    'cache_dir'            => __DIR__ . '/cache',
+    'versions'             => $versions,
+    'build_dir'            => __DIR__ . '/api/%version%',
+    'cache_dir'            => __DIR__ . '/cache/%version%',
 ];
 
 $sami = new Sami\Sami($iterator, $options);
