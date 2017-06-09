@@ -52,6 +52,10 @@ class Validator
 	public static function validate(Array $input, $rules = null, $only_present = false)
     {
         $rules = is_null($rules) ? static::$rules : $rules;
+        if (empty($rules)) {
+          return $input;
+        }
+
         $input_whitelist = array_keys($rules);
         $whitelisted_input = array_only($input, $input_whitelist);
 
