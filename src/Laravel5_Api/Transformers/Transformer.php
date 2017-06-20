@@ -1,6 +1,6 @@
 <?php
 
-namespace SehrGut\Laravel5_Api;
+namespace SehrGut\Laravel5_Api\Transformers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;

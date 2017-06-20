@@ -4,7 +4,7 @@ namespace SehrGut\Laravel5_Api;
 
 use Illuminate\Database\Eloquent\Model;
 
-use SehrGut\Laravel5_Api\Transformer;
+use SehrGut\Laravel5_Api\Transformers\Transformer;
 use SehrGut\Laravel5_Api\Validator;
 
 class ModelMapping

@@ -148,7 +148,7 @@ To shape how your models are represented at the api, you can do some transformat
 In your Transformer subclass, you can define the following attributes to customize the output:
 
 ```php
-use SehrGut\Laravel5_Api\Transformer;
+use SehrGut\Laravel5_Api\Transformers\Transformer;
 
 class PostTransformer extends Transformer
 {
@@ -173,7 +173,7 @@ class PostTransformer extends Transformer
 Further, you can change the values of individual attributes of your models by defining a `formatAttribute` method on the Transformer where `Attribute` is the camel-case name of the attribute you want to transform. The method should accept a single argument (the original value) and return the transformed attribute. Example:
 
 ```php
-use SehrGut\Laravel5_Api\Transformer;
+use SehrGut\Laravel5_Api\Transformers\Transformer;
 
 class PostTransformer extends Transformer
 {
