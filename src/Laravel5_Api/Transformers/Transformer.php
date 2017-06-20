@@ -5,6 +5,8 @@ namespace SehrGut\Laravel5_Api\Transformers;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
+use SehrGut\Laravel5_Api\ModelMapping;
+
 /**
  * Responsible for applying transformations to Eloquent Models
  * in order to customize their representation at the API.
