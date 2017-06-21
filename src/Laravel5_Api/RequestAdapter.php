@@ -25,7 +25,7 @@ class RequestAdapter
      */
     public function hasKey(String $key)
     {
-        return !is_null($this->request->$key);
+        return isset($this->request->$key);
     }
 
     /**
@@ -34,9 +34,12 @@ class RequestAdapter
      * @param  String  $key
      * @return mixed
      */
-    public function getValueByKey(String $key)
+    public function getValueByKey(String $key, $default = null)
     {
-        return $this->request->$key;
+        if ($this->hasKey($key)) {
+            return $this->request->$key;
+        }
+        return $default;
     }
 
     /**

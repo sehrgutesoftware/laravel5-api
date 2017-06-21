@@ -228,9 +228,25 @@ TBD
 
 
 ## Customization
+
+### Plugins [TBD]
+
+#### `adaptResourceQuery(Builder $query)`
+Customize the query for fetching a single resource (`show`, `update` and `destroy` actions). Return the adapted query.
+
+#### `adaptCollectionQuery(Builder $query)`
+Customize the query for fetching a resource collection (`index` action). Return the adapted query.
+
+#### `authorizeAction(String $action)`
+Hook in here to perform authorization on action level (`$action = index|store|show|update|destroy`). Calling this hook is the first act of every handler method. You could use the Laravel built-in [Authorization](https://laravel.com/docs/5.2/authorization) and throw an exception here if the user is not authorized to perform this action.
+
+#### `authorizeResource(String $action)`
+Hook in here to perform authorization on a single resource. This method is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
+
+### Old Hooks (deprecated, please use Plugins)
+
 There are serveral hooks in the Controller which help you customizing its behaviour. All you need to do is implement the desired method in your controller. For details on the hooks please browse the code and refer to the [API Documentation](https://sehrgutesoftware.github.io/laravel5-api/api/).
 
-### Hooks
 #### `makeModelMapping()`
 Dynamically customize the ModelMapping, for example based on Auth/Roles
 
@@ -239,18 +255,6 @@ Dynamically customize the Formatter.
 
 #### `makeRequestAdapter(Request $request)`
 Dynamically customize the RequestAdapter.
-
-#### `authorizeAction(String $action)`
-Hook in here to perform authorization on action level (`$action = index|store|show|update|destroy`). Calling this hook is the first act of every handler method. You could use the Laravel built-in [Authorization](https://laravel.com/docs/5.2/authorization) and throw an exception here if the user is not authorized to perform this action.
-
-#### `authorizeResource(String $action)`
-Hook in here to perform authorization on a single resource. This method is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
-
-#### `adaptResourceQuery(Builder $query)`
-Customize the query for fetching a single resource (`show`, `update` and `destroy` actions). Return the adapted query.
-
-#### `adaptCollectionQuery(Builder $query)`
-Customize the query for fetching a resource collection (`index` action). Return the adapted query.
 
 #### `adaptRules(Array $rules)`
 Adapt the validation rules after fetching them from the validator. Return the adapted rules.
@@ -275,6 +279,12 @@ Last call in the controller's `__construct()` method.
 ### v0.2.0
 - Can now count relations defined in `Controller::$counts` (see ["Counting Related Models"](https://laravel.com/docs/5.3/eloquent-relationships#counting-related-models))
 - Requires now Laravel ~5.2
+
+### v0.3.0
+- Add SplitRelationsTransformer and -Formatter classes
+
+### v0.4.0
+- Introduce Plugins as a more flexible alternative to the old "hook methods"
 
 
 ## Compatibility

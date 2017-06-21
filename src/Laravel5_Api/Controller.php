@@ -1,18 +1,20 @@
 <?php
-/**
- * Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.
- */
 
 namespace SehrGut\Laravel5_Api;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as IlluminateController;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-use SehrGut\Laravel5_Api\Formatters\Formatter;
 use SehrGut\Laravel5_Api\Exceptions\Http\NotFound;
+use SehrGut\Laravel5_Api\Formatters\Formatter;
+use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
+use SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery;
+use SehrGut\Laravel5_Api\Hooks\AuthorizeAction;
+use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
+use SehrGut\Laravel5_Api\Plugins\Plugin;
 
 /**
  * The main Controler to inherit from.
@@ -76,6 +78,13 @@ class Controller extends IlluminateController
     protected $counts = [];
 
     /**
+     * Use these plugins. List all Plugin classes here.
+     *
+     * @var array
+     */
+    protected $plugins = [];
+
+    /**
      * Use this to simply override the Formatter.
      *
      * @var Formatter
@@ -98,13 +107,20 @@ class Controller extends IlluminateController
 
     public $request_adapter;
     public $request;
+    public $model_mapping;
+    public $resource;
 
     protected $model;
-    protected $model_mapping;
     protected $formatter;
     protected $input;
-    protected $resource;
     protected $collection;
+
+    /**
+     * Maps hooks to plugin instances. Don't add anything here manually!
+     *
+     * @var array
+     */
+    private $hooks = [];
 
     public function __construct(Request $request)
     {
@@ -112,7 +128,83 @@ class Controller extends IlluminateController
         $this->model_mapping = $this->makeModelMapping();
         $this->request_adapter = $this->makeRequestAdapter($request);
         $this->formatter = $this->makeFormatter($this->model_mapping);
+        $this->loadPlugins();
         $this->afterConstruct();
+    }
+
+
+    /***
+    |--------------------------------------------------------------------------
+    | Plugins / Hooks
+    |--------------------------------------------------------------------------
+    ***/
+
+    /**
+     * Load all plugins registered in `$plugins` and save their hooks to `$hooks`.
+     *
+     * @return void
+     */
+    protected function loadPlugins()
+    {
+        foreach ($this->plugins as $class) {
+            $instance = new $class($this);
+
+            $hooks = class_implements($class);
+            foreach ($hooks as $hook) {
+                $this->registerHook($instance, $hook);
+            }
+        }
+    }
+
+    /**
+     * Register a plugin to a single hook.
+     *
+     * @param  Plugin $plugin The plugin instance
+     * @param  String $hook   FQN of the hook interface
+     * @return void
+     */
+    protected function registerHook(Plugin $plugin, String $hook)
+    {
+        if (!array_key_exists($hook, $this->hooks)) {
+            $this->hooks[$hook] = [];
+        }
+        $this->hooks[$hook][] = $plugin;
+    }
+
+    /**
+     * Pass the `$argument` to all plugins registered for `$hook`
+     * consecutively and return the result of the last plugin.
+     *
+     * @param  String $hook     FQN of the hook interface
+     * @param  mixed $argument  Argument passed to the first hook
+     * @return mixed            Return value of the last hook
+     */
+    protected function applyHooks(String $hook, $argument)
+    {
+        $method_name = $this->getHookMethodName($hook);
+
+        // Check if there are any plugins for this hook
+        if (array_key_exists($hook, $this->hooks)) {
+
+            // Call all plugins, passing the return value of the
+            // previous hook as first argument to the next
+            foreach ($this->hooks[$hook] as $plugin) {
+                $argument = $plugin->$method_name($argument);
+            }
+        }
+        return $argument;
+    }
+
+    /**
+     * Turn the FQN of a hook Interface into its corresponding method name.
+     *
+     * @param  String $fqn  FQN of the hook
+     * @return String       Name of the hook method
+     */
+    private function getHookMethodName(String $fqn)
+    {
+        $without_namespace = array_last(explode('\\', $fqn));
+        return lcfirst($without_namespace);
     }
 
 
@@ -129,7 +221,7 @@ class Controller extends IlluminateController
      */
     public function index()
     {
-        $this->authorizeAction('index');
+        $this->applyHooks(AuthorizeAction::class, 'index');
         $this->getCollection();
         $this->formatCollection();
         return $this->makeResponse();
@@ -142,7 +234,7 @@ class Controller extends IlluminateController
      */
     public function store()
     {
-        $this->authorizeAction('store');
+        $this->applyHooks(AuthorizeAction::class, 'store');
         $this->gatherInput();
         $this->validateInput();
         $this->createResource();
@@ -157,9 +249,9 @@ class Controller extends IlluminateController
      */
     public function show()
     {
-        $this->authorizeAction('show');
+        $this->applyHooks(AuthorizeAction::class, 'show');
         $this->getResource();
-        $this->authorizeResource('show');
+        $this->applyHooks(AuthorizeResource::class, 'show');
         $this->formatResource();
         return $this->makeResponse();
     }
@@ -171,9 +263,9 @@ class Controller extends IlluminateController
      */
     public function update()
     {
-        $this->authorizeAction('update');
+        $this->applyHooks(AuthorizeAction::class, 'update');
         $this->getResource();
-        $this->authorizeResource('update');
+        $this->applyHooks(AuthorizeResource::class, 'update');
         $this->gatherInput();
         $this->validateInput(true);
         $this->updateResource();
@@ -188,9 +280,9 @@ class Controller extends IlluminateController
      */
     public function destroy()
     {
-        $this->authorizeAction('destroy');
+        $this->applyHooks(AuthorizeAction::class, 'destroy');
         $this->getResource();
-        $this->authorizeResource('destroy');
+        $this->applyHooks(AuthorizeResource::class, 'destroy');
         $this->destroyResource();
         return $this->makeResponse("", 204);
     }
@@ -212,7 +304,7 @@ class Controller extends IlluminateController
     {
         $query = $this->model::with($this->relations)->withCount($this->counts);
         $query = $this->filterByRequest($query);
-        $query = $this->adaptResourceQuery($query);
+        $query = $this->applyHooks(AdaptResourceQuery::class, $query);
         try {
             $this->resource = $query->firstOrFail();
         }
@@ -230,7 +322,7 @@ class Controller extends IlluminateController
     {
         $query = $this->model::with($this->relations)->withCount($this->counts);
         $query = $this->filterByRequest($query);
-        $query = $this->adaptCollectionQuery($query);
+        $query = $this->applyHooks(AdaptCollectionQuery::class, $query);
         $this->collection = $query->get();
     }
 
@@ -428,46 +520,6 @@ class Controller extends IlluminateController
     protected function makeRequestAdapter(Request $request)
     {
         return new $this->request_adapter_class($request);
-    }
-
-    /**
-     * Make sure the authenticated user is allowed to
-     * perform this type of $action.
-     *
-     * @param   String  $action  The name of the action
-     * @return  void
-     */
-    protected function authorizeAction(String $action) {}
-
-    /**
-     * Make sure the authenticated user is allowed to perform
-     * this type of $action on $this->resource.
-     *
-     * @param   String  $action  The name of the action
-     * @return  void
-     */
-    protected function authorizeResource(String $action) {}
-
-    /**
-     * A hook to customize the query for all single resource queries.
-     *
-     * @param  Builder  $query  The original query
-     * @return Builder  The customized query
-     */
-    protected function adaptResourceQuery(Builder $query)
-    {
-        return $query;
-    }
-
-    /**
-     * A hook to customize the query for all collection queries.
-     *
-     * @param  Builder  $query  The original query
-     * @return Builder  The customized query
-     */
-    protected function adaptCollectionQuery(Builder $query)
-    {
-        return $query;
     }
 
     /**
