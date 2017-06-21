@@ -9,7 +9,7 @@ A modular controller for exposing your Laravel 5 Eloquent models as a REST API. 
 **Please use Github Issues for bug reports and feature requests.**
 
 ## Documentation
-[API Reference](https://sehrgutesoftware.github.io/laravel5-api/api/)
+[API Reference v0.4.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.0)
 
 ## Getting Started
 
@@ -245,7 +245,7 @@ Hook in here to perform authorization on a single resource. This method is calle
 
 ### Old Hooks (deprecated, please use Plugins)
 
-There are serveral hooks in the Controller which help you customizing its behaviour. All you need to do is implement the desired method in your controller. For details on the hooks please browse the code and refer to the [API Documentation](https://sehrgutesoftware.github.io/laravel5-api/api/).
+There are serveral hooks in the Controller which help you customizing its behaviour. All you need to do is implement the desired method in your controller. For details on the hooks please browse the code and refer to the [API Documentation v0.4.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.0).
 
 #### `makeModelMapping()`
 Dynamically customize the ModelMapping, for example based on Auth/Roles
