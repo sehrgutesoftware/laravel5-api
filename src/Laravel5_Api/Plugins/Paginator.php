@@ -11,12 +11,24 @@ use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
  */
 class Paginator extends Plugin implements AdaptCollectionQuery
 {
+    protected $default_config = [
+        'limit_param' => 'limit',
+        'page_param' => 'page',
+        'limit_default' => 10,
+        'page_default' => 1,
+    ];
+
     public function adaptCollectionQuery(Builder $query)
     {
-        $limit = $this->controller->request_adapter->getValueByKey('limit', 10);
-        $page = $this->controller->request_adapter->getValueByKey('page', 1);
+        $limit = (int) $this->controller->request_adapter->getValueByKey(
+            $this->config['limit_param'],
+            $this->config['limit_default']
+        );
+        $page = (int) $this->controller->request_adapter->getValueByKey(
+            $this->config['page_param'],
+            $this->config['page_default']
+        );
 
-        $query->limit($limit)->skip(($page - 1)*$limit);
-        return $query;
+        return $query->limit($limit)->skip(($page - 1)*$limit);
     }
 }

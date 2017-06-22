@@ -146,7 +146,7 @@ class Controller extends IlluminateController
      */
     protected function loadPlugins()
     {
-        foreach ($this->plugins as $class) {
+        foreach (array_unique($this->plugins) as $class) {
             $instance = new $class($this);
 
             $hooks = class_implements($class);
@@ -207,6 +207,23 @@ class Controller extends IlluminateController
         return lcfirst($without_namespace);
     }
 
+    /**
+     * Pass configuration array to a plugin instance.
+     *
+     * @param  String $name  FQN of the plugin
+     * @param  Array  $options Array of options for the plugin
+     * @return void
+     */
+    protected function configurePlugin(String $name, Array $options)
+    {
+        foreach ($this->hooks as $plugins) {
+            foreach ($plugins as $plugin) {
+                if ($plugin instanceof $name) {
+                    $plugin->configure($options);
+                }
+            }
+        }
+    }
 
     /***
     |--------------------------------------------------------------------------
