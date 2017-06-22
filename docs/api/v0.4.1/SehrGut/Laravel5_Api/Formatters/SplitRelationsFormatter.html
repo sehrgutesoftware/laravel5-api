@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>SehrGut\Laravel5_Api\Formatters\SplitRelationsFormatter | Laravel5_API Package Documentation</title>
+
+            <link rel="stylesheet" type="text/css" href="../../../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../../../css/sami.css">
+        <script src="../../../js/jquery-1.11.1.min.js"></script>
+        <script src="../../../js/bootstrap.min.js"></script>
+        <script src="../../../js/typeahead.min.js"></script>
+        <script src="../../../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:SehrGut_Laravel5_Api_Formatters_SplitRelationsFormatter" data-root-path="../../../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                <form id="search-form" action="../../../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../../index.html">Laravel5_API Package Documentation</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../../classes.html">Classes</a></li>
+                                            <li><a href="../../../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../../../interfaces.html">Interfaces</a></li>
+                    <li><a href="../../../traits.html">Traits</a></li>
+                    <li><a href="../../../doc-index.html">Index</a></li>
+                    <li><a href="../../../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                                                            <li><a href="../../../SehrGut.html">SehrGut</a></li>
+                                        <li><a href="../../../SehrGut/Laravel5_Api.html">Laravel5_Api</a></li>
+                                        <li><a href="../../../SehrGut/Laravel5_Api/Formatters.html">Formatters</a></li>
+    
+                <li>SplitRelationsFormatter</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>
+            SplitRelationsFormatter
+                
+        </h1>
+    </div>
+
+    <p>    class
+    <strong>SplitRelationsFormatter</strong>        extends <a href="../../../SehrGut/Laravel5_Api/Formatters/Formatter.html"><abbr title="SehrGut\Laravel5_Api\Formatters\Formatter">Formatter</abbr></a>
+</p>
+
+        
+    
+
+            <div class="description">
+            <p>This response Formatter is meant to work together with the <code>SplitRelationsTransformer</code>.</p>            <p>It extracts the corresponding values from the Transformer's
+return values and presents them as an appropriate response:
+<code>[
+    'result': ['id': 1, 'name': 'Some Record', 'some_relation': [1]],
+    'relations': [
+        'some_relation': [
+               ['id': 1, 'type': 'Another Record']
+        ]
+    ]
+]</code></p>        </div>
+    
+    
+    
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_content_type">
+                                                                                string
+                </td>
+                <td>$content_type</td>
+                <td class="last">The Content-Type this Formatter returns.</td>
+                <td><small>from&nbsp;<a href="../../../SehrGut/Laravel5_Api/Formatters/Formatter.html#property_content_type"><abbr title="SehrGut\Laravel5_Api\Formatters\Formatter">Formatter</abbr></a></small></td>
+            </tr>
+            </table>
+
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method___construct">__construct</a>(<a href="../../../SehrGut/Laravel5_Api/ModelMapping.html"><abbr title="SehrGut\Laravel5_Api\ModelMapping">ModelMapping</abbr></a> $mapping, <abbr title="SehrGut\Laravel5_Api\Controller">Controller</abbr> $controller)
+        
+                                            <p>Create a new instance.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../SehrGut/Laravel5_Api/Formatters/Formatter.html#method___construct"><abbr title="SehrGut\Laravel5_Api\Formatters\Formatter">Formatter</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    string
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_format">format</a>(mixed $data)
+        
+                                            <p>Generate a HTTP response body from an Eloquent Collection or Model.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../SehrGut/Laravel5_Api/Formatters/Formatter.html#method_format"><abbr title="SehrGut\Laravel5_Api\Formatters\Formatter">Formatter</abbr></a></small></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method___construct">
+        <div class="location">in <a href="../../../SehrGut/Laravel5_Api/Formatters/Formatter.html#method___construct"><abbr title="SehrGut\Laravel5_Api\Formatters\Formatter">Formatter</abbr></a> at line         line 42</div>
+        <code>                    
+    <strong>__construct</strong>(<a href="../../../SehrGut/Laravel5_Api/ModelMapping.html"><abbr title="SehrGut\Laravel5_Api\ModelMapping">ModelMapping</abbr></a> $mapping, <abbr title="SehrGut\Laravel5_Api\Controller">Controller</abbr> $controller)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Create a new instance.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../SehrGut/Laravel5_Api/ModelMapping.html"><abbr title="SehrGut\Laravel5_Api\ModelMapping">ModelMapping</abbr></a></td>
+                <td>$mapping</td>
+                <td>The ModelMapping to use to determine the correct Validator/Transformer for each formatted record</td>
+            </tr>
+                    <tr>
+                <td><abbr title="SehrGut\Laravel5_Api\Controller">Controller</abbr></td>
+                <td>$controller</td>
+                <td>The controller instance that this call originates from</td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_format">
+        <div class="location">in <a href="../../../SehrGut/Laravel5_Api/Formatters/Formatter.html#method_format"><abbr title="SehrGut\Laravel5_Api\Formatters\Formatter">Formatter</abbr></a> at line         line 55</div>
+        <code>                    string
+    <strong>format</strong>(mixed $data)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Generate a HTTP response body from an Eloquent Collection or Model.</p>                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>mixed</td>
+                <td>$data</td>
+                <td>An Eloquent Collection or Model</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>string</td>
+            <td>A response body</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../SehrGut/Laravel5_Api/Exceptions/Formatter/InvalidData.html"><abbr title="SehrGut\Laravel5_Api\Exceptions\Formatter\InvalidData">InvalidData</abbr></a></td>
+                <td>In case the input is neither Model nor Collection</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>
