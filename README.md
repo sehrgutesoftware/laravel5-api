@@ -229,21 +229,120 @@ TBD
 
 ## Customization
 
-### Plugins [TBD]
+### Plugins
 
-#### `adaptResourceQuery(Builder $query)`
+Plugins are a way of "hooking into" and manipulating the behaviour of controller actions. They replace the old "hooks", used in versions ≤0.3
+
+#### Usage
+
+Plugins can be registered inside the **Controller** by specifying them in the `$plugins` property. The order of execution will be the order in which they are listed here.
+
+**Example:**
+
+```
+use SehrGut\Laravel5_Api\Plugins\Paginator;
+use SehrGut\Laravel5_Api\Plugins\SearchFilter;
+
+class PostsController extends BaseController
+{
+	protected $plugins = [
+		Paginator::class,
+		SearchFilter::class,
+	];
+}
+```
+
+#### Configuration
+
+Some plugins have configurable options, that can be set through the controller. This can be done from inside the `afterConstruct()` method like so:
+
+```
+use SehrGut\Laravel5_Api\Plugins\SearchFilter;
+
+class PostsController extends BaseController
+{
+	protected $plugins = [SearchFilter::class];
+
+	protected function afterConstruct()
+	{
+	    $this->configurePlugin(SearchFilter::class, [
+	        'searchable' => ['name', 'description'],  // compare to those fields on the model
+	        'search_param' => 'query',                // `?query=some+search+query`
+	    ]);
+	}
+}
+```
+
+*Please refer to the source code or API reference of the individual plugin to see the available configuration options.*
+
+#### Available Plugins
+
+Please [use the source](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Plugins) for definite answers. Still, here's a (probably outdated) list of plugins:
+
+- **Paginator** allows pagination of `index` result sets. By default, it uses the `limit` and `page` query parameters to determine the requested subset.
+- **SearchFilter** adds text search to `index` queries. You can configure which model attributes to compare the search term with.
+
+#### Writing Plugins
+
+A plugin is just a class that extends `SehrGut\Laravel5_Api\Plugins\Plugin` class. It can implement one or more *Hooks* in order to influence the controller's behaviour.
+
+##### Plugin Configuration
+
+The base `Plugin` class provides a `protected $config` attribute, to store configuation options, which are settable through the controller's `configurePlugin($name, $options)` method. Use this feature to expose parameters of your plugin to the user (the person writing the controller). Retrieve config options inside the plugin with `$this->config['option_name']`. Default values can be set via the `protected $default_config` property.
+
+##### Example:
+
+```
+<?php
+namespace App\Api\V1\Plugins;
+
+use Illuminate\Database\Eloquent\Builder;
+use SehrGut\Laravel5_Api\Plugins\Plugin;
+use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
+use SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery;
+
+/**
+ * Just an example: `dd()` all queries instead of executing them.
+ */
+class DieAndDumpQuery extends Plugin implements AdaptCollectionQuery, AdaptResourceQuery
+{
+	$default_config = [
+		'option' => 'Reasonable default',
+	];
+
+	protected function adaptCollectionQuery(Builder $query)
+	{
+		dd($query);
+	}
+
+	protected function adaptResourceQuery(Builder $query)
+	{
+		dd($query);
+	}
+}
+```
+
+##### Plugin Hooks
+
+The available hooks are listed in the ["Hooks" directory](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Hooks). In order to use a hook, you simply have to declare that your plugin class `implements` the corresponding interface and then actually implement the appropriate method of that interface. Take a look at source code of the [existing plugins](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Plugins) to see how this is done. Each hook interface always contains to exactly one method.
+
+###### Available Hooks
+
+`AdaptResourceQuery::adaptResourceQuery(Builder $query)`
 Customize the query for fetching a single resource (`show`, `update` and `destroy` actions). Return the adapted query.
 
-#### `adaptCollectionQuery(Builder $query)`
+`AdaptCollectionQuery::adaptCollectionQuery(Builder $query)`
 Customize the query for fetching a resource collection (`index` action). Return the adapted query.
 
-#### `authorizeAction(String $action)`
+`AuthorizeAction::authorizeAction(String $action)`
 Hook in here to perform authorization on action level (`$action = index|store|show|update|destroy`). Calling this hook is the first act of every handler method. You could use the Laravel built-in [Authorization](https://laravel.com/docs/5.2/authorization) and throw an exception here if the user is not authorized to perform this action.
 
-#### `authorizeResource(String $action)`
+`AuthorizeResource::authorizeResource(String $action)`
 Hook in here to perform authorization on a single resource. This method is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
 
-### Old Hooks (deprecated, please use Plugins)
+### Deprecated: Hooks
+
+**Warning: Hooks are deprecated in favour of Plugins (see above), so be aware when using them: The methods listed below will soon be removed from the controller and substituted with appropriate plugin hooks.** "Hook" in the context of a "Plugin" refers to an interface, rather than a controller method like in the old sense.
 
 There are serveral hooks in the Controller which help you customizing its behaviour. All you need to do is implement the desired method in your controller. For details on the hooks please browse the code and refer to the [API Documentation v0.4.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.0).
 
@@ -286,10 +385,14 @@ Last call in the controller's `__construct()` method.
 ### v0.4.0
 - Introduce Plugins as a more flexible alternative to the old "hook methods"
 
+#### v0.4.1
+- Make plugins configurable
+- Add SearchFilter plugin
+
 
 ## Compatibility
 
-* Tested with Laravel 5.2 and 5.3
+* Tested with Laravel 5.2, 5.3 and 5.4
 * Works with PHP 5.4 upwards
 
 
