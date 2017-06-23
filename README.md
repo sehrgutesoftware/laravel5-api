@@ -389,6 +389,9 @@ Last call in the controller's `__construct()` method.
 - Make plugins configurable
 - Add SearchFilter plugin
 
+#### v0.4.2
+- SearchFilter plugin can search on (nested) relationships
+
 
 ## Compatibility
 
