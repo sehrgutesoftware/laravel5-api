@@ -257,7 +257,7 @@ Plugins can be registered inside the **Controller** by specifying them in the `$
 
 **Example:**
 
-```
+```php
 use SehrGut\Laravel5_Api\Plugins\Paginator;
 use SehrGut\Laravel5_Api\Plugins\SearchFilter;
 
@@ -274,7 +274,7 @@ class PostsController extends BaseController
 
 Some plugins have configurable options, that can be set through the controller. This can be done from inside the `afterConstruct()` method like so:
 
-```
+```php
 use SehrGut\Laravel5_Api\Plugins\SearchFilter;
 
 class PostsController extends BaseController
@@ -310,7 +310,7 @@ The base `Plugin` class provides a `protected $config` attribute, to store confi
 
 ##### Example:
 
-```
+```php
 <?php
 namespace App\Api\V1\Plugins;
 
@@ -421,7 +421,7 @@ Last call in the controller's `__construct()` method.
 
 Tests are based on phpunit and use an in-memory sqlite database. As the tests rely on the laravel framework, composer (dev-) dependencies need to be installed first:
 
-```
+```bash
 composer install
 vendor/bin/phpunit
 ```
