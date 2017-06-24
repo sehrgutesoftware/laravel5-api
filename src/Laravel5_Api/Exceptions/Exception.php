@@ -16,7 +16,7 @@ class Exception extends \Exception
     /**
      * The HTTP status code to respond with on this exception (if applicable).
      *
-     * @var integer
+     * @var int
      */
     protected $status = 500;
 
@@ -31,14 +31,15 @@ class Exception extends \Exception
         return new JsonResponse([
             'error' => [
                 'message' => $this->getMessage(),
-                'status' => $this->getStatus()
-            ]
+                'status'  => $this->getStatus(),
+            ],
         ], $this->getStatus());
     }
 
     /**
      * Get the HTTP status associated with this Exception (if applicable).
-     * @return Integer
+     *
+     * @return int
      */
     public function getStatus()
     {

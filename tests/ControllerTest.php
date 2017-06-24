@@ -11,40 +11,42 @@ class ControllerTest extends TestCase
     /**
      * Call a controller action and pass through its return value.
      *
-     * @param  String       $action  Controller action (index|show|store|update|destroy)
-     * @param  Array|array  $params  Request parameters
+     * @param string      $action Controller action (index|show|store|update|destroy)
+     * @param array|array $params Request parameters
+     *
      * @return Response
      */
-    private function makeRequest(String $action, Array $params = [])
+    private function makeRequest(String $action, array $params = [])
     {
         $request = new Request($params);
         $controller = new PostsController($request);
+
         return $controller->callAction($action, []);
     }
 
     /**
      * Create some posts in the database.
      *
-     * @return Array The eloquent model instances for the newly created records
+     * @return array The eloquent model instances for the newly created records
      */
     private function createPosts()
     {
         $posts = [];
 
         $posts[] = Post::create([
-            'title' => 'Test 1',
+            'title'   => 'Test 1',
             'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
-            'slug' => 'test-1',
+            'slug'    => 'test-1',
         ]);
         $posts[] = Post::create([
-            'title' => 'Test 2',
+            'title'   => 'Test 2',
             'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
-            'slug' => 'test-2',
+            'slug'    => 'test-2',
         ]);
         $posts[] = Post::create([
-            'title' => 'Test 3',
+            'title'   => 'Test 3',
             'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
-            'slug' => 'test-3',
+            'slug'    => 'test-3',
         ]);
 
         return $posts;

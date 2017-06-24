@@ -17,8 +17,9 @@ interface AuthorizeAction
      * - update
      * - destroy
      *
-     * @param  String $action Name of the action to check
-     * @return String
+     * @param string $action Name of the action to check
+     *
+     * @return string
      */
     public function authorizeAction(String $action);
 }

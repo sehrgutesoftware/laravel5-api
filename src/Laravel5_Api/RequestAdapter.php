@@ -12,7 +12,7 @@ class RequestAdapter
 {
     public $request;
 
-	public function __construct(Request $request)
+    public function __construct(Request $request)
     {
         $this->request = $request;
     }
@@ -20,8 +20,9 @@ class RequestAdapter
     /**
      * Check if a given key exists in the request.
      *
-     * @param  String  $key  The key to check for
-     * @return boolean
+     * @param string $key The key to check for
+     *
+     * @return bool
      */
     public function hasKey(String $key)
     {
@@ -31,7 +32,8 @@ class RequestAdapter
     /**
      * Get the value for a given key.
      *
-     * @param  String  $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function getValueByKey(String $key, $default = null)
@@ -39,6 +41,7 @@ class RequestAdapter
         if ($this->hasKey($key)) {
             return $this->request->$key;
         }
+
         return $default;
     }
 

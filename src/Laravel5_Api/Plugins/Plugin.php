@@ -30,7 +30,7 @@ class Plugin
      */
     protected $config = [];
 
-    function __construct(Controller $controller)
+    public function __construct(Controller $controller)
     {
         $this->controller = $controller;
         $this->config = $this->default_config;
@@ -39,12 +39,14 @@ class Plugin
     /**
      * Set configuration options on the plugin.
      *
-     * @param  Array  $options New options (Previously set values not present here remain unchanged)
+     * @param array $options New options (Previously set values not present here remain unchanged)
+     *
      * @return $this
      */
-    public function configure(Array $options)
+    public function configure(array $options)
     {
         $this->config = array_merge($this->config, $options);
+
         return $this;
     }
 }

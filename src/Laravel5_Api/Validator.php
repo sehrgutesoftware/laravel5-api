@@ -2,9 +2,8 @@
 
 namespace SehrGut\Laravel5_Api;
 
-use Validator as BaseValidator;
-
 use SehrGut\Laravel5_Api\Exceptions\Validator\InvalidInput;
+use Validator as BaseValidator;
 
 class Validator
 {
@@ -24,14 +23,14 @@ class Validator
      *      ];
      * ```
      *
-     * @var Array
+     * @var array
      */
     protected static $rules = [];
 
     /**
      * Retrieve the rules of this validator.
      *
-     * @return Array
+     * @return array
      */
     public static function getRules()
     {
@@ -43,17 +42,19 @@ class Validator
      *
      * Drop any keys that are not present in $rules.
      *
-     * @param  Array  $input
-     * @param  Mixed  $rules  (optional) Override internal rules
-     * @param  Bool   $only_present  Whether to only validate fields present in $input (default = false)
-     * @return Array
+     * @param array $input
+     * @param mixed $rules        (optional) Override internal rules
+     * @param bool  $only_present Whether to only validate fields present in $input (default = false)
+     *
      * @throws InvalidInput
+     *
+     * @return array
      */
-	public static function validate(Array $input, $rules = null, $only_present = false)
+    public static function validate(array $input, $rules = null, $only_present = false)
     {
         $rules = is_null($rules) ? static::$rules : $rules;
         if (empty($rules)) {
-          return $input;
+            return $input;
         }
 
         $input_whitelist = array_keys($rules);
@@ -62,7 +63,7 @@ class Validator
         // TODO - refactor this crazyness...
         if ($only_present) {
             $rules_whitelist = array_keys($input);
-            $rules = array_filter($rules, function($rule) use ($rules_whitelist) {
+            $rules = array_filter($rules, function ($rule) use ($rules_whitelist) {
                 $in_whitelist = false;
                 foreach ($rules_whitelist as $allowed) {
                     if (substr($rule, 0, strlen($allowed)) == $allowed) {
@@ -70,6 +71,7 @@ class Validator
                         break;
                     }
                 }
+
                 return $in_whitelist;
             }, ARRAY_FILTER_USE_KEY);
         }

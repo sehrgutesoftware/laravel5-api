@@ -3,9 +3,7 @@
 namespace SehrGut\Laravel5_Api;
 
 use Illuminate\Database\Eloquent\Model;
-
 use SehrGut\Laravel5_Api\Transformers\Transformer;
-use SehrGut\Laravel5_Api\Validator;
 
 class ModelMapping
 {
@@ -18,7 +16,8 @@ class ModelMapping
      *     App\Models\Post::class => App\Transformers\PostTransformer::class
      * ]
      * ```
-     * @var Array
+     *
+     * @var array
      */
     protected $transformers = [];
 
@@ -27,7 +26,7 @@ class ModelMapping
      *
      * Usage is the same as for $transformers.
      *
-     * @var Array
+     * @var array
      */
     protected $validators = [];
 
@@ -53,29 +52,29 @@ class ModelMapping
     /**
      * The default Transformer to use if none specified.
      *
-     * @var Array
+     * @var array
      */
     protected $default_transformer = Transformer::class;
 
     /**
      * The default Validator to use if none specified.
      *
-     * @var Array
+     * @var array
      */
     protected $default_validator = Validator::class;
 
     /**
      * Get the Transformer for a specific model.
      *
-     * @param  String $class  Class name of the model
+     * @param string $class Class name of the model
+     *
      * @return Transformer
      */
     public function getTransformerFor(String $class)
     {
-        if(array_key_exists($class, $this->transformers)) {
+        if (array_key_exists($class, $this->transformers)) {
             return new $this->transformers[$class]($this);
-        }
-        else {
+        } else {
             return new $this->default_transformer($this);
         }
     }
@@ -83,15 +82,15 @@ class ModelMapping
     /**
      * Get the Validator for a specific model.
      *
-     * @param  String $class  Class name of the model
+     * @param string $class Class name of the model
+     *
      * @return Validator
      */
     public function getValidatorFor(String $class)
     {
-        if(array_key_exists($class, $this->validators)) {
+        if (array_key_exists($class, $this->validators)) {
             return $this->validators[$class];
-        }
-        else {
+        } else {
             return $this->default_validator;
         }
     }
@@ -103,19 +102,21 @@ class ModelMapping
      * of a named route. The name of the route and the mapping of model
      * attributes to url parameters is defined in $this->routes.
      *
-     * @param  String $class  Class name of the model
-     * @param  Bool   $absolute  Whether to generate an absolute url (Default: true)
+     * @param string $class    Class name of the model
+     * @param bool   $absolute Whether to generate an absolute url (Default: true)
+     *
      * @return Validator
      */
     public function getUrlFor(Model $model, $absolute = true)
     {
         $class = get_class($model);
-        if(array_key_exists($class, $this->routes)) {
+        if (array_key_exists($class, $this->routes)) {
             $route = $this->routes[$class];
             $parameters = [];
             foreach ($route['parameters'] as $route_key => $model_key) {
                 $parameters[$route_key] = $model->$model_key;
             }
+
             return route($route['name'], $parameters, $absolute);
         }
     }
