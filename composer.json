@@ -19,10 +19,17 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "laravel/framework": "~5.2"
+        "php": ">=5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.5",
+        "phpspec/phpspec": "~2.1",
+        "laravel/laravel": "~5.3"
     },
     "autoload": {
-        "psr-4": {"SehrGut\\Laravel5_Api\\": "src/Laravel5_Api"}
+        "psr-4": { "SehrGut\\Laravel5_Api\\": "src/Laravel5_Api" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Tests\\": "tests/" }
     }
 }

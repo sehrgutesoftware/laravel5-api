@@ -9,7 +9,7 @@ A modular controller for exposing your Laravel 5 Eloquent models as a REST API. 
 **Please use Github Issues for bug reports and feature requests.**
 
 ## Documentation
-[API Reference v0.4.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.0)
+[API Reference v0.4.2](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.2)
 
 ## Getting Started
 
@@ -344,7 +344,7 @@ Hook in here to perform authorization on a single resource. This method is calle
 
 **Warning: Hooks are deprecated in favour of Plugins (see above), so be aware when using them: The methods listed below will soon be removed from the controller and substituted with appropriate plugin hooks.** "Hook" in the context of a "Plugin" refers to an interface, rather than a controller method like in the old sense.
 
-There are serveral hooks in the Controller which help you customizing its behaviour. All you need to do is implement the desired method in your controller. For details on the hooks please browse the code and refer to the [API Documentation v0.4.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.0).
+There are serveral hooks in the Controller which help you customizing its behaviour. All you need to do is implement the desired method in your controller. For details on the hooks please browse the code and refer to the [API Documentation v0.4.2](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.2).
 
 #### `makeModelMapping()`
 Dynamically customize the ModelMapping, for example based on Auth/Roles
@@ -397,6 +397,16 @@ Last call in the controller's `__construct()` method.
 
 * Tested with Laravel 5.2, 5.3 and 5.4
 * Works with PHP 5.4 upwards
+
+
+## Testing
+
+Tests are based on phpunit and use an in-memory sqlite database. As the tests rely on the laravel framework, composer (dev-) dependencies need to be installed first:
+
+```
+composer install
+vendor/bin/phpunit
+```
 
 
 ## License
