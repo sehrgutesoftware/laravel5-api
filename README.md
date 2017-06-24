@@ -396,7 +396,7 @@ Last call in the controller's `__construct()` method.
 ## Compatibility
 
 * Tested with Laravel 5.2, 5.3 and 5.4
-* Works with PHP 5.4 upwards
+* Works with PHP 5.6 upwards
 
 
 ## Testing
