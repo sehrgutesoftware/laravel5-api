@@ -16,7 +16,7 @@ class ControllerTest extends TestCase
      *
      * @return Response
      */
-    private function makeRequest(String $action, array $params = [])
+    private function makeRequest($action, $params = [])
     {
         $request = new Request($params);
         $controller = new PostsController($request);
