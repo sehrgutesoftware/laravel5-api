@@ -4,12 +4,10 @@ namespace SehrGut\Laravel5_Api\Formatters;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-
 use SehrGut\Laravel5_Api\Exceptions\Formatter\InvalidData;
 
 class JsonapiFormatter extends Formatter
 {
-
     /**
      * {@inheritdoc}
      */
@@ -17,17 +15,15 @@ class JsonapiFormatter extends Formatter
     {
         if ($data instanceof Model) {
             $formatted_data = $this->formatResource($data);
-        }
-        elseif ($data instanceof Collection) {
+        } elseif ($data instanceof Collection) {
             $formatted_data = $this->formatCollection($data);
-        }
-        else {
+        } else {
             throw new InvalidData();
         }
 
         $wrapped_data = [
             'links' => [
-                'self' => $this->controller->request->url()
+                'self' => $this->controller->request->url(),
             ],
             'data' => $formatted_data,
         ];
@@ -47,10 +43,10 @@ class JsonapiFormatter extends Formatter
         $attributes = array_except($this->transform($model), ['id', 'type']);
 
         $resource = [
-            'id' => $model->getKey(),
-            'type' => $this->getModelType($model),
+            'id'    => $model->getKey(),
+            'type'  => $this->getModelType($model),
             'links' => [
-                'self' => $this->mapping->getUrlFor($model)
+                'self' => $this->mapping->getUrlFor($model),
             ],
             'attributes' => $attributes,
         ];
@@ -76,9 +72,10 @@ class JsonapiFormatter extends Formatter
     }
 
     /**
-     * master(Functional programming)
+     * master(Functional programming).
      *
-     * @param  Model  $model
+     * @param Model $model
+     *
      * @return string
      */
     protected function getModelType(Model $model)

@@ -5,7 +5,6 @@ namespace SehrGut\Laravel5_Api\Formatters;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-
 use SehrGut\Laravel5_Api\Transformers\SplitRelationsTransformer;
 
 /**
@@ -35,6 +34,7 @@ class SplitRelationsFormatter extends Formatter
 
     /**
      * The name under which the included relations are listed in the response.
+     *
      * @var string
      */
     protected $relations_key = 'relations';
@@ -55,7 +55,7 @@ class SplitRelationsFormatter extends Formatter
         }
 
         return [
-            $this->results_key => $result,
+            $this->results_key   => $result,
             $this->relations_key => $relations,
         ];
     }
@@ -64,8 +64,9 @@ class SplitRelationsFormatter extends Formatter
     protected function formatResource(Model $model)
     {
         $transformed = $this->transform($model);
+
         return [
-            $this->results_key => $transformed[SplitRelationsTransformer::RESULTS_KEY],
+            $this->results_key   => $transformed[SplitRelationsTransformer::RESULTS_KEY],
             $this->relations_key => $transformed[SplitRelationsTransformer::RELATIONS_KEY],
         ];
     }
@@ -73,15 +74,16 @@ class SplitRelationsFormatter extends Formatter
     /**
      * Merge `new` into `old` relations, returning a new deduplicated array.
      *
-     * @param  Array $old
-     * @param  Array $new
-     * @return Array
+     * @param array $old
+     * @param array $new
+     *
+     * @return array
      */
     protected function mergeRelations($old, $new)
     {
         foreach ($new as $name => $relations) {
             if (!array_key_exists($name, $old)) {
-                $old[$name] = new Collection;
+                $old[$name] = new Collection();
             }
             $old[$name] = $old[$name]->merge($relations)->unique()->sortBy('id')->values();
         }

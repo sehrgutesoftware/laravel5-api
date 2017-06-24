@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as IlluminateController;
-
 use SehrGut\Laravel5_Api\Exceptions\Http\NotFound;
 use SehrGut\Laravel5_Api\Formatters\Formatter;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
@@ -60,7 +59,7 @@ class Controller extends IlluminateController
      * @var array
      */
     protected $key_mapping = [
-        'id' => 'id'
+        'id' => 'id',
     ];
 
     /**
@@ -132,7 +131,6 @@ class Controller extends IlluminateController
         $this->afterConstruct();
     }
 
-
     /***
     |--------------------------------------------------------------------------
     | Plugins / Hooks
@@ -159,8 +157,9 @@ class Controller extends IlluminateController
     /**
      * Register a plugin to a single hook.
      *
-     * @param  Plugin $plugin The plugin instance
-     * @param  String $hook   FQN of the hook interface
+     * @param Plugin $plugin The plugin instance
+     * @param string $hook   FQN of the hook interface
+     *
      * @return void
      */
     protected function registerHook(Plugin $plugin, String $hook)
@@ -175,9 +174,10 @@ class Controller extends IlluminateController
      * Pass the `$argument` to all plugins registered for `$hook`
      * consecutively and return the result of the last plugin.
      *
-     * @param  String $hook     FQN of the hook interface
-     * @param  mixed $argument  Argument passed to the first hook
-     * @return mixed            Return value of the last hook
+     * @param string $hook     FQN of the hook interface
+     * @param mixed  $argument Argument passed to the first hook
+     *
+     * @return mixed Return value of the last hook
      */
     protected function applyHooks(String $hook, $argument)
     {
@@ -192,29 +192,33 @@ class Controller extends IlluminateController
                 $argument = $plugin->$method_name($argument);
             }
         }
+
         return $argument;
     }
 
     /**
      * Turn the FQN of a hook Interface into its corresponding method name.
      *
-     * @param  String $fqn  FQN of the hook
-     * @return String       Name of the hook method
+     * @param string $fqn FQN of the hook
+     *
+     * @return string Name of the hook method
      */
     private function getHookMethodName(String $fqn)
     {
         $without_namespace = array_last(explode('\\', $fqn));
+
         return lcfirst($without_namespace);
     }
 
     /**
      * Pass configuration array to a plugin instance.
      *
-     * @param  String $name  FQN of the plugin
-     * @param  Array  $options Array of options for the plugin
+     * @param string $name    FQN of the plugin
+     * @param array  $options Array of options for the plugin
+     *
      * @return void
      */
-    protected function configurePlugin(String $name, Array $options)
+    protected function configurePlugin(String $name, array $options)
     {
         foreach ($this->hooks as $plugins) {
             foreach ($plugins as $plugin) {
@@ -241,6 +245,7 @@ class Controller extends IlluminateController
         $this->applyHooks(AuthorizeAction::class, 'index');
         $this->getCollection();
         $this->formatCollection();
+
         return $this->makeResponse();
     }
 
@@ -256,6 +261,7 @@ class Controller extends IlluminateController
         $this->validateInput();
         $this->createResource();
         $this->formatResource();
+
         return $this->makeResponse();
     }
 
@@ -270,6 +276,7 @@ class Controller extends IlluminateController
         $this->getResource();
         $this->applyHooks(AuthorizeResource::class, 'show');
         $this->formatResource();
+
         return $this->makeResponse();
     }
 
@@ -287,6 +294,7 @@ class Controller extends IlluminateController
         $this->validateInput(true);
         $this->updateResource();
         $this->formatResource();
+
         return $this->makeResponse();
     }
 
@@ -301,9 +309,9 @@ class Controller extends IlluminateController
         $this->getResource();
         $this->applyHooks(AuthorizeResource::class, 'destroy');
         $this->destroyResource();
-        return $this->makeResponse("", 204);
-    }
 
+        return $this->makeResponse('', 204);
+    }
 
     /***
     |--------------------------------------------------------------------------
@@ -314,8 +322,9 @@ class Controller extends IlluminateController
     /**
      * Fetch a single record from the DB and store it to $this->resource.
      *
-     * @return  void
-     * @throws  NotFound  In case no record matches the query
+     * @throws NotFound In case no record matches the query
+     *
+     * @return void
      */
     protected function getResource()
     {
@@ -324,8 +333,7 @@ class Controller extends IlluminateController
         $query = $this->applyHooks(AdaptResourceQuery::class, $query);
         try {
             $this->resource = $query->firstOrFail();
-        }
-        catch (ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             throw new NotFound();
         }
     }
@@ -367,9 +375,10 @@ class Controller extends IlluminateController
      * Apply filters based on the $key_mapping. If a key is present in the
      * request, an appropriate where clause will be added to the query.
      *
-     * @param   Builder  $query  The query to apply the filters to
-     * @param   Array  $mapping  (optional) A mapping to use instead of $this->key_mapping
-     * @return  Builder
+     * @param Builder $query   The query to apply the filters to
+     * @param array   $mapping (optional) A mapping to use instead of $this->key_mapping
+     *
+     * @return Builder
      */
     protected function filterByRequest($query, $mapping = null)
     {
@@ -381,11 +390,10 @@ class Controller extends IlluminateController
                 $that = $this;
                 $relation = $db_key['relation'];
                 $mapping = $db_key['mapping'];
-                $query->whereHas($relation, function($subquery) use ($that, $mapping) {
+                $query->whereHas($relation, function ($subquery) use ($that, $mapping) {
                     return $that->filterByRequest($subquery, $mapping);
                 });
-            }
-            else {
+            } else {
                 // Item is `key => value` -> directly map to model
                 if ($this->request_adapter->hasKey($request_key)) {
                     $query->where(
@@ -395,6 +403,7 @@ class Controller extends IlluminateController
                 }
             }
         }
+
         return $query;
     }
 
@@ -412,7 +421,8 @@ class Controller extends IlluminateController
     /**
      * Validate the input data using the appropriate validator.
      *
-     * @param  bool  $only_present  Whether to only validate fields present in $this->input
+     * @param bool $only_present Whether to only validate fields present in $this->input
+     *
      * @return void
      */
     protected function validateInput($only_present = false)
@@ -480,6 +490,7 @@ class Controller extends IlluminateController
 
         $response = new Response($response_data, $status_code);
         $response->headers->set('Content-Type', $this->formatter->content_type);
+
         return $response;
     }
 
@@ -492,7 +503,6 @@ class Controller extends IlluminateController
     {
         $this->resource = $this->resource->fresh($this->relations);
     }
-
 
     /***
     |--------------------------------------------------------------------------
@@ -518,7 +528,8 @@ class Controller extends IlluminateController
      *
      * This can be used to dynamically customize the formatter.
      *
-     * @param  ModelMapping  $mapping  The ModelMapping instance to use
+     * @param ModelMapping $mapping The ModelMapping instance to use
+     *
      * @return Formatter
      */
     protected function makeFormatter(ModelMapping $mapping)
@@ -531,7 +542,8 @@ class Controller extends IlluminateController
      *
      * This can be used to dynamically customize the adapter.
      *
-     * @param  Request  $request  The current Request object
+     * @param Request $request The current Request object
+     *
      * @return RequestAdapter
      */
     protected function makeRequestAdapter(Request $request)
@@ -542,10 +554,11 @@ class Controller extends IlluminateController
     /**
      * This is the place to manipulate the validation rules at runtime.
      *
-     * @param  Array  $rules The original rules from the Validator
-     * @return Array  The adapted rules
+     * @param array $rules The original rules from the Validator
+     *
+     * @return array The adapted rules
      */
-    protected function adaptRules(Array $rules)
+    protected function adaptRules(array $rules)
     {
         return $rules;
     }
@@ -557,30 +570,38 @@ class Controller extends IlluminateController
      *
      * @return void
      */
-    protected function beforeSave() {}
+    protected function beforeSave()
+    {
+    }
 
     /**
-     * Hook in here to customize actions after saving a resource
+     * Hook in here to customize actions after saving a resource.
      *
      * This happens in both the create and update actions.
      *
      * @return void
      */
-    protected function afterSave() {}
+    protected function afterSave()
+    {
+    }
 
     /**
      * Hook in here to customize the input before creating a resource.
      *
      * @return void
      */
-    protected function beforeCreate() {}
+    protected function beforeCreate()
+    {
+    }
 
     /**
      * Hook in here to customize the input before updating a resource.
      *
      * @return void
      */
-    protected function beforeUpdate() {}
+    protected function beforeUpdate()
+    {
+    }
 
     /**
      * Use this hook to apply custom logic after
@@ -588,5 +609,7 @@ class Controller extends IlluminateController
      *
      * @return void
      */
-    protected function afterConstruct() {}
+    protected function afterConstruct()
+    {
+    }
 }

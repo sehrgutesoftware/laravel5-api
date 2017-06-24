@@ -2,9 +2,8 @@
 
 namespace SehrGut\Laravel5_Api\Exceptions\Validator;
 
-use Illuminate\Support\MessageBag;
 use Illuminate\Http\JsonResponse;
-
+use Illuminate\Support\MessageBag;
 use SehrGut\Laravel5_Api\Exceptions\Exception as BaseException;
 
 class ValidatorException extends BaseException
@@ -19,7 +18,7 @@ class ValidatorException extends BaseException
     /**
      * The HTTP status code to respond with on this exception.
      *
-     * @var integer
+     * @var int
      */
     protected $status = 400;
 
@@ -44,9 +43,9 @@ class ValidatorException extends BaseException
         return new JsonResponse([
                 'error' => [
                     'message' => $this->message,
-                    'status' => $this->status,
-                    'fields' => $this->fields
-                ]
+                    'status'  => $this->status,
+                    'fields'  => $this->fields,
+                ],
             ],
             $this->status
         );

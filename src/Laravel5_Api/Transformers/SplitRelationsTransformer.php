@@ -44,7 +44,7 @@ class SplitRelationsTransformer extends Transformer
     /**
      * Add a single relation.
      *
-     * @param String $name
+     * @param string           $name
      * @param Model|Collection $relation
      */
     protected function addRelation(String $name, $relation)
@@ -64,11 +64,9 @@ class SplitRelationsTransformer extends Transformer
         } else {
             $model = $model_or_array;
 
-            if (array_key_exists(self::RESULTS_KEY, $model) AND array_key_exists(self::RELATIONS_KEY, $model)) {
-
+            if (array_key_exists(self::RESULTS_KEY, $model) and array_key_exists(self::RELATIONS_KEY, $model)) {
                 $this->relations[$name][] = $model[self::RESULTS_KEY];
                 $this->relations = array_merge_recursive($this->relations, $model[self::RELATIONS_KEY]);
-
             } else {
                 $this->relations[$name] = $model;
             }
@@ -78,20 +76,21 @@ class SplitRelationsTransformer extends Transformer
     /**
      * Serialize a single record to an array.
      *
-     * @return Array
+     * @return array
      */
     protected function serialize()
     {
         return [
-            self::RESULTS_KEY => $this->output,
-            self::RELATIONS_KEY => $this->relations
+            self::RESULTS_KEY   => $this->output,
+            self::RELATIONS_KEY => $this->relations,
         ];
     }
 
     /**
      * Get the primary identifiers for either a single model or a collection of models.
      *
-     * @param  Model|Colleciton $model_or_collection
+     * @param Model|Colleciton $model_or_collection
+     *
      * @return mixed|Array<mixed>
      */
     protected function extractIds($model_or_collection)
@@ -101,7 +100,7 @@ class SplitRelationsTransformer extends Transformer
         }
 
         if ($model_or_collection instanceof Collection) {
-            return $model_or_collection->map(function($item) {
+            return $model_or_collection->map(function ($item) {
                 return $item->getKey();
             });
         }

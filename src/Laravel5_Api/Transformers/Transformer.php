@@ -4,7 +4,6 @@ namespace SehrGut\Laravel5_Api\Transformers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-
 use SehrGut\Laravel5_Api\ModelMapping;
 
 /**
@@ -53,7 +52,7 @@ class Transformer
     /**
      * Holds the array form of the model.
      *
-     * @var Array
+     * @var array
      */
     protected $output = [];
 
@@ -65,7 +64,8 @@ class Transformer
     /**
      * Transform a single eloquent record.
      *
-     * @param  Model  $model  The eloquent model record to transform
+     * @param Model $model The eloquent model record to transform
+     *
      * @return array
      */
     public function transform(Model $model)
@@ -81,6 +81,7 @@ class Transformer
 
         $this->alias();
         $this->beforeSerialize();
+
         return $this->serialize();
     }
 
@@ -102,7 +103,7 @@ class Transformer
     /**
      * Add a single relation.
      *
-     * @param String $name
+     * @param string           $name
      * @param Model|Collection $relation
      */
     protected function addRelation(String $name, $relation)
@@ -113,21 +114,24 @@ class Transformer
     /**
      * Transform either Collection or Model using the known $model_mapping.
      *
-     * @param  Collection|Model $thing  to transform
-     * @return Array
+     * @param Collection|Model $thing to transform
+     *
+     * @return array
      */
     protected function transformAny($thing)
     {
         if ($thing instanceof Model) {
             $transformer = $this->model_mapping->getTransformerFor(get_class($thing));
+
             return $transformer->transform($thing);
-        }
-        else if ($thing instanceof Collection and $thing->count() > 0) {
+        } elseif ($thing instanceof Collection and $thing->count() > 0) {
             $transformer = $this->model_mapping->getTransformerFor(get_class($thing->first()));
-            return $thing->map(function($model) use ($transformer) {
+
+            return $thing->map(function ($model) use ($transformer) {
                 return $transformer->transform($model);
             })->toArray();
         }
+
         return [];
     }
 
@@ -176,12 +180,14 @@ class Transformer
      *
      * @return void
      */
-    protected function beforeSerialize() {}
+    protected function beforeSerialize()
+    {
+    }
 
     /**
      * Serialize a single record to an array.
      *
-     * @return Array
+     * @return array
      */
     protected function serialize()
     {

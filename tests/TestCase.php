@@ -2,9 +2,7 @@
 
 namespace Tests;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-
 use Tests\Migrations\CreatePostsTable;
 
 class TestCase extends BaseTestCase
@@ -31,7 +29,7 @@ class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->app['config']->set('database.default','sqlite');
+        $this->app['config']->set('database.default', 'sqlite');
         $this->app['config']->set('database.connections.sqlite.database', ':memory:');
 
         $this->migrate();
@@ -48,7 +46,7 @@ class TestCase extends BaseTestCase
             CreatePostsTable::class,
         ];
         foreach ($migrations as $class) {
-            (new $class)->up();
+            (new $class())->up();
         }
     }
 }
