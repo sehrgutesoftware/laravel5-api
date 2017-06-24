@@ -8,8 +8,26 @@ A modular controller for exposing your Laravel 5 Eloquent models as a REST API. 
 
 **Please use Github Issues for bug reports and feature requests.**
 
+## Table of Contents
+* [Documentation](#documentation)
+* [Getting Started](#getting-started)
+* [Components](#components)
+  * [Controller](#controller-1)
+  * [Validator](#validator)
+  * [Transformer](#transformer)
+  * [ModelMapping](#modelmapping)
+  * [RequestAdapter](#requestadapter)
+  * [Formatter](#formatter)
+* [Customization](#customization)
+  * [Plugins](#plugins)
+  * [Deprecated: Hooks](#deprecated-hooks)
+* [Changelog](#changelog)
+* [Compatibility](#compatibility)
+* [Testing](#testing)
+* [License](#license)
+
 ## Documentation
-[API Reference v0.4.2](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.2)
+[API Reference v0.4.2](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.2) ([v0.4.1](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.1), [v0.4.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.0), [v0.3.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.3.0))
 
 ## Getting Started
 
@@ -34,7 +52,7 @@ class PostsController extends ApiController
 ```
 
 #### Routes
-You now have a controller with the same handlers as a [Laravel Resource Controller](https://laravel.com/docs/5.2/controllers#restful-resource-controllers). Those methods can now be used to handle the following routes:
+You now have a controller with the same handlers as a [Laravel Resource Controller](https://laravel.com/docs/5.4/controllers#resource-controllers). Those methods can now be used to handle the following routes:
 
 ```php
 Route::get('/posts', 'PostsController@index');
@@ -344,7 +362,7 @@ Hook in here to perform authorization on a single resource. This method is calle
 
 **Warning: Hooks are deprecated in favour of Plugins (see above), so be aware when using them: The methods listed below will soon be removed from the controller and substituted with appropriate plugin hooks.** "Hook" in the context of a "Plugin" refers to an interface, rather than a controller method like in the old sense.
 
-There are serveral hooks in the Controller which help you customizing its behaviour. All you need to do is implement the desired method in your controller. For details on the hooks please browse the code and refer to the [API Documentation v0.4.2](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.2).
+There are serveral hooks in the Controller which help you customizing its behaviour. All you need to do is implement the desired method in your controller. For details on the hooks please browse the code and refer to the [API Reference](#documentation).
 
 #### `makeModelMapping()`
 Dynamically customize the ModelMapping, for example based on Auth/Roles
