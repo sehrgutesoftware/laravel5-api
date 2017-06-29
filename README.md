@@ -413,7 +413,7 @@ Last call in the controller's `__construct()` method.
 
 #### v0.5.0
 - Remove Formatters alltogether (replace with plugin hooks)
-- Paginator plugin adds meta info to reponse body
+- Paginator plugin adds meta info to reponse headers
 
 
 ## Compatibility
