@@ -364,7 +364,7 @@ class Controller extends IlluminateController
      */
     protected function formatCollection()
     {
-        $this->payload = $this->applyHooks(FormatCollection::class, $this->collection);
+        $this->payload = $this->applyHooks(FormatCollection::class, $this->collection->all());
         $this->transformPayload();
     }
 

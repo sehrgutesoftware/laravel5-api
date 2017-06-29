@@ -64,6 +64,7 @@ class SearchFilter extends Plugin implements AdaptCollectionQuery
         'search_param' => 'filter',
     ];
 
+    /* {@inheritdoc} **/
     public function adaptCollectionQuery(Builder $query)
     {
         $fields = $this->config['searchable'];

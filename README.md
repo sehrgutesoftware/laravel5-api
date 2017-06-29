@@ -352,7 +352,7 @@ Hook in here to perform authorization on action level (`$action = index|store|sh
 `AuthorizeResource::authorizeResource(String $action)`
 Hook in here to perform authorization on a single resource. This method is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
 
-`FormatCollection::formatCollection(ArrayAccess $collection)`
+`FormatCollection::formatCollection(Array $collection)`
 This hook receives a Collection of resources before they are transformed.
 
 `FormatResource::formatResource(Model $resource)`
@@ -413,6 +413,7 @@ Last call in the controller's `__construct()` method.
 
 #### v0.5.0
 - Remove Formatters alltogether (replace with plugin hooks)
+- Paginator plugin adds meta info to reponse body
 
 
 ## Compatibility

@@ -54,7 +54,7 @@ class TestPlugin extends Plugin implements
         return $action;
     }
 
-    public function formatCollection(ArrayAccess $collection)
+    public function formatCollection(Array $collection)
     {
         Log::info('TestPlugin: called formatCollection', ['collection' => $collection]);
 
