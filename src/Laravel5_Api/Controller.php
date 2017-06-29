@@ -3,16 +3,20 @@
 namespace SehrGut\Laravel5_Api;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as IlluminateController;
+use Illuminate\Support\Collection;
 use SehrGut\Laravel5_Api\Exceptions\Http\NotFound;
-use SehrGut\Laravel5_Api\Formatters\Formatter;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
 use SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeAction;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
+use SehrGut\Laravel5_Api\Hooks\FormatCollection;
+use SehrGut\Laravel5_Api\Hooks\FormatResource;
+use SehrGut\Laravel5_Api\Hooks\ResponseHeaders;
 use SehrGut\Laravel5_Api\Plugins\Plugin;
 
 /**
@@ -84,13 +88,6 @@ class Controller extends IlluminateController
     protected $plugins = [];
 
     /**
-     * Use this to simply override the Formatter.
-     *
-     * @var Formatter
-     */
-    protected $formatter_class = Formatter::class;
-
-    /**
      * Use this to simply override the ModelMapping.
      *
      * @var ModelMapping
@@ -110,7 +107,6 @@ class Controller extends IlluminateController
     public $resource;
 
     protected $model;
-    protected $formatter;
     protected $input;
     protected $collection;
 
@@ -126,7 +122,6 @@ class Controller extends IlluminateController
         $this->request = $request;
         $this->model_mapping = $this->makeModelMapping();
         $this->request_adapter = $this->makeRequestAdapter($request);
-        $this->formatter = $this->makeFormatter($this->model_mapping);
         $this->loadPlugins();
         $this->afterConstruct();
     }
@@ -352,23 +347,40 @@ class Controller extends IlluminateController
     }
 
     /**
-     * Generate the response data using our Formatter.
+     * Populate payload, applying hooks before transforming.
      *
      * @return void
      */
     protected function formatResource()
     {
-        $this->response_data = $this->formatter->format($this->resource);
+        $this->payload = $this->applyHooks(FormatResource::class, $this->resource);
+        $this->transformPayload();
     }
 
     /**
-     * Generate the response data using our Formatter.
+     * Populate payload, applying hooks before transforming.
      *
      * @return void
      */
     protected function formatCollection()
     {
-        $this->response_data = $this->formatter->format($this->collection);
+        $this->payload = $this->applyHooks(FormatCollection::class, $this->collection);
+        $this->transformPayload();
+    }
+
+    /**
+     * Apply transformers recusively to the payload.
+     *
+     * @return $this
+     */
+    protected function transformPayload()
+    {
+        array_walk_recursive($this->payload, function(&$leaf) {
+            if ($leaf instanceof Model) {
+                $transformer = $this->model_mapping->getTransformerFor(get_class($leaf));
+                $leaf = $transformer->transform($leaf);
+            }
+        });
     }
 
     /**
@@ -484,12 +496,15 @@ class Controller extends IlluminateController
         $this->resource->delete();
     }
 
-    protected function makeResponse($response_data = null, $status_code = 200)
+    protected function makeResponse($payload = null, $status_code = 200)
     {
-        $response_data = is_null($response_data) ? $this->response_data : $response_data;
+        $payload = is_null($payload) ? $this->payload : $payload;
+        $headers = $this->applyHooks(ResponseHeaders::class, [
+            'Content-Type' => 'application/json'
+        ]);
 
-        $response = new Response($response_data, $status_code);
-        $response->headers->set('Content-Type', $this->formatter->content_type);
+        $response = new Response($payload, $status_code);
+        $response->headers->add($headers);
 
         return $response;
     }
@@ -521,20 +536,6 @@ class Controller extends IlluminateController
     protected function makeModelMapping()
     {
         return new $this->model_mapping_class();
-    }
-
-    /**
-     * Return a Formatter instance.
-     *
-     * This can be used to dynamically customize the formatter.
-     *
-     * @param ModelMapping $mapping The ModelMapping instance to use
-     *
-     * @return Formatter
-     */
-    protected function makeFormatter(ModelMapping $mapping)
-    {
-        return new $this->formatter_class($mapping, $this);
     }
 
     /**

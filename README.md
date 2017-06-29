@@ -17,7 +17,6 @@ A modular controller for exposing your Laravel 5 Eloquent models as a REST API. 
   * [Transformer](#transformer)
   * [ModelMapping](#modelmapping)
   * [RequestAdapter](#requestadapter)
-  * [Formatter](#formatter)
 * [Customization](#customization)
   * [Plugins](#plugins)
   * [Deprecated: Hooks](#deprecated-hooks)
@@ -120,7 +119,6 @@ app/
 |			  |---- Validators
 |			  |		|---- PostValidator.php
 |			  |		+---- CommentValidator.php
-|			  |---- Formatter.php
 |			  |---- ModelMapping.php
 |			  +---- RequestAdapter.php
 +---- …
@@ -135,7 +133,6 @@ The logic is divided up into smaller components, each with their own responsibil
 - **Transformer** – applies transformations to the output data
 - **ModelMapping** – knows which Validator/Transformer to use for each Model
 - **RequestAdapter** – obtains the parameters from the request
-- **Formatter** – defines the response format and structure
 
 ### Controller
 #### Available Handlers
@@ -239,9 +236,6 @@ class BaseController extends Controller
 ```
 
 ### RequestAdapter
-TBD
-
-### Formatter
 TBD
 
 
@@ -358,6 +352,16 @@ Hook in here to perform authorization on action level (`$action = index|store|sh
 `AuthorizeResource::authorizeResource(String $action)`
 Hook in here to perform authorization on a single resource. This method is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
 
+`FormatCollection::formatCollection(ArrayAccess $collection)`
+This hook receives a Collection of resources before they are transformed.
+
+`FormatResource::formatResource(Model $resource)`
+This hook receives a single resource before it is transformed.
+
+`ResponseHeaders::responseHeaders(Array $headers)`
+Hook in here to manipulate the response headers.
+
+
 ### Deprecated: Hooks
 
 **Warning: Hooks are deprecated in favour of Plugins (see above), so be aware when using them: The methods listed below will soon be removed from the controller and substituted with appropriate plugin hooks.** "Hook" in the context of a "Plugin" refers to an interface, rather than a controller method like in the old sense.
@@ -366,9 +370,6 @@ There are serveral hooks in the Controller which help you customizing its behavi
 
 #### `makeModelMapping()`
 Dynamically customize the ModelMapping, for example based on Auth/Roles
-
-#### `makeFormatter(ModelMapping $mapping)`
-Dynamically customize the Formatter.
 
 #### `makeRequestAdapter(Request $request)`
 Dynamically customize the RequestAdapter.
@@ -409,6 +410,9 @@ Last call in the controller's `__construct()` method.
 
 #### v0.4.2
 - SearchFilter plugin can search on (nested) relationships
+
+#### v0.5.0
+- Remove Formatters alltogether (replace with plugin hooks)
 
 
 ## Compatibility
