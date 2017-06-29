@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Tests\Classes\Post;
 use Tests\Classes\PostsController;
 
-class ControllerTest extends TestCase
+class ControllerCrudTest extends TestCase
 {
     /**
      * Call a controller action and pass through its return value.
