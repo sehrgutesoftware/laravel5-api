@@ -11,9 +11,19 @@ use SehrGut\Laravel5_Api\Hooks\FormatCollection;
  */
 class RelationSplitter extends Plugin implements FormatCollection
 {
+    /**
+     * Config options for this plugin:
+     *
+     * - `result_key`: The key under which the actual results will appear in the response payload
+     * - `includes_key`: The key under which the extracted relations will appear in the response payload
+     * - `replace_with_ids`: Whether to replace the removed relations with their ids on the parent model
+     *
+     * @var array
+     */
     protected $default_config = [
         'result_key' => 'result',
-        'includes_key' => 'includes'
+        'includes_key' => 'includes',
+        'replace_with_ids' => true
     ];
 
     protected $includes = [];
@@ -44,14 +54,26 @@ class RelationSplitter extends Plugin implements FormatCollection
         foreach ($collection as $model) {
             // Check if the model has eloquent-like relations
             if (is_callable([$model, 'getRelations'])) {
+
+                // Save away the ids for merging them later
+                $ids = [];
+
                 foreach ($model->getRelations() as $name => $relatives) {
                     // Save the relatives to the "includes" array
-                    $this->includeRelatives($name, $relatives);
+                    $ids[$name] = $this->includeRelatives($name, $relatives);
                     // Repeat the entire process for relatives (recurse)
                     $this->splitRelations($relatives);
                 }
+
                 // Remove all relatives from all relations on the model
                 $model->setRelations([]);
+
+                // Add relative's ids instead to the model
+                if ($this->config['replace_with_ids']) {
+                    foreach ($ids as $relation => $relative_ids) {
+                        $model[$relation] = $relative_ids;
+                    }
+                }
             }
         }
     }
@@ -72,6 +94,12 @@ class RelationSplitter extends Plugin implements FormatCollection
         }
 
         $this->includes[$name] = array_merge($this->includes[$name], $relatives);
+
+        if ($this->config['replace_with_ids']) {
+            return array_map(function($model) {
+                return $model->getKey();
+            }, $relatives);
+        }
     }
 
     /**
