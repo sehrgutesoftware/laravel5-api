@@ -411,7 +411,7 @@ Last call in the controller's `__construct()` method.
 #### v0.4.2
 - SearchFilter plugin can search on (nested) relationships
 
-#### v0.5.0
+### v0.5.0
 - Remove Formatters alltogether (replace with plugin hooks)
 - Paginator plugin adds meta info to reponse headers (optionally to payload)
 - New Plugin: RelationSplitter (replaces SplitRelationsFormatter)
@@ -421,6 +421,8 @@ Last call in the controller's `__construct()` method.
 	- Also split relations on 'resource' requests
 	- Add 'ignore_relations' config option
 
+#### v0.5.2
+- Offer `$last_page` as paginator meta value
 
 ## Compatibility
 
