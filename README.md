@@ -416,6 +416,11 @@ Last call in the controller's `__construct()` method.
 - Paginator plugin adds meta info to reponse headers (optionally to payload)
 - New Plugin: RelationSplitter (replaces SplitRelationsFormatter)
 
+#### v0.5.1
+- RelationSplitter:
+	- Also split relations on 'resource' requests
+	- Add 'ignore_relations' config option
+
 
 ## Compatibility
 
