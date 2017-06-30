@@ -16,7 +16,7 @@ class ControllerCrudTest extends TestCase
      *
      * @return Response
      */
-    private function makeRequest($action, $params = [])
+    protected function makeRequest($action, $params = [])
     {
         $request = new Request($params);
         $controller = new PostsController($request);

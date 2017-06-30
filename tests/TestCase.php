@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Tests\Migrations\CreateCommentsTable;
 use Tests\Migrations\CreatePostsTable;
 
 class TestCase extends BaseTestCase
@@ -44,6 +45,7 @@ class TestCase extends BaseTestCase
     {
         $migrations = [
             CreatePostsTable::class,
+            CreateCommentsTable::class,
         ];
         foreach ($migrations as $class) {
             (new $class())->up();
