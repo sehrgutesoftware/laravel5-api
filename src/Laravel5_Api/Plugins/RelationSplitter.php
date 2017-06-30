@@ -50,7 +50,7 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
         $this->splitRelations($resource);
 
         $result = [
-            $this->config['result_key'] => $resource,
+            $this->config['result_key']   => $resource,
             $this->config['includes_key'] => $this->uniqueIncludes(),
         ];
 
