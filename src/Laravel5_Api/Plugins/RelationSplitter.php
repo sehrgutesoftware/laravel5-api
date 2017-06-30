@@ -2,14 +2,16 @@
 
 namespace SehrGut\Laravel5_Api\Plugins;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use SehrGut\Laravel5_Api\Hooks\FormatCollection;
+use SehrGut\Laravel5_Api\Hooks\FormatResource;
 
 /**
  * This plugin separates relations from the actually requested models
  * and puts them under separate keys in the response payload.
  */
-class RelationSplitter extends Plugin implements FormatCollection
+class RelationSplitter extends Plugin implements FormatCollection, FormatResource
 {
     /**
      * Config options for this plugin:.
@@ -24,6 +26,7 @@ class RelationSplitter extends Plugin implements FormatCollection
         'result_key'       => 'result',
         'includes_key'     => 'includes',
         'replace_with_ids' => true,
+        'ignore_relations' => [],
     ];
 
     protected $includes = [];
@@ -35,6 +38,19 @@ class RelationSplitter extends Plugin implements FormatCollection
 
         $result = [
             $this->config['result_key']   => $collection,
+            $this->config['includes_key'] => $this->uniqueIncludes(),
+        ];
+
+        return $result;
+    }
+
+    /** {@inheritdoc} */
+    public function formatResource(Model $resource)
+    {
+        $this->splitRelations($resource);
+
+        $result = [
+            $this->config['result_key'] => $resource,
             $this->config['includes_key'] => $this->uniqueIncludes(),
         ];
 
@@ -60,10 +76,14 @@ class RelationSplitter extends Plugin implements FormatCollection
                 $ids = [];
 
                 foreach ($model->getRelations() as $name => $relatives) {
-                    // Save the relatives to the "includes" array
-                    $ids[$name] = $this->includeRelatives($name, $relatives);
-                    // Repeat the entire process for relatives (recurse)
-                    $this->splitRelations($relatives);
+                    // Skip relations listed in config['ignore_relations']
+                    if (!in_array($name, $this->config['ignore_relations'])) {
+
+                        // Save the relatives to the "includes" array
+                        $ids[$name] = $this->includeRelatives($name, $relatives);
+                        // Repeat the entire process for relatives (recurse)
+                        $this->splitRelations($relatives);
+                    }
                 }
 
                 // Remove all relatives from all relations on the model
