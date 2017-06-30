@@ -29,10 +29,10 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
      * - `meta_in_payload`: Key under which to meta info (total, limit, current page)
      *                      to response body (or `false` to disable)
      * - `meta_in_headers`: (Boolean) Whether or not to add meta info as http headers
-     * - `meta_structure`: An array describing how meta info is formatted (in payload)
-     *                     or naming headers (in http headers). '$total', '$limit'
-     *                     and '$page' will be replaced with their actual
-     *                     values. (Remember to use single quotes)
+     * - `meta_structure`: An array describing how meta info is formatted (in payload) or
+     *                     naming headers (in http headers). '$total', '$limit',
+     *                     '$page', '$last_page' will be replaced with their
+     *                     actual values. (Remember to use single quotes)
      *
      * @var array
      */
@@ -103,7 +103,12 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
      */
     protected function saveMetaCounts(int $total, int $limit, int $page)
     {
-        $values = ['$total' => $total, '$limit' => $limit, '$page' => $page];
+        $values = [
+            '$total' => $total,
+            '$limit' => $limit,
+            '$page' => $page,
+            '$last_page' => ceil($total/$limit),
+        ];
         $this->meta_counts = $this->config['meta_structure'];
         array_walk_recursive($this->meta_counts, function (&$node) use ($values) {
             if (array_key_exists($node, $values)) {
