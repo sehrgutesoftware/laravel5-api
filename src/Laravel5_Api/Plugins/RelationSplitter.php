@@ -12,7 +12,7 @@ use SehrGut\Laravel5_Api\Hooks\FormatCollection;
 class RelationSplitter extends Plugin implements FormatCollection
 {
     /**
-     * Config options for this plugin:
+     * Config options for this plugin:.
      *
      * - `result_key`: The key under which the actual results will appear in the response payload
      * - `includes_key`: The key under which the extracted relations will appear in the response payload
@@ -21,20 +21,20 @@ class RelationSplitter extends Plugin implements FormatCollection
      * @var array
      */
     protected $default_config = [
-        'result_key' => 'result',
-        'includes_key' => 'includes',
-        'replace_with_ids' => true
+        'result_key'       => 'result',
+        'includes_key'     => 'includes',
+        'replace_with_ids' => true,
     ];
 
     protected $includes = [];
 
     /** {@inheritdoc} */
-    public function formatCollection(Array $collection)
+    public function formatCollection(array $collection)
     {
         $this->splitRelations($collection);
 
         $result = [
-            $this->config['result_key'] => $collection,
+            $this->config['result_key']   => $collection,
             $this->config['includes_key'] => $this->uniqueIncludes(),
         ];
 
@@ -44,7 +44,8 @@ class RelationSplitter extends Plugin implements FormatCollection
     /**
      * Separate the related models from each model in the passed-in collection.
      *
-     * @param  mixed $collection
+     * @param mixed $collection
+     *
      * @return void
      */
     protected function splitRelations($collection)
@@ -81,8 +82,9 @@ class RelationSplitter extends Plugin implements FormatCollection
     /**
      * Add passed-in relatives to `$this->includes` under the `$name` key.
      *
-     * @param  String $name
-     * @param  mixed $relatives
+     * @param string $name
+     * @param mixed  $relatives
+     *
      * @return void
      */
     protected function includeRelatives(String $name, $relatives)
@@ -96,7 +98,7 @@ class RelationSplitter extends Plugin implements FormatCollection
         $this->includes[$name] = array_merge($this->includes[$name], $relatives);
 
         if ($this->config['replace_with_ids']) {
-            return array_map(function($model) {
+            return array_map(function ($model) {
                 return $model->getKey();
             }, $relatives);
         }
@@ -106,20 +108,26 @@ class RelationSplitter extends Plugin implements FormatCollection
      * Wrap the subject into an array if it's not already an
      * array, convert it to array if it's a collection.
      *
-     * @param  mixed $subject
-     * @return Array
+     * @param mixed $subject
+     *
+     * @return array
      */
     protected function ensureArray($subject)
     {
-        if (is_array($subject)) return $subject;
-        if ($subject instanceof Collection) return $subject->all();
+        if (is_array($subject)) {
+            return $subject;
+        }
+        if ($subject instanceof Collection) {
+            return $subject->all();
+        }
+
         return [$subject];
     }
 
     /**
      * Return all includes after removing duplicates.
      *
-     * @return Array
+     * @return array
      */
     protected function uniqueIncludes()
     {
@@ -127,6 +135,7 @@ class RelationSplitter extends Plugin implements FormatCollection
         foreach ($this->includes as $name => $relatives) {
             $includes[$name] = array_values(array_unique($relatives));
         }
+
         return $includes;
     }
 }

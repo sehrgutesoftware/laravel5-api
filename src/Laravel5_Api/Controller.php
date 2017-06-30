@@ -375,7 +375,7 @@ class Controller extends IlluminateController
      */
     protected function transformPayload()
     {
-        array_walk_recursive($this->payload, function(&$leaf) {
+        array_walk_recursive($this->payload, function (&$leaf) {
             if ($leaf instanceof Model) {
                 $transformer = $this->model_mapping->getTransformerFor(get_class($leaf));
                 $leaf = $transformer->transform($leaf);
@@ -500,7 +500,7 @@ class Controller extends IlluminateController
     {
         $payload = is_null($payload) ? $this->payload : $payload;
         $headers = $this->applyHooks(ResponseHeaders::class, [
-            'Content-Type' => 'application/json'
+            'Content-Type' => 'application/json',
         ]);
 
         $response = new Response($payload, $status_code);
