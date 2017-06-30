@@ -20,7 +20,7 @@ use SehrGut\Laravel5_Api\Hooks\ResponseHeaders;
 class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection, ResponseHeaders
 {
     /**
-     * Configuration options for this Plugin:
+     * Configuration options for this Plugin:.
      *
      * - `limit_param`: Name of the request parameter that contains the limit value (page size)
      * - `page_param`: Name of the request parameter that contains the page number
@@ -34,19 +34,19 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
      *                     and '$page' will be replaced with their actual
      *                     values. (Remember to use single quotes)
      *
-     * @var Array
+     * @var array
      */
     protected $default_config = [
-        'limit_param' => 'limit',
-        'page_param' => 'page',
-        'limit_default' => 10,
-        'page_default' => 1,
+        'limit_param'     => 'limit',
+        'page_param'      => 'page',
+        'limit_default'   => 10,
+        'page_default'    => 1,
         'meta_in_payload' => false,
         'meta_in_headers' => true,
-        'meta_structure' => [
+        'meta_structure'  => [
             'X-Pagination-Total' => '$total',
             'X-Pagination-Limit' => '$limit',
-            'X-Pagination-Page' => '$page',
+            'X-Pagination-Page'  => '$page',
         ],
     ];
 
@@ -72,7 +72,7 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
     }
 
     /** {@inheritdoc} */
-    public function formatCollection(Array $collection)
+    public function formatCollection(array $collection)
     {
         if ($meta_key = $this->config['meta_in_payload']) {
             $collection[$meta_key] = $this->meta_counts;
@@ -82,7 +82,7 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
     }
 
     /** {@inheritdoc} */
-    public function responseHeaders(Array $headers)
+    public function responseHeaders(array $headers)
     {
         if ($this->config['meta_in_headers']) {
             $headers = array_merge($headers, $this->meta_counts);
@@ -95,19 +95,21 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
      * Replace $placeholders with their actual values in config['meta_structure']
      * and store the resulting array into `$this->meta_counts`.
      *
-     * @param  int $total
-     * @param  int $limit
-     * @param  int $page
+     * @param int $total
+     * @param int $limit
+     * @param int $page
+     *
      * @return void
      */
     protected function saveMetaCounts(int $total, int $limit, int $page)
     {
         $values = ['$total' => $total, '$limit' => $limit, '$page' => $page];
         $this->meta_counts = $this->config['meta_structure'];
-        array_walk_recursive($this->meta_counts, function(&$node) use ($values) {
+        array_walk_recursive($this->meta_counts, function (&$node) use ($values) {
             if (array_key_exists($node, $values)) {
                 $node = $values[$node];
             }
+
             return $node;
         });
     }

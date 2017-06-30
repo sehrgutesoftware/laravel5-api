@@ -53,7 +53,7 @@ class TestPlugin extends Plugin implements
         return $action;
     }
 
-    public function formatCollection(Array $collection)
+    public function formatCollection(array $collection)
     {
         Log::info('TestPlugin: called formatCollection', ['collection' => $collection]);
 
@@ -67,7 +67,7 @@ class TestPlugin extends Plugin implements
         return $resource;
     }
 
-    public function responseHeaders(Array $headers)
+    public function responseHeaders(array $headers)
     {
         Log::info('TestPlugin: called responseHeaders', ['headers' => $headers]);
 

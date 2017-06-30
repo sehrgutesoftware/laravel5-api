@@ -11,5 +11,5 @@ interface FormatCollection
      *
      * @return array The modified Collection
      */
-    public function formatCollection(Array $collection);
+    public function formatCollection(array $collection);
 }

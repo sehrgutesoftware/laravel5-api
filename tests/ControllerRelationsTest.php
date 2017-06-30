@@ -2,8 +2,8 @@
 
 namespace Tests;
 
-use ReflectionClass;
 use Illuminate\Http\Request;
+use ReflectionClass;
 use Tests\Classes\Post;
 use Tests\Classes\PostsController;
 
@@ -35,7 +35,7 @@ class ControllerRelationsTest extends TestCase
         $post = Post::create(['title' => 'Some Post', 'slug' => 'some-post']);
         $post->load('comments')->refresh();
         $response = $this->makeRequest('index');
-        $this->assertEquals([$post->toArray()],json_decode($response->content(), true));
+        $this->assertEquals([$post->toArray()], json_decode($response->content(), true));
 
         $comment = $post->comments()->create(['text' => 'An opinions']);
         $post->load('comments')->refresh();

@@ -11,5 +11,5 @@ interface ResponseHeaders
      *
      * @return array Updated headers
      */
-    public function responseHeaders(Array $headers);
+    public function responseHeaders(array $headers);
 }

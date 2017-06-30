@@ -2,7 +2,6 @@
 
 namespace Tests;
 
-use Tests\Classes\Comment;
 use Tests\Classes\Post;
 
 class ModelsTest extends TestCase
@@ -11,17 +10,17 @@ class ModelsTest extends TestCase
     {
         $this->assertDatabaseMissing('posts', [
             'title' => 'Test Post',
-            'slug' => 'test-post'
+            'slug'  => 'test-post',
         ]);
 
         Post::create([
             'title' => 'Test Post',
-            'slug' => 'test-post'
+            'slug'  => 'test-post',
         ]);
 
         $this->assertDatabaseHas('posts', [
             'title' => 'Test Post',
-            'slug' => 'test-post'
+            'slug'  => 'test-post',
         ]);
     }
 
@@ -31,8 +30,8 @@ class ModelsTest extends TestCase
         $post->comments()->create(['text' => 'Absolutely agree']);
 
         $this->assertDatabaseHas('comments', [
-            'text' => 'Absolutely agree',
-            'post_id' => $post->id
+            'text'    => 'Absolutely agree',
+            'post_id' => $post->id,
         ]);
     }
 }
