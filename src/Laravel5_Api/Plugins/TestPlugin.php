@@ -2,7 +2,6 @@
 
 namespace SehrGut\Laravel5_Api\Plugins;
 
-use ArrayAccess;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
