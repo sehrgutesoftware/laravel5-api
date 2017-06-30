@@ -26,7 +26,7 @@ A modular controller for exposing your Laravel 5 Eloquent models as a REST API. 
 * [License](#license)
 
 ## Documentation
-[API Reference v0.4.2](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.2) ([v0.4.1](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.1), [v0.4.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.0), [v0.3.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.3.0))
+[API Reference v0.5.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.5.0) ([v0.4.2](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.2), [v0.4.1](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.1), [v0.4.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.0), [v0.3.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.3.0))
 
 ## Getting Started
 
@@ -414,7 +414,7 @@ Last call in the controller's `__construct()` method.
 #### v0.5.0
 - Remove Formatters alltogether (replace with plugin hooks)
 - Paginator plugin adds meta info to reponse headers (optionally to payload)
-- New Plugin: RelationSplitter
+- New Plugin: RelationSplitter (replaces SplitRelationsFormatter)
 
 
 ## Compatibility
