@@ -613,4 +613,15 @@ class Controller extends IlluminateController
     protected function afterConstruct()
     {
     }
+
+    /**
+     * This is used to receive the model's FQN.
+     * Some plugins might need to know which model they are dealing with.
+     *
+     * @return String
+     */
+    public function getModelNameWithNamespace()
+    {
+        return $this->model;
+    }
 }
