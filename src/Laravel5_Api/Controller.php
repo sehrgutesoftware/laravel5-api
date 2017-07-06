@@ -267,7 +267,6 @@ class Controller extends IlluminateController
      */
     public function show()
     {
-        $this->applyHooks(AuthorizeAction::class, 'show');
         $this->getResource();
         $this->applyHooks(AuthorizeResource::class, 'show');
         $this->formatResource();
@@ -282,7 +281,6 @@ class Controller extends IlluminateController
      */
     public function update()
     {
-        $this->applyHooks(AuthorizeAction::class, 'update');
         $this->getResource();
         $this->applyHooks(AuthorizeResource::class, 'update');
         $this->gatherInput();
@@ -300,7 +298,6 @@ class Controller extends IlluminateController
      */
     public function destroy()
     {
-        $this->applyHooks(AuthorizeAction::class, 'destroy');
         $this->getResource();
         $this->applyHooks(AuthorizeResource::class, 'destroy');
         $this->destroyResource();
