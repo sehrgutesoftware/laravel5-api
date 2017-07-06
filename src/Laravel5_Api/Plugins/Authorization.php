@@ -5,7 +5,6 @@ namespace SehrGut\Laravel5_Api\Plugins;
 use Illuminate\Foundation\Auth\User as DummyUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-
 use SehrGut\Laravel5_Api\Exceptions\Unauthorized;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeAction;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
@@ -21,6 +20,7 @@ class Authorization extends Plugin implements AuthorizeAction, AuthorizeResource
         if ($this->authenticatedUserOrDummy()->cant($action, $this->controller->getModelNameWithNamespace())) {
             throw new Unauthorized();
         }
+
         return $action;
     }
 
@@ -30,6 +30,7 @@ class Authorization extends Plugin implements AuthorizeAction, AuthorizeResource
         if (Gate::forUser($this->authenticatedUserOrDummy())->denies($action, $this->controller->resource)) {
             throw new Unauthorized();
         }
+
         return $action;
     }
 
