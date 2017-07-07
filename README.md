@@ -336,7 +336,7 @@ class DieAndDumpQuery extends Plugin implements AdaptCollectionQuery, AdaptResou
 
 ##### Plugin Hooks
 
-The available hooks are listed in the ["Hooks" directory](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Hooks). In order to use a hook, you simply have to declare that your plugin class `implements` the corresponding interface and then actually implement the appropriate method of that interface. Take a look at source code of the [existing plugins](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Plugins) to see how this is done. Each hook interface always contains to exactly one method.
+The available hooks are listed in the ["Hooks" directory](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Hooks). In order to use a hook, you simply have to declare that your plugin class `implements` the corresponding interface and then actually implement the appropriate method of that interface. Take a look at source code of the [existing plugins](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Plugins) to see how this is done. Each hook interface always contains exactly one method.
 
 ###### Available Hooks
 
