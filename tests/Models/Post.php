@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Classes;
+namespace Tests\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +11,6 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->hasMany('Tests\Classes\Comment');
+        return $this->hasMany('Tests\Models\Comment');
     }
 }
