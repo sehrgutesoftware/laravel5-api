@@ -57,7 +57,9 @@ class AuthorizationPluginTest extends TestCase
     public function test_index_action_with_user()
     {
         $db_user = User::create(['email' => 'test@example.org']);
-        Gate::define('index', function($user, $post) use ($db_user) { return $user == $db_user; });
+        Gate::define('index', function ($user, $post) use ($db_user) {
+            return $user == $db_user;
+        });
 
         $response = $this->get('/posts');
         $this->assertTrue($response->exception instanceof Unauthorized);
@@ -69,7 +71,9 @@ class AuthorizationPluginTest extends TestCase
     public function test_store_action_with_user()
     {
         $db_user = User::create(['email' => 'test@example.org']);
-        Gate::define('store', function($user, $post) use ($db_user) { return $user == $db_user; });
+        Gate::define('store', function ($user, $post) use ($db_user) {
+            return $user == $db_user;
+        });
 
         $response = $this->post('/posts', ['title' => 'Test Post', 'slug' => 'test-post']);
         $this->assertTrue($response->exception instanceof Unauthorized);
@@ -82,7 +86,9 @@ class AuthorizationPluginTest extends TestCase
     {
         $db_user = User::create(['email' => 'test@example.org']);
         Post::create(['title' => 'Test Post', 'slug' => 'test-post']);
-        Gate::define('show', function($user, $post) use ($db_user) { return $user == $db_user; });
+        Gate::define('show', function ($user, $post) use ($db_user) {
+            return $user == $db_user;
+        });
 
         $response = $this->get('/posts/1');
         $this->assertTrue($response->exception instanceof Unauthorized);
@@ -95,7 +101,9 @@ class AuthorizationPluginTest extends TestCase
     {
         $db_user = User::create(['email' => 'test@example.org']);
         Post::create(['title' => 'Test Post', 'slug' => 'test-post']);
-        Gate::define('update', function($user, $post) use ($db_user) { return $user == $db_user; });
+        Gate::define('update', function ($user, $post) use ($db_user) {
+            return $user == $db_user;
+        });
 
         $response = $this->put('/posts/1', ['title' => 'New Title']);
         $this->assertTrue($response->exception instanceof Unauthorized);
@@ -108,7 +116,9 @@ class AuthorizationPluginTest extends TestCase
     {
         $db_user = User::create(['email' => 'test@example.org']);
         Post::create(['title' => 'Test Post', 'slug' => 'test-post']);
-        Gate::define('destroy', function($user, $post) use ($db_user) { return $user == $db_user; });
+        Gate::define('destroy', function ($user, $post) use ($db_user) {
+            return $user == $db_user;
+        });
 
         $response = $this->delete('/posts/1');
         $this->assertTrue($response->exception instanceof Unauthorized);
