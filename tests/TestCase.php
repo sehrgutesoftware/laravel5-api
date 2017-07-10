@@ -10,7 +10,7 @@ use Tests\Migrations\CreatePostsTable;
 class TestCase extends BaseTestCase
 {
     /**
-     * Which controller to use for making requests using `$this->get()` etc…
+     * Which controller to use for making requests using `$this->get()` etc….
      *
      * @var Illuminate\Routing\Controller
      */
@@ -68,10 +68,10 @@ class TestCase extends BaseTestCase
      */
     protected function registerRoutes()
     {
-        Route::get('/posts', static::$controller . '@index');
-        Route::post('/posts', static::$controller . '@store');
-        Route::get('/posts/{id}', static::$controller . '@show');
-        Route::put('/posts/{id}', static::$controller . '@update');
-        Route::delete('/posts/{id}', static::$controller . '@destroy');
+        Route::get('/posts', static::$controller.'@index');
+        Route::post('/posts', static::$controller.'@store');
+        Route::get('/posts/{id}', static::$controller.'@show');
+        Route::put('/posts/{id}', static::$controller.'@update');
+        Route::delete('/posts/{id}', static::$controller.'@destroy');
     }
 }
