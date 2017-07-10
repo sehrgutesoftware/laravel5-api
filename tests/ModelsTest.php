@@ -2,7 +2,7 @@
 
 namespace Tests;
 
-use Tests\Classes\Post;
+use Tests\Models\Post;
 
 class ModelsTest extends TestCase
 {

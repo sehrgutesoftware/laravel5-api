@@ -2,44 +2,67 @@
 
 namespace Tests;
 
-use Illuminate\Http\Request;
-use ReflectionClass;
-use Tests\Classes\Post;
-use Tests\Classes\PostsController;
+use Tests\Models\Post;
 
 class ControllerRelationsTest extends TestCase
 {
-    /**
-     * Call a controller action and pass through its return value.
-     *
-     * @param string      $action Controller action (index|show|store|update|destroy)
-     * @param array|array $params Request parameters
-     *
-     * @return Response
-     */
-    protected function makeRequest($action, $params = [])
-    {
-        $request = new Request($params);
-        $controller = new PostsController($request);
+    /** {@inheritdoc} */
+    public static $controller = \Tests\Controllers\PostsWithCommentsController::class;
 
-        $reflector_class = new ReflectionClass(PostsController::class);
-        $reflector_property = $reflector_class->getProperty('relations');
-        $reflector_property->setAccessible(true);
-        $reflector_property->setValue($controller, ['comments']);
-
-        return $controller->callAction($action, []);
-    }
-
-    public function test_it_includes_relationships()
+    public function test_it_includes_relationships_on_show()
     {
         $post = Post::create(['title' => 'Some Post', 'slug' => 'some-post']);
-        $post->load('comments')->refresh();
-        $response = $this->makeRequest('index');
-        $this->assertEquals([$post->toArray()], json_decode($response->content(), true));
 
-        $comment = $post->comments()->create(['text' => 'An opinions']);
-        $post->load('comments')->refresh();
-        $response = $this->makeRequest('index');
-        $this->assertEquals([$post->toArray()], json_decode($response->content(), true));
+        // First, there shouldn't be any comments…
+        $this->get('/posts/' . $post->id)
+            ->assertJson([
+                'id' => $post->id,
+                'comments' => [],
+            ]);
+
+        $comment = $post->comments()->create(['text' => 'An opinion on this…']);
+
+        // …but after inserting one, it should appear
+        $this->get('/posts/' . $post->id)
+            ->assertJson([
+                'id' => $post->id,
+                'comments' => [
+                    [
+                        'id' => $comment->id,
+                        'text' => 'An opinion on this…',
+                    ]
+                ],
+            ]);
+    }
+
+    public function test_it_includes_relationships_on_index()
+    {
+        $post = Post::create(['title' => 'Some Post', 'slug' => 'some-post']);
+
+        // First, there shouldn't be any comments…
+        $this->get('/posts')
+            ->assertJson([[
+                'id' => $post->id,
+                'comments' => [],
+            ]]);
+
+        $comment_1 = $post->comments()->create(['text' => 'An opinion on this…']);
+        $comment_2 = $post->comments()->create(['text' => 'Some more rant…']);
+
+        // …but after inserting some, they should appear
+        $this->get('/posts')
+            ->assertJson([[
+                'id' => $post->id,
+                'comments' => [
+                    [
+                        'id' => $comment_1->id,
+                        'text' => 'An opinion on this…',
+                    ],
+                    [
+                        'id' => $comment_2->id,
+                        'text' => 'Some more rant…',
+                    ]
+                ],
+            ]]);
     }
 }

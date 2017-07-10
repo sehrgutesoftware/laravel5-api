@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Classes;
+namespace Tests\Controllers;
 
 use SehrGut\Laravel5_Api\Controller;
+use Tests\Models\Post;
 
 class PostsController extends Controller
 {
