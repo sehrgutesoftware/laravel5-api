@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Classes;
+namespace Tests\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +11,6 @@ class Comment extends Model
 
     public function post()
     {
-        return $this->belongsTo('Tests\Classes\Post');
+        return $this->belongsTo('Tests\Models\Post');
     }
 }

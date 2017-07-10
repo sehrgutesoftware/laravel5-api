@@ -3,11 +3,19 @@
 namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Route;
 use Tests\Migrations\CreateCommentsTable;
 use Tests\Migrations\CreatePostsTable;
 
 class TestCase extends BaseTestCase
 {
+    /**
+     * Which controller to use for making requests using `$this->get()` etc….
+     *
+     * @var Illuminate\Routing\Controller
+     */
+    public static $controller = \Tests\Controllers\PostsController::class;
+
     /**
      * Boots the application.
      *
@@ -34,6 +42,7 @@ class TestCase extends BaseTestCase
         $this->app['config']->set('database.connections.sqlite.database', ':memory:');
 
         $this->migrate();
+        $this->registerRoutes();
     }
 
     /**
@@ -41,7 +50,7 @@ class TestCase extends BaseTestCase
      *
      * @return void
      */
-    public function migrate()
+    protected function migrate()
     {
         $migrations = [
             CreatePostsTable::class,
@@ -50,5 +59,19 @@ class TestCase extends BaseTestCase
         foreach ($migrations as $class) {
             (new $class())->up();
         }
+    }
+
+    /**
+     * Register all "resource routes" for `PostsController`.
+     *
+     * @return void
+     */
+    protected function registerRoutes()
+    {
+        Route::get('/posts', static::$controller.'@index');
+        Route::post('/posts', static::$controller.'@store');
+        Route::get('/posts/{id}', static::$controller.'@show');
+        Route::put('/posts/{id}', static::$controller.'@update');
+        Route::delete('/posts/{id}', static::$controller.'@destroy');
     }
 }
