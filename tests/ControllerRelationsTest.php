@@ -14,23 +14,23 @@ class ControllerRelationsTest extends TestCase
         $post = Post::create(['title' => 'Some Post', 'slug' => 'some-post']);
 
         // First, there shouldn't be any comments…
-        $this->get('/posts/' . $post->id)
+        $this->get('/posts/'.$post->id)
             ->assertJson([
-                'id' => $post->id,
+                'id'       => $post->id,
                 'comments' => [],
             ]);
 
         $comment = $post->comments()->create(['text' => 'An opinion on this…']);
 
         // …but after inserting one, it should appear
-        $this->get('/posts/' . $post->id)
+        $this->get('/posts/'.$post->id)
             ->assertJson([
-                'id' => $post->id,
+                'id'       => $post->id,
                 'comments' => [
                     [
-                        'id' => $comment->id,
+                        'id'   => $comment->id,
                         'text' => 'An opinion on this…',
-                    ]
+                    ],
                 ],
             ]);
     }
@@ -42,7 +42,7 @@ class ControllerRelationsTest extends TestCase
         // First, there shouldn't be any comments…
         $this->get('/posts')
             ->assertJson([[
-                'id' => $post->id,
+                'id'       => $post->id,
                 'comments' => [],
             ]]);
 
@@ -52,16 +52,16 @@ class ControllerRelationsTest extends TestCase
         // …but after inserting some, they should appear
         $this->get('/posts')
             ->assertJson([[
-                'id' => $post->id,
+                'id'       => $post->id,
                 'comments' => [
                     [
-                        'id' => $comment_1->id,
+                        'id'   => $comment_1->id,
                         'text' => 'An opinion on this…',
                     ],
                     [
-                        'id' => $comment_2->id,
+                        'id'   => $comment_2->id,
                         'text' => 'Some more rant…',
-                    ]
+                    ],
                 ],
             ]]);
     }
