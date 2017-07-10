@@ -613,6 +613,7 @@ class Controller extends IlluminateController
 
     /**
      * This is used to receive the model's FQN.
+     *
      * Some plugins might need to know which model they are dealing with.
      *
      * @return string

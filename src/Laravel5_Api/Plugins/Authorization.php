@@ -36,9 +36,11 @@ class Authorization extends Plugin implements AuthorizeAction, AuthorizeResource
 
     /**
      * Laravel assumes an authenticated User object for any authorization.
-     * There might be situations where you don't have or need an User in your authorisation logic.
-     * For those situations we will simply create a DummyUser which contains no information
-     * in order to satisfy Laravel's authorisation logic.
+     *
+     * There might be situations where you don't have or need an User in
+     * your authorisation logic. For those situations we will simply
+     * create a DummyUser which contains no information in order
+     * to satisfy Laravel's authorisation logic.
      *
      * @return Illuminate\Foundation\Auth\User
      */
