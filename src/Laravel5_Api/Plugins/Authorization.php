@@ -17,7 +17,7 @@ class Authorization extends Plugin implements AuthorizeAction, AuthorizeResource
     /** {@inheritdoc} */
     public function authorizeAction(String $action)
     {
-        if ($this->authenticatedUserOrDummy()->cant($action, $this->controller->getModelNameWithNamespace())) {
+        if (Gate::forUser($this->authenticatedUserOrDummy())->denies($action, $this->controller->getModelNameWithNamespace())) {
             throw new Unauthorized();
         }
 

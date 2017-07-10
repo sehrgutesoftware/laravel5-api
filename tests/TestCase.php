@@ -4,8 +4,6 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\Route;
-use Tests\Migrations\CreateCommentsTable;
-use Tests\Migrations\CreatePostsTable;
 
 class TestCase extends BaseTestCase
 {
@@ -37,25 +35,26 @@ class TestCase extends BaseTestCase
     public function setUp()
     {
         parent::setUp();
-
-        $this->app['config']->set('database.default', 'sqlite');
-        $this->app['config']->set('database.connections.sqlite.database', ':memory:');
-
-        $this->migrate();
+        $this->setupDatabase();
         $this->registerRoutes();
     }
 
     /**
-     * Run test migrations.
+     * Configure the DB and run test migrations.
      *
      * @return void
      */
-    protected function migrate()
+    protected function setupDatabase()
     {
+        $this->app['config']->set('database.default', 'sqlite');
+        $this->app['config']->set('database.connections.sqlite.database', ':memory:');
+
         $migrations = [
-            CreatePostsTable::class,
-            CreateCommentsTable::class,
+            \Tests\Migrations\CreateUsersTable::class,
+            \Tests\Migrations\CreatePostsTable::class,
+            \Tests\Migrations\CreateCommentsTable::class,
         ];
+
         foreach ($migrations as $class) {
             (new $class())->up();
         }
