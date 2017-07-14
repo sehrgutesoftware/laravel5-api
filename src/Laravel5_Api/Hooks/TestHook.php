@@ -8,7 +8,7 @@ namespace SehrGut\Laravel5_Api\Hooks;
 interface TestHook extends Hook
 {
     /**
-     * Just pass in anything here…
+     * Just pass in anything here….
      *
      * @param mixed $input
      *

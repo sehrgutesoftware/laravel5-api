@@ -130,8 +130,9 @@ class Controller extends IlluminateController
     /**
      * Proxy: Pass configuration options to a plugin on the loader.
      *
-     * @param  String $class   Plugin type
-     * @param  array  $options Config parameters (individual per plugin)
+     * @param string $class   Plugin type
+     * @param array  $options Config parameters (individual per plugin)
+     *
      * @return mixed
      */
     public function configurePlugin(String $class, array $options)
@@ -142,9 +143,10 @@ class Controller extends IlluminateController
     /**
      * Proxy: Run `$argument` through all plugins registered for `$hook` and return their result.
      *
-     * @param  String $hook    Hook Interface
-     * @param  mixed $argument Whatever the hook requires
-     * @return mixed           Whatever the last plugin on that hook returns
+     * @param string $hook     Hook Interface
+     * @param mixed  $argument Whatever the hook requires
+     *
+     * @return mixed Whatever the last plugin on that hook returns
      */
     protected function applyHooks(String $hook, $argument)
     {
