@@ -291,8 +291,12 @@ class PostsController extends BaseController
 
 Please [use the source](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Plugins) for definite answers. Still, here's a (probably outdated) list of plugins:
 
+- **Authorizaton** runs Authorization checks using Laravel's built-in [Authorization](https://laravel.com/docs/5.2/authorization) on all five default controller actions.
 - **Paginator** allows pagination of `index` result sets. By default, it uses the `limit` and `page` query parameters to determine the requested subset.
+- **RelationSplitter** is a pretty successful divorce lawyer from Southern… kidding aside, it makes related objects appear under a separate key in the response, instead of nested inside their relatives.
 - **SearchFilter** adds text search to `index` queries. You can configure which model attributes to compare the search term with.
+
+**For help on using the individual plugins, check their respective [source files](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Plugins) or the [API reference](#documentation)!**
 
 #### Writing Plugins
 
@@ -300,7 +304,7 @@ A plugin is just a class that extends `SehrGut\Laravel5_Api\Plugins\Plugin` clas
 
 ##### Plugin Configuration
 
-The base `Plugin` class provides a `protected $config` attribute, to store configuation options, which are settable through the controller's `configurePlugin($name, $options)` method. Use this feature to expose parameters of your plugin to the user (the person writing the controller). Retrieve config options inside the plugin with `$this->config['option_name']`. Default values can be set via the `protected $default_config` property.
+The base `Plugin` class provides a `protected $config` attribute, to store configuation options, which are settable through the controller's `configurePlugin($name, $options)` method. Use this feature to expose parameters of your plugin to the user (the person writing the controller). Retrieve config options inside the plugin with `$this->config['option_name']`. Default values should be set via the `protected $default_config` property.
 
 ##### Example:
 
@@ -336,7 +340,11 @@ class DieAndDumpQuery extends Plugin implements AdaptCollectionQuery, AdaptResou
 
 ##### Plugin Hooks
 
-The available hooks are listed in the ["Hooks" directory](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Hooks). In order to use a hook, you simply have to declare that your plugin class `implements` the corresponding interface and then actually implement the appropriate method of that interface. Take a look at source code of the [existing plugins](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Plugins) to see how this is done. Each hook interface always contains exactly one method.
+The available hooks are listed in the ["Hooks" directory](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Hooks).
+
+In order to use a hook, you simply have to declare that your plugin class `implements` the corresponding interface and then actually implement the appropriate method of that interface. Take a look at source code of the [existing plugins](https://github.com/sehrgutesoftware/laravel5-api/tree/master/src/Laravel5_Api/Plugins) to see how this is done.
+
+Each hook interface declares exactly one method. The name of this method is the same as the interface, just with a lowercase first letter. Example: The Hook Interface `AdaptResourceQuery` declares a method named `adaptResourceQuery`.
 
 ###### Available Hooks
 
@@ -347,10 +355,10 @@ Customize the query for fetching a single resource (`show`, `update` and `destro
 Customize the query for fetching a resource collection (`index` action). Return the adapted query.
 
 `AuthorizeAction::authorizeAction(String $action)`
-Hook in here to perform authorization on action level (`$action = index|store|show|update|destroy`). Calling this hook is the first act of every handler method. You could use the Laravel built-in [Authorization](https://laravel.com/docs/5.2/authorization) and throw an exception here if the user is not authorized to perform this action.
+Hook in here to perform authorization on action level. This hook is only called on the `index` and `store` actions.
 
 `AuthorizeResource::authorizeResource(String $action)`
-Hook in here to perform authorization on a single resource. This method is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
+Hook in here to perform authorization on a single resource. This hook is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
 
 `FormatCollection::formatCollection(Array $collection)`
 This hook receives a Collection of resources before they are transformed.
