@@ -7,6 +7,8 @@ use InvalidArgumentException;
 use Mockery;
 use SehrGut\Laravel5_Api\Controller;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
+use SehrGut\Laravel5_Api\Hooks\Hook;
+use SehrGut\Laravel5_Api\Hooks\TestHook;
 use SehrGut\Laravel5_Api\PluginLoader;
 use SehrGut\Laravel5_Api\Plugins\Paginator;
 use SehrGut\Laravel5_Api\Plugins\Plugin;
@@ -151,5 +153,25 @@ class PluginLoaderTest extends TestCase
         foreach ($samples as $challenge => $response) {
             $this->assertEquals($response, PluginLoader::getHookMethodName($challenge));
         }
+    }
+
+    public function test_it_identifies_hook_interfaces()
+    {
+        $this->assertFalse(PluginLoader::isHook(Controller::class));
+        $this->assertFalse(PluginLoader::isHook(Plugin::class));
+        $this->assertFalse(PluginLoader::isHook('Hook'));
+        $this->assertFalse(PluginLoader::isHook('Something Else'));
+
+        // Hook itself shouldn't be recognized as it defines zero methods
+        $this->assertFalse(PluginLoader::isHook(Hook::class));
+
+        $this->assertTrue(PluginLoader::isHook(TestHook::class));
+        $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery'));
+        $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery'));
+        $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\AuthorizeResource'));
+        $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\AuthorizeAction'));
+        $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\FormatCollection'));
+        $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\FormatResource'));
+        $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\ResponseHeaders'));
     }
 }

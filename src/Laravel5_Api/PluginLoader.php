@@ -3,6 +3,7 @@
 namespace SehrGut\Laravel5_Api;
 
 use InvalidArgumentException;
+use SehrGut\Laravel5_Api\Hooks\Hook;
 use SehrGut\Laravel5_Api\Plugins\Plugin;
 
 /**
@@ -41,6 +42,8 @@ class PluginLoader
     {
         $this->controller = $controller;
 
+        $this->loadPlugin($this->controller);
+
         // Load Plugins
         if ($plugins) {
             $this->loadPlugins($plugins);
@@ -68,7 +71,7 @@ class PluginLoader
      */
     public function loadPlugin($class)
     {
-        if ($class instanceof Plugin) {
+        if ($class instanceof Plugin OR $class instanceof Controller) {
             $instance = $class;
             $class = get_class($class);
         } elseif (is_string($class) AND class_exists($class)) {
@@ -158,9 +161,14 @@ class PluginLoader
      */
     protected function registerHook(String $class, String $hook)
     {
+        if (!static::isHook($hook)) {
+            return;
+        }
+
         if (!$this->hookExists($hook)) {
             $this->hooks[$hook] = [];
         }
+
         $this->hooks[$hook][] = $class;
     }
 
@@ -221,5 +229,15 @@ class PluginLoader
         $without_namespace = array_last(explode('\\', $fqn));
 
         return lcfirst($without_namespace);
+    }
+
+    /**
+     * Test whether a Hook is
+     * @param  String  $class [description]
+     * @return boolean        [description]
+     */
+    public static function isHook(String $class)
+    {
+        return is_subclass_of($class, Hook::class, true);
     }
 }
