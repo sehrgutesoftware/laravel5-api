@@ -4,7 +4,7 @@ namespace SehrGut\Laravel5_Api\Hooks;
 
 use Illuminate\Database\Eloquent\Builder;
 
-interface AdaptResourceQuery
+interface AdaptResourceQuery extends Hook
 {
     /**
      * This hook receives the query on "single resource" requests after the

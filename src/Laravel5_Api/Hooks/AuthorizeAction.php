@@ -2,7 +2,7 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-interface AuthorizeAction
+interface AuthorizeAction extends Hook
 {
     /**
      * Hook in here to check authorization for an action in general

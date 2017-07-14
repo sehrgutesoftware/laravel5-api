@@ -2,7 +2,7 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-interface FormatCollection
+interface FormatCollection extends Hook
 {
     /**
      * This hook receives a Collection of resources before they are transformed.

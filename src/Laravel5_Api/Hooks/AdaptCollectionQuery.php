@@ -4,7 +4,7 @@ namespace SehrGut\Laravel5_Api\Hooks;
 
 use Illuminate\Database\Eloquent\Builder;
 
-interface AdaptCollectionQuery
+interface AdaptCollectionQuery extends Hook
 {
     /**
      * This hook receives the query on "index requests" after the request

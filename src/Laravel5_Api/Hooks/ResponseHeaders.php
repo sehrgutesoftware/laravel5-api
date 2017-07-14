@@ -2,7 +2,7 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-interface ResponseHeaders
+interface ResponseHeaders extends Hook
 {
     /**
      * Hook in here to manipulate the response headers.

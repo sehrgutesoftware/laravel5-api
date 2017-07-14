@@ -2,7 +2,7 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-interface AuthorizeResource
+interface AuthorizeResource extends Hook
 {
     /**
      * Hook in here to check authorization for a single resource (db record).

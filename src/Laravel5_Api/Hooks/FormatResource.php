@@ -4,7 +4,7 @@ namespace SehrGut\Laravel5_Api\Hooks;
 
 use Illuminate\Database\Eloquent\Model;
 
-interface FormatResource
+interface FormatResource extends Hook
 {
     /**
      * This hook receives a single resource before it is transformed.
