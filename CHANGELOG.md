@@ -29,3 +29,7 @@
 
 ### v0.5.2
 - Offer `$last_page` as paginator meta value
+
+### v0.5.3
+- Add Authorization Plugin
+- Prepare for Plugin testing
