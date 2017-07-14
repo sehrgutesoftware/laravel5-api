@@ -123,7 +123,7 @@ class PluginLoader
      */
     public function applyHooks(String $hook, $argument)
     {
-        $method_name = $this->getHookMethodName($hook);
+        $method_name = static::getHookMethodName($hook);
 
         // Call all plugins, passing the return value of the
         // previous hook as first argument to the next
@@ -212,11 +212,11 @@ class PluginLoader
     /**
      * Turn the FQN of a hook Interface into its corresponding method name.
      *
-     * @param string $fqn FQN of the hook
+     * @param string $fqn FQN of the hook Interface
      *
      * @return string Name of the hook method
      */
-    private function getHookMethodName(String $fqn)
+    public static function getHookMethodName(String $fqn)
     {
         $without_namespace = array_last(explode('\\', $fqn));
 

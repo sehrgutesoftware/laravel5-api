@@ -135,4 +135,21 @@ class PluginLoaderTest extends TestCase
 
         $this->assertEquals('three to out', $result);
     }
+
+    public function test_it_generates_hook_methods_correctly()
+    {
+        $samples = [
+            'SehrGut\\Laravel5_Api\\Hooks\\AdaptCollectionQuery' => 'adaptCollectionQuery',
+            '\\\\SehrGut\\Laravel5_Api\\Hooks\\AdaptResourceQuery' => 'adaptResourceQuery',
+            'Hooks\\AuthorizeResource' => 'authorizeResource',
+            'SehrGut\Laravel5_Api\Hooks\AuthorizeAction' => 'authorizeAction',
+            'FormatCollection' => 'formatCollection',
+            'formatResource' => 'formatResource',
+            'ponseHeaders' => 'ponseHeaders',
+        ];
+
+        foreach ($samples as $challenge => $response) {
+            $this->assertEquals($response, PluginLoader::getHookMethodName($challenge));
+        }
+    }
 }
