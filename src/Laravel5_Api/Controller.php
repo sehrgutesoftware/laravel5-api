@@ -20,7 +20,7 @@ use SehrGut\Laravel5_Api\Hooks\ResponseHeaders;
 use SehrGut\Laravel5_Api\Plugins\Plugin;
 
 /**
- * The main Controler to inherit from.
+ * The main Controller to inherit from.
  */
 class Controller extends IlluminateController
 {
@@ -82,6 +82,7 @@ class Controller extends IlluminateController
 
     /**
      * Use these plugins. List all Plugin classes here.
+     * Order of listing = order of execution.
      *
      * @var array
      */
@@ -109,119 +110,45 @@ class Controller extends IlluminateController
     protected $model;
     protected $input;
     protected $collection;
-
-    /**
-     * Maps hooks to plugin instances. Don't add anything here manually!
-     *
-     * @var array
-     */
-    private $hooks = [];
+    protected $loader;
 
     public function __construct(Request $request)
     {
         $this->request = $request;
         $this->model_mapping = $this->makeModelMapping();
         $this->request_adapter = $this->makeRequestAdapter($request);
-        $this->loadPlugins();
+        $this->loader = new PluginLoader($this, $this->plugins);
         $this->afterConstruct();
     }
 
     /***
     |--------------------------------------------------------------------------
-    | Plugins / Hooks
+    | Plugins
     |--------------------------------------------------------------------------
     ***/
 
     /**
-     * Load all plugins registered in `$plugins` and save their hooks to `$hooks`.
+     * Proxy: Pass configuration options to a plugin on the loader.
      *
-     * @return void
+     * @param  String $class   Plugin type
+     * @param  array  $options Config parameters (individual per plugin)
+     * @return mixed
      */
-    protected function loadPlugins()
+    public function configurePlugin(String $class, array $options)
     {
-        foreach (array_unique($this->plugins) as $class) {
-            $instance = new $class($this);
-
-            $hooks = class_implements($class);
-            foreach ($hooks as $hook) {
-                $this->registerHook($instance, $hook);
-            }
-        }
+        return $this->loader->configurePlugin($class, $options);
     }
 
     /**
-     * Register a plugin to a single hook.
+     * Proxy: Run `$argument` through all plugins registered for `$hook` and return their result.
      *
-     * @param Plugin $plugin The plugin instance
-     * @param string $hook   FQN of the hook interface
-     *
-     * @return void
-     */
-    protected function registerHook(Plugin $plugin, String $hook)
-    {
-        if (!array_key_exists($hook, $this->hooks)) {
-            $this->hooks[$hook] = [];
-        }
-        $this->hooks[$hook][] = $plugin;
-    }
-
-    /**
-     * Pass the `$argument` to all plugins registered for `$hook`
-     * consecutively and return the result of the last plugin.
-     *
-     * @param string $hook     FQN of the hook interface
-     * @param mixed  $argument Argument passed to the first hook
-     *
-     * @return mixed Return value of the last hook
+     * @param  String $hook    Hook Interface
+     * @param  mixed $argument Whatever the hook requires
+     * @return mixed           Whatever the last plugin on that hook returns
      */
     protected function applyHooks(String $hook, $argument)
     {
-        $method_name = $this->getHookMethodName($hook);
-
-        // Check if there are any plugins for this hook
-        if (array_key_exists($hook, $this->hooks)) {
-
-            // Call all plugins, passing the return value of the
-            // previous hook as first argument to the next
-            foreach ($this->hooks[$hook] as $plugin) {
-                $argument = $plugin->$method_name($argument);
-            }
-        }
-
-        return $argument;
-    }
-
-    /**
-     * Turn the FQN of a hook Interface into its corresponding method name.
-     *
-     * @param string $fqn FQN of the hook
-     *
-     * @return string Name of the hook method
-     */
-    private function getHookMethodName(String $fqn)
-    {
-        $without_namespace = array_last(explode('\\', $fqn));
-
-        return lcfirst($without_namespace);
-    }
-
-    /**
-     * Pass configuration array to a plugin instance.
-     *
-     * @param string $name    FQN of the plugin
-     * @param array  $options Array of options for the plugin
-     *
-     * @return void
-     */
-    protected function configurePlugin(String $name, array $options)
-    {
-        foreach ($this->hooks as $plugins) {
-            foreach ($plugins as $plugin) {
-                if ($plugin instanceof $name) {
-                    $plugin->configure($options);
-                }
-            }
-        }
+        return $this->loader->applyHooks($hook, $argument);
     }
 
     /***
