@@ -9,7 +9,8 @@ interface AfterSave extends Hook
     /**
      * This Hook is called after a resource is saved (on store & update actions).
      *
-     * @param  Context $context
+     * @param Context $context
+     *
      * @return Context
      */
     public function afterSave(Context $context);

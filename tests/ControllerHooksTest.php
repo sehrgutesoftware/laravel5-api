@@ -20,7 +20,7 @@ class ControllerHooksTest extends TestCase
             [$request]
         );
 
-        $thief = Closure::bind(function($controller) {
+        $thief = Closure::bind(function ($controller) {
             return $controller->context;
         }, null, $controller);
         $context = $thief($controller);

@@ -9,14 +9,14 @@ class ContextTest extends TestCase
     public function test_it_stores_and_returns_properties()
     {
         $context = new Context([
-            'model' => 'MODEL',
-            'request' => 'REQUEST',
-            'input' => 'INPUT',
-            'action' => 'ACTION',
-            'query' => 'QUERY',
-            'resource' => 'RESOURCE',
+            'model'      => 'MODEL',
+            'request'    => 'REQUEST',
+            'input'      => 'INPUT',
+            'action'     => 'ACTION',
+            'query'      => 'QUERY',
+            'resource'   => 'RESOURCE',
             'collection' => 'COLLECTION',
-            'response' => 'RESPONSE',
+            'response'   => 'RESPONSE',
         ]);
 
         $this->assertEquals('MODEL', $context->model);
@@ -57,7 +57,7 @@ class ContextTest extends TestCase
     {
         $context = new Context([
             'rmadon_sritng' => 'RMADON_SRITNG',
-            'anodda_one' => 'ANODDA_ONE',
+            'anodda_one'    => 'ANODDA_ONE',
         ]);
 
         $this->assertEquals('RMADON_SRITNG', $context->rmadon_sritng);

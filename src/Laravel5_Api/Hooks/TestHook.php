@@ -10,9 +10,10 @@ use SehrGut\Laravel5_Api\Context;
 interface TestHook extends Hook
 {
     /**
-     * Just pass in anything here…
+     * Just pass in anything here….
      *
-     * @param  Context $context
+     * @param Context $context
+     *
      * @return Context
      */
     public function testHook(Context $context);
