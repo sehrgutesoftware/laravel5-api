@@ -2,10 +2,10 @@
 
 namespace SehrGut\Laravel5_Api\Plugins;
 
-use Illuminate\Database\Eloquent\Builder;
+use SehrGut\Laravel5_Api\Context;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
 use SehrGut\Laravel5_Api\Hooks\FormatCollection;
-use SehrGut\Laravel5_Api\Hooks\ResponseHeaders;
+use SehrGut\Laravel5_Api\Hooks\BeforeRespond;
 
 /**
  * A basic paginator that takes `limit` and `page` from the
@@ -17,7 +17,7 @@ use SehrGut\Laravel5_Api\Hooks\ResponseHeaders;
  * These can be renamed or moved to the response payload
  * instead, through the plugin's configuration options.
  */
-class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection, ResponseHeaders
+class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection, BeforeRespond
 {
     /**
      * Configuration options for this Plugin:.
@@ -53,9 +53,9 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
     protected $meta_counts;
 
     /** {@inheritdoc} */
-    public function adaptCollectionQuery(Builder $query)
+    public function adaptCollectionQuery(Context $context)
     {
-        $total = $query->count();
+        $total = $context->query->count();
 
         $limit = (int) $this->controller->request_adapter->getValueByKey(
             $this->config['limit_param'],
@@ -68,27 +68,29 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
 
         $this->saveMetaCounts($total, $limit, $page);
 
-        return $query->limit($limit)->skip(($page - 1) * $limit);
+        $context->query->limit($limit)->skip(($page - 1) * $limit);
+
+        return $context;
     }
 
     /** {@inheritdoc} */
-    public function formatCollection(array $collection)
+    public function formatCollection(Context $context)
     {
         if ($meta_key = $this->config['meta_in_payload']) {
-            $collection[$meta_key] = $this->meta_counts;
+            $context->collection[$meta_key] = $this->meta_counts;
         }
 
-        return $collection;
+        return $context;
     }
 
     /** {@inheritdoc} */
-    public function responseHeaders(array $headers)
+    public function beforeRespond(Context $context)
     {
         if ($this->config['meta_in_headers']) {
-            $headers = array_merge($headers, $this->meta_counts);
+            $context->response->headers->add($this->meta_counts);
         }
 
-        return $headers;
+        return $context;
     }
 
     /**

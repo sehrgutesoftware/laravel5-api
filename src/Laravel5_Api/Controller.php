@@ -102,22 +102,31 @@ class Controller extends IlluminateController
      */
     protected $request_adapter_class = RequestAdapter::class;
 
-    public $request_adapter;
-    public $request;
-    public $model_mapping;
-    public $resource;
-
+    /**
+     * The Eloquent Model that is exposed/accessed through this controller.
+     *
+     * @var Model
+     */
     protected $model;
-    protected $input;
-    protected $collection;
+
+    public $request_adapter;
+    public $model_mapping;
+
     protected $loader;
+    protected $context;
 
     public function __construct(Request $request)
     {
-        $this->request = $request;
         $this->model_mapping = $this->makeModelMapping();
         $this->request_adapter = $this->makeRequestAdapter($request);
+
         $this->loader = new PluginLoader($this, $this->plugins);
+
+        $this->context = new Context([
+            'request' => $request,
+            'model' => $this->model,
+        ]);
+
         $this->afterConstruct();
     }
 
@@ -146,9 +155,9 @@ class Controller extends IlluminateController
      * @param  mixed $argument Whatever the hook requires
      * @return mixed           Whatever the last plugin on that hook returns
      */
-    protected function applyHooks(String $hook, $argument)
+    protected function applyHooks(String $hook, $deprecated = null)
     {
-        return $this->loader->applyHooks($hook, $argument);
+        $this->context = $this->loader->applyHooks($hook, $this->context);
     }
 
     /***
@@ -164,7 +173,8 @@ class Controller extends IlluminateController
      */
     public function index()
     {
-        $this->applyHooks(AuthorizeAction::class, 'index');
+        $this->context->action = 'index';
+        $this->applyHooks(AuthorizeAction::class);
         $this->getCollection();
         $this->formatCollection();
 
@@ -178,7 +188,8 @@ class Controller extends IlluminateController
      */
     public function store()
     {
-        $this->applyHooks(AuthorizeAction::class, 'store');
+        $this->context->action = 'store';
+        $this->applyHooks(AuthorizeAction::class);
         $this->gatherInput();
         $this->validateInput();
         $this->createResource();
@@ -194,8 +205,9 @@ class Controller extends IlluminateController
      */
     public function show()
     {
+        $this->context->action = 'show';
         $this->getResource();
-        $this->applyHooks(AuthorizeResource::class, 'show');
+        $this->applyHooks(AuthorizeResource::class);
         $this->formatResource();
 
         return $this->makeResponse();
@@ -208,8 +220,9 @@ class Controller extends IlluminateController
      */
     public function update()
     {
+        $this->context->action = 'update';
         $this->getResource();
-        $this->applyHooks(AuthorizeResource::class, 'update');
+        $this->applyHooks(AuthorizeResource::class);
         $this->gatherInput();
         $this->validateInput(true);
         $this->updateResource();
@@ -225,8 +238,9 @@ class Controller extends IlluminateController
      */
     public function destroy()
     {
+        $this->context->action = 'destroy';
         $this->getResource();
-        $this->applyHooks(AuthorizeResource::class, 'destroy');
+        $this->applyHooks(AuthorizeResource::class);
         $this->destroyResource();
 
         return $this->makeResponse('', 204);
@@ -239,7 +253,7 @@ class Controller extends IlluminateController
     ***/
 
     /**
-     * Fetch a single record from the DB and store it to $this->resource.
+     * Fetch a single record from the DB and store it to $this->context->resource.
      *
      * @throws NotFound In case no record matches the query
      *
@@ -247,27 +261,31 @@ class Controller extends IlluminateController
      */
     protected function getResource()
     {
-        $query = $this->model::with($this->relations)->withCount($this->counts);
-        $query = $this->filterByRequest($query);
-        $query = $this->applyHooks(AdaptResourceQuery::class, $query);
+        $this->context->query = $this->model::with($this->relations)->withCount($this->counts);
+        $this->context->query = $this->filterByRequest($this->context->query);
+
+        $this->applyHooks(AdaptResourceQuery::class);
+
         try {
-            $this->resource = $query->firstOrFail();
+            $this->context->resource = $this->context->query->firstOrFail();
         } catch (ModelNotFoundException $e) {
             throw new NotFound();
         }
     }
 
     /**
-     * Fetch a Collection of Resources from the databse and store it to $this->collection.
+     * Fetch a Collection of Resources from the databse and store it to $this->context->collection.
      *
      * @return void
      */
     protected function getCollection()
     {
-        $query = $this->model::with($this->relations)->withCount($this->counts);
-        $query = $this->filterByRequest($query);
-        $query = $this->applyHooks(AdaptCollectionQuery::class, $query);
-        $this->collection = $query->get();
+        $this->context->query = $this->model::with($this->relations)->withCount($this->counts);
+        $this->context->query = $this->filterByRequest($this->context->query);
+
+        $this->applyHooks(AdaptCollectionQuery::class);
+
+        $this->context->collection = $this->context->query->get();
     }
 
     /**
@@ -277,7 +295,8 @@ class Controller extends IlluminateController
      */
     protected function formatResource()
     {
-        $this->payload = $this->applyHooks(FormatResource::class, $this->resource);
+        $this->applyHooks(FormatResource::class);
+        $this->payload = $this->context->resource;
         $this->transformPayload();
     }
 
@@ -288,7 +307,9 @@ class Controller extends IlluminateController
      */
     protected function formatCollection()
     {
-        $this->payload = $this->applyHooks(FormatCollection::class, $this->collection->all());
+        $this->context->collection = $this->context->collection->all();
+        $this->applyHooks(FormatCollection::class);
+        $this->payload = $this->context->collection;
         $this->transformPayload();
     }
 
@@ -345,19 +366,19 @@ class Controller extends IlluminateController
 
     /**
      * Get the request data from the adapter and
-     * store it to $this->input.
+     * store it to $this->context->input.
      *
      * @return void
      */
     protected function gatherInput()
     {
-        $this->input = $this->request_adapter->getPayload();
+        $this->context->input = $this->request_adapter->getPayload();
     }
 
     /**
      * Validate the input data using the appropriate validator.
      *
-     * @param bool $only_present Whether to only validate fields present in $this->input
+     * @param bool $only_present Whether to only validate fields present in $this->context->input
      *
      * @return void
      */
@@ -365,7 +386,7 @@ class Controller extends IlluminateController
     {
         $validator = $this->model_mapping->getValidatorFor($this->model);
         $rules = $this->adaptRules($validator::getRules());
-        $this->input = $validator::validate($this->input, $rules, $only_present);
+        $this->context->input = $validator::validate($this->context->input, $rules, $only_present);
     }
 
     /**
@@ -377,20 +398,20 @@ class Controller extends IlluminateController
      */
     protected function createResource()
     {
-        $this->resource = new $this->model($this->input);
+        $this->context->resource = new $this->model($this->context->input);
 
         // Add values for parent records
         foreach ($this->key_mapping as $request_key => $db_key) {
             if (!is_array($db_key)) {  // Key mapping items can be `key => value` or `Array`
                 if ($this->request_adapter->hasKey($request_key)) {
-                    $this->resource->$db_key = $this->request_adapter->getValueByKey($request_key);
+                    $this->context->resource->$db_key = $this->request_adapter->getValueByKey($request_key);
                 }
             }
         }
 
         $this->beforeCreate();
         $this->beforeSave();
-        $this->resource->save();
+        $this->context->resource->save();
         $this->afterSave();
         $this->refreshResource();
     }
@@ -402,10 +423,10 @@ class Controller extends IlluminateController
      */
     protected function updateResource()
     {
-        $this->resource->fill($this->input);
+        $this->context->resource->fill($this->context->input);
         $this->beforeUpdate();
         $this->beforeSave();
-        $this->resource->save();
+        $this->context->resource->save();
         $this->afterSave();
         $this->refreshResource();
     }
@@ -417,20 +438,19 @@ class Controller extends IlluminateController
      */
     protected function destroyResource()
     {
-        $this->resource->delete();
+        $this->context->resource->delete();
     }
 
     protected function makeResponse($payload = null, $status_code = 200)
     {
         $payload = is_null($payload) ? $this->payload : $payload;
-        $headers = $this->applyHooks(ResponseHeaders::class, [
-            'Content-Type' => 'application/json',
-        ]);
+        $this->context->response = new Response($payload, $status_code);
 
-        $response = new Response($payload, $status_code);
-        $response->headers->add($headers);
+        $this->context->response->headers->add(['Content-Type' => 'application/json']);
 
-        return $response;
+        $this->applyHooks(BeforeResponse::class);
+
+        return $this->context->response;
     }
 
     /**
@@ -440,7 +460,7 @@ class Controller extends IlluminateController
      */
     protected function refreshResource()
     {
-        $this->resource = $this->resource->fresh($this->relations);
+        $this->context->resource = $this->context->resource->fresh($this->relations);
     }
 
     /***

@@ -3,6 +3,7 @@
 namespace SehrGut\Laravel5_Api\Plugins;
 
 use Illuminate\Database\Eloquent\Builder;
+use SehrGut\Laravel5_Api\Context;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
 
 /**
@@ -65,7 +66,7 @@ class SearchFilter extends Plugin implements AdaptCollectionQuery
     ];
 
     /* {@inheritdoc} **/
-    public function adaptCollectionQuery(Builder $query)
+    public function adaptCollectionQuery(Context $context)
     {
         $fields = $this->config['searchable'];
         $condition = (string) $this->controller
@@ -73,10 +74,10 @@ class SearchFilter extends Plugin implements AdaptCollectionQuery
             ->getValueByKey($this->config['search_param'], '');
 
         if (!empty($condition) and count($fields) > 0) {
-            $query = $this->applyFilter($query, $fields, $condition);
+            $context->query = $this->applyFilter($context->query, $fields, $condition);
         }
 
-        return $query;
+        return $context;
     }
 
     /**

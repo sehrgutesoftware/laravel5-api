@@ -18,18 +18,33 @@ class AuthorizationPluginTest extends TestCase
         Post::create(['title' => 'Test Post', 'slug' => 'test-post']);
 
         $response = $this->get('/posts');
+        if (!$response->exception instanceof Unauthorized) {
+            dd($response->exception);
+        }
         $this->assertTrue($response->exception instanceof Unauthorized);
 
         $response = $this->post('/posts');
+        if (!$response->exception instanceof Unauthorized) {
+            dd($response->exception);
+        }
         $this->assertTrue($response->exception instanceof Unauthorized);
 
         $response = $this->get('/posts/1');
+        if (!$response->exception instanceof Unauthorized) {
+            dd($response->exception);
+        }
         $this->assertTrue($response->exception instanceof Unauthorized);
 
         $response = $this->put('/posts/1', ['title' => 'New Title']);
+        if (!$response->exception instanceof Unauthorized) {
+            dd($response->exception);
+        }
         $this->assertTrue($response->exception instanceof Unauthorized);
 
         $response = $this->delete('/posts/1');
+        if (!$response->exception instanceof Unauthorized) {
+            dd($response->exception);
+        }
         $this->assertTrue($response->exception instanceof Unauthorized);
     }
 

@@ -2,6 +2,8 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
+use SehrGut\Laravel5_Api\Context;
+
 interface AuthorizeAction extends Hook
 {
     /**
@@ -10,16 +12,7 @@ interface AuthorizeAction extends Hook
      *
      * Throw an exception if the check fails, otherwise return $action.
      *
-     * Possible values for `$action` are:
-     * - index
-     * - store
-     * - show
-     * - update
-     * - destroy
-     *
-     * @param string $action Name of the action to check
-     *
      * @return string
      */
-    public function authorizeAction(String $action);
+    public function authorizeAction(Context $context);
 }

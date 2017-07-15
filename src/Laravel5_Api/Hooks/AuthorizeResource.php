@@ -2,6 +2,8 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
+use SehrGut\Laravel5_Api\Context;
+
 interface AuthorizeResource extends Hook
 {
     /**
@@ -10,14 +12,8 @@ interface AuthorizeResource extends Hook
      * Throw an exception if the check fails, otherwise return $action.
      * The resource can be retrieved as `$this->controller->resource`.
      *
-     * Possible values for `$action` are:
-     * - show
-     * - update
-     * - destroy
-     *
-     * @param string $action Name of the action to check
-     *
-     * @return string
+     * @param  Context $context
+     * @return Context
      */
-    public function authorizeResource(String $action);
+    public function authorizeResource(Context $context);
 }

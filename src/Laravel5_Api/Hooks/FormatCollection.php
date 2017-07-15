@@ -2,14 +2,15 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
+use SehrGut\Laravel5_Api\Context;
+
 interface FormatCollection extends Hook
 {
     /**
      * This hook receives a Collection of resources before they are transformed.
      *
-     * @param array $collection
-     *
-     * @return array The modified Collection
+     * @param  Context $context
+     * @return Context
      */
-    public function formatCollection(array $collection);
+    public function formatCollection(Context $context);
 }

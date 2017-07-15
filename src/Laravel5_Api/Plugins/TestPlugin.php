@@ -2,16 +2,16 @@
 
 namespace SehrGut\Laravel5_Api\Plugins;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use SehrGut\Laravel5_Api\Context;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
 use SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeAction;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
+use SehrGut\Laravel5_Api\Hooks\BeforeRespond;
 use SehrGut\Laravel5_Api\Hooks\FormatCollection;
 use SehrGut\Laravel5_Api\Hooks\FormatResource;
-use SehrGut\Laravel5_Api\Hooks\ResponseHeaders;
+use SehrGut\Laravel5_Api\Hooks\TestHook;
 
 /**
  * This plugin is to test all hooks that exist on the Controller.
@@ -21,56 +21,64 @@ class TestPlugin extends Plugin implements
     AdaptResourceQuery,
     AuthorizeResource,
     AuthorizeAction,
+    BeforeRespond,
     FormatCollection,
     FormatResource,
-    ResponseHeaders
+    TestHook
 {
-    public function adaptCollectionQuery(Builder $query)
+    public function adaptCollectionQuery(Context $context)
     {
-        Log::info('TestPlugin: called adaptCollectionQuery', ['query' => $query]);
+        Log::info('TestPlugin: called adaptCollectionQuery', ['context' => $context]);
 
-        return $query;
+        return $context;
     }
 
-    public function adaptResourceQuery(Builder $query)
+    public function adaptResourceQuery(Context $context)
     {
-        Log::info('TestPlugin: called adaptResourceQuery', ['query' => $query]);
+        Log::info('TestPlugin: called adaptResourceQuery', ['context' => $context]);
 
-        return $query;
+        return $context;
     }
 
-    public function authorizeResource(String $action)
+    public function authorizeResource(Context $context)
     {
-        Log::info('TestPlugin: called authorizeResource', ['action' => $action]);
+        Log::info('TestPlugin: called authorizeResource', ['context' => $context]);
 
-        return $action;
+        return $context;
     }
 
-    public function authorizeAction(String $action)
+    public function authorizeAction(Context $context)
     {
-        Log::info('TestPlugin: called authorizeAction', ['action' => $action]);
+        Log::info('TestPlugin: called authorizeAction', ['context' => $context]);
 
-        return $action;
+        return $context;
     }
 
-    public function formatCollection(array $collection)
+    public function beforeRespond(Context $context)
     {
-        Log::info('TestPlugin: called formatCollection', ['collection' => $collection]);
+        Log::info('TestPlugin: called beforeRespond', ['context' => $context]);
 
-        return $collection;
+        return $context;
     }
 
-    public function formatResource(Model $resource)
+    public function formatCollection(Context $context)
     {
-        Log::info('TestPlugin: called formatResource', ['resource' => $resource]);
+        Log::info('TestPlugin: called formatCollection', ['context' => $context]);
 
-        return $resource;
+        return $context;
     }
 
-    public function responseHeaders(array $headers)
+    public function formatResource(Context $context)
     {
-        Log::info('TestPlugin: called responseHeaders', ['headers' => $headers]);
+        Log::info('TestPlugin: called formatResource', ['context' => $context]);
 
-        return $headers;
+        return $context;
+    }
+
+    public function testHook(Context $context)
+    {
+        Log::info('TestPlugin: called testHook', ['context' => $context]);
+
+        return $context;
     }
 }

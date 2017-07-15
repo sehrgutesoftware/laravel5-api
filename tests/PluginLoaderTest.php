@@ -5,6 +5,7 @@ namespace Tests;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
 use Mockery;
+use SehrGut\Laravel5_Api\Context;
 use SehrGut\Laravel5_Api\Controller;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
 use SehrGut\Laravel5_Api\Hooks\Hook;
@@ -99,14 +100,16 @@ class PluginLoaderTest extends TestCase
     public function test_it_applies_hooks()
     {
         $controller = $this->getController();
+        $context = new Context();
+
         $mock = Mockery::mock('SehrGut\Laravel5_Api\Plugins\TestPlugin', [$controller]);
         $mock->shouldReceive('authorizeResource')
-            ->with('some input')
+            ->with($context)
             ->once()
             ->andReturn('some output');
 
         $loader = new PluginLoader($controller, [$mock]);
-        $result = $loader->applyHooks(AuthorizeResource::class, 'some input');
+        $result = $loader->applyHooks(AuthorizeResource::class, $context);
 
         $this->assertEquals('some output', $result);
     }
@@ -114,28 +117,32 @@ class PluginLoaderTest extends TestCase
     public function test_it_applies_hooks_in_correct_order()
     {
         $controller = $this->getController();
+        $in2one = new Context();
+        $one2two = new Context();
+        $two2three = new Context();
+        $three2out = new Context();
 
         // Test one direction
         $plugin_1 = Mockery::namedMock('Mock1', 'SehrGut\Laravel5_Api\Plugins\TestPlugin', [$controller]);
         $plugin_2 = Mockery::namedMock('Mock2', 'SehrGut\Laravel5_Api\Plugins\TestPlugin', [$controller]);
         $plugin_3 = Mockery::namedMock('Mock3', 'SehrGut\Laravel5_Api\Plugins\TestPlugin', [$controller]);
         $plugin_1->shouldReceive('authorizeResource')
-            ->with('in to one')
+            ->with($in2one)
             ->once()
-            ->andReturn('one to two');
+            ->andReturn($one2two);
         $plugin_2->shouldReceive('authorizeResource')
-            ->with('one to two')
+            ->with($one2two)
             ->once()
-            ->andReturn('two to three');
+            ->andReturn($two2three);
         $plugin_3->shouldReceive('authorizeResource')
-            ->with('two to three')
+            ->with($two2three)
             ->once()
-            ->andReturn('three to out');
+            ->andReturn($three2out);
 
         $loader = new PluginLoader($controller, [$plugin_1, $plugin_2, $plugin_3]);
-        $result = $loader->applyHooks(AuthorizeResource::class, 'in to one');
+        $result = $loader->applyHooks(AuthorizeResource::class, $in2one);
 
-        $this->assertEquals('three to out', $result);
+        $this->assertEquals($three2out, $result);
     }
 
     public function test_it_generates_hook_methods_correctly()
@@ -147,7 +154,7 @@ class PluginLoaderTest extends TestCase
             'SehrGut\Laravel5_Api\Hooks\AuthorizeAction' => 'authorizeAction',
             'FormatCollection' => 'formatCollection',
             'formatResource' => 'formatResource',
-            'ponseHeaders' => 'ponseHeaders',
+            'foreRespond' => 'foreRespond',
         ];
 
         foreach ($samples as $challenge => $response) {
@@ -170,8 +177,8 @@ class PluginLoaderTest extends TestCase
         $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery'));
         $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\AuthorizeResource'));
         $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\AuthorizeAction'));
+        $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\BeforeRespond'));
         $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\FormatCollection'));
         $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\FormatResource'));
-        $this->assertTrue(PluginLoader::isHook('SehrGut\Laravel5_Api\Hooks\ResponseHeaders'));
     }
 }
