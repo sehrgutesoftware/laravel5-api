@@ -264,6 +264,13 @@ class PostsController extends BaseController
 }
 ```
 
+Instead of using Plugins, a controller can also implement any of the [Hooks](#plugin-hooks) itself, in order to influence the request/response lifecycle. In this case, it behaves the same as a Plugin:
+
+1. Declare that the controller `implements` the appropriate Hook Interface
+2. Declare the method required by the Interface
+
+If a controller subscribes to a Hook this way, the Hook will first be called on the controller, before it gets handed through the Plugins.
+
 #### Configuration
 
 Some plugins have configurable options, that can be set through the controller. This can be done from inside the `afterConstruct()` method like so:
@@ -369,8 +376,25 @@ This hook receives a single resource before it is transformed.
 `ResponseHeaders::responseHeaders(Array $headers)`
 Hook in here to manipulate the response headers.
 
+###### Hook Context
 
-### Deprecated: Hooks
+Each hook method receives a [Context](https://github.com/sehrgutesoftware/laravel5-api/blob/master/src/Laravel5_Api/Context.php) object as its first and only argument. It is required to return that same object, whether it's changed or not. The `Context` contains all relevant pieces of data, that a Plugin might manipulate:
+
+```php
+// Read-only:
+$context->model;
+$context->request;
+
+// Read-write:
+$context->input;
+$context->action;
+$context->query;
+$context->resource;
+$context->collection;
+$context->response;
+```
+
+### Deprecated: Hook Methods
 
 **Warning: Hooks are deprecated in favour of Plugins (see above), so be aware when using them: The methods listed below will soon be removed from the controller and substituted with appropriate plugin hooks.** "Hook" in the context of a "Plugin" refers to an interface, rather than a controller method like in the old sense.
 
