@@ -376,6 +376,18 @@ This hook receives a single resource before it is transformed.
 `ResponseHeaders::responseHeaders(Context $context)`
 Hook in here to manipulate the response headers.
 
+`BeforeSave::beforeSave(Context $context)`
+Is called on every `create` and `update` action after the model has been filled from `$context->input` right before the call to `$context->resource->save()`.
+
+`AfterSave::afterSave(Context $context)`
+On every `create` and `update` action after the call to `$context->resource->save()`.
+
+`BeforeCreate::beforeCreate(Context $context)`
+Hook just before `beforeSave()` but only in the `store` action.
+
+`BeforeUpdate::beforeUpdate(Context $context)`
+Hook just before `beforeSave()` but only in the `update` action.
+
 ###### Hook Context
 
 Each hook method receives a [Context](https://github.com/sehrgutesoftware/laravel5-api/blob/master/src/Laravel5_Api/Context.php) object as its first and only argument. It is required to return that same object, whether it's changed or not. The `Context` contains all relevant pieces of data, that a Plugin might manipulate:
@@ -408,18 +420,6 @@ Dynamically customize the RequestAdapter.
 
 #### `adaptRules(Array $rules)`
 Adapt the validation rules after fetching them from the validator. Return the adapted rules.
-
-#### `beforeSave()`
-Is called on every `create` and `update` action after the model has been filled from `$this->input` right before the call to `$this->resource->save()`.
-
-#### `afterSave()`
-On every `create` and `update` action after the call to `$this->resource->save()`.
-
-#### `beforeCreate()`
-Same as `beforeSave()` but only in the `store` action.
-
-#### `beforeUpdate()`
-Same as `beforeSave()` but only in the `update` action.
 
 #### `afterConstruct()`
 Last call in the controller's `__construct()` method.

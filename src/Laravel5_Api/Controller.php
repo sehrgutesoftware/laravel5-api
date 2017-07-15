@@ -12,8 +12,12 @@ use Illuminate\Support\Collection;
 use SehrGut\Laravel5_Api\Exceptions\Http\NotFound;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
 use SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery;
+use SehrGut\Laravel5_Api\Hooks\AfterSave;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeAction;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
+use SehrGut\Laravel5_Api\Hooks\BeforeCreate;
+use SehrGut\Laravel5_Api\Hooks\BeforeSave;
+use SehrGut\Laravel5_Api\Hooks\BeforeUpdate;
 use SehrGut\Laravel5_Api\Hooks\FormatCollection;
 use SehrGut\Laravel5_Api\Hooks\FormatResource;
 use SehrGut\Laravel5_Api\Hooks\ResponseHeaders;
@@ -366,8 +370,7 @@ class Controller extends IlluminateController
     }
 
     /**
-     * Get the request data from the adapter and
-     * store it to $this->context->input.
+     * Get the request data from the adapter and store it to $this->context->input.
      *
      * @return void
      */
@@ -391,9 +394,8 @@ class Controller extends IlluminateController
     }
 
     /**
-     * Create a new instance of the current Model, fill it
-     * with the input data, save it to the database and
-     * load it anew to get all attributes populated.
+     * Create a new instance of the current Model, fill it with the input data,
+     * save it tothe database and load it anew to get all attributes populated.
      *
      * @return void
      */
@@ -403,17 +405,17 @@ class Controller extends IlluminateController
 
         // Add values for parent records
         foreach ($this->key_mapping as $request_key => $db_key) {
-            if (!is_array($db_key)) {  // Key mapping items can be `key => value` or `Array`
+            if (!is_array($db_key)) {  // Key mapping items can be `key => value` or `numeric_key => Array`
                 if ($this->request_adapter->hasKey($request_key)) {
                     $this->context->resource->$db_key = $this->request_adapter->getValueByKey($request_key);
                 }
             }
         }
 
-        $this->beforeCreate();
-        $this->beforeSave();
+        $this->applyHooks(BeforeCreate::class);
+        $this->applyHooks(BeforeSave::class);
         $this->context->resource->save();
-        $this->afterSave();
+        $this->applyHooks(AfterSave::class);
         $this->refreshResource();
     }
 
@@ -425,10 +427,10 @@ class Controller extends IlluminateController
     protected function updateResource()
     {
         $this->context->resource->fill($this->context->input);
-        $this->beforeUpdate();
-        $this->beforeSave();
+        $this->applyHooks(BeforeUpdate::class);
+        $this->applyHooks(BeforeSave::class);
         $this->context->resource->save();
-        $this->afterSave();
+        $this->applyHooks(AfterSave::class);
         $this->refreshResource();
     }
 
@@ -510,64 +512,12 @@ class Controller extends IlluminateController
     }
 
     /**
-     * Hook in here to customize the input before saving a resource.
-     *
-     * This happens in both the create and update actions.
-     *
-     * @return void
-     */
-    protected function beforeSave()
-    {
-    }
-
-    /**
-     * Hook in here to customize actions after saving a resource.
-     *
-     * This happens in both the create and update actions.
-     *
-     * @return void
-     */
-    protected function afterSave()
-    {
-    }
-
-    /**
-     * Hook in here to customize the input before creating a resource.
-     *
-     * @return void
-     */
-    protected function beforeCreate()
-    {
-    }
-
-    /**
-     * Hook in here to customize the input before updating a resource.
-     *
-     * @return void
-     */
-    protected function beforeUpdate()
-    {
-    }
-
-    /**
-     * Use this hook to apply custom logic after
-     * the controller instance has been created.
+     * Use this hook to apply custom logic after the controller instance has been created.
      *
      * @return void
      */
     protected function afterConstruct()
     {
-    }
-
-    /**
-     * This is used to receive the model's FQN.
-     *
-     * Some plugins might need to know which model they are dealing with.
-     *
-     * @return string
-     */
-    public function getModelNameWithNamespace()
-    {
-        return $this->model;
+        //
     }
 }
