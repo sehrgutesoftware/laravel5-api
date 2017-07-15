@@ -12,7 +12,8 @@ interface AuthorizeResource extends Hook
      * Throw an exception if the check fails, otherwise return $action.
      * The resource can be retrieved as `$context->resource`.
      *
-     * @param  Context $context
+     * @param Context $context
+     *
      * @return Context
      */
     public function authorizeResource(Context $context);

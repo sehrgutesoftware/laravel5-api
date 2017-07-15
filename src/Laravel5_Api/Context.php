@@ -33,7 +33,7 @@ class Context
      */
     protected $overload = [];
 
-    function __construct(array $attributes = [])
+    public function __construct(array $attributes = [])
     {
         foreach ($attributes as $key => $value) {
             $this->$key = $value;
@@ -64,7 +64,9 @@ class Context
      * Handle read attempts to non-existing or protected properties.
      *
      * @see __set()
-     * @param  void $key
+     *
+     * @param void $key
+     *
      * @return void
      */
     public function __get($key)

@@ -9,7 +9,8 @@ interface BeforeUpdate extends Hook
     /**
      * This Hook is called before a resource is update (on update action).
      *
-     * @param  Context $context
+     * @param Context $context
+     *
      * @return Context
      */
     public function beforeUpdate(Context $context);

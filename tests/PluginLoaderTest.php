@@ -21,8 +21,10 @@ class PluginLoaderTest extends TestCase
     protected function getController()
     {
         $request = new Request();
+
         return new Controller($request);
     }
+
     public function test_it_initializes_properly_without_plugins()
     {
         $loader = new PluginLoader($this->getController());
@@ -148,13 +150,13 @@ class PluginLoaderTest extends TestCase
     public function test_it_generates_hook_methods_correctly()
     {
         $samples = [
-            'SehrGut\\Laravel5_Api\\Hooks\\AdaptCollectionQuery' => 'adaptCollectionQuery',
+            'SehrGut\\Laravel5_Api\\Hooks\\AdaptCollectionQuery'   => 'adaptCollectionQuery',
             '\\\\SehrGut\\Laravel5_Api\\Hooks\\AdaptResourceQuery' => 'adaptResourceQuery',
-            'Hooks\\AuthorizeResource' => 'authorizeResource',
-            'SehrGut\Laravel5_Api\Hooks\AuthorizeAction' => 'authorizeAction',
-            'FormatCollection' => 'formatCollection',
-            'formatResource' => 'formatResource',
-            'foreRespond' => 'foreRespond',
+            'Hooks\\AuthorizeResource'                             => 'authorizeResource',
+            'SehrGut\Laravel5_Api\Hooks\AuthorizeAction'           => 'authorizeAction',
+            'FormatCollection'                                     => 'formatCollection',
+            'formatResource'                                       => 'formatResource',
+            'foreRespond'                                          => 'foreRespond',
         ];
 
         foreach ($samples as $challenge => $response) {

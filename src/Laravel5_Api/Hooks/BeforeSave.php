@@ -9,7 +9,8 @@ interface BeforeSave extends Hook
     /**
      * This Hook is called before a resource is saved (on store & update actions).
      *
-     * @param  Context $context
+     * @param Context $context
+     *
      * @return Context
      */
     public function beforeSave(Context $context);

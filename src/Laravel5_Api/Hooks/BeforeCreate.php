@@ -9,7 +9,8 @@ interface BeforeCreate extends Hook
     /**
      * This Hook is called before a resource created (on store action).
      *
-     * @param  Context $context
+     * @param Context $context
+     *
      * @return Context
      */
     public function beforeCreate(Context $context);

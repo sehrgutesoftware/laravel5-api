@@ -9,7 +9,8 @@ interface BeforeRespond extends Hook
     /**
      * Hook in here to manipulate the response headers or other stuff before responding.
      *
-     * @param  Context $context
+     * @param Context $context
+     *
      * @return Context
      */
     public function beforeRespond(Context $context);

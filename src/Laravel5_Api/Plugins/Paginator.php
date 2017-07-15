@@ -4,8 +4,8 @@ namespace SehrGut\Laravel5_Api\Plugins;
 
 use SehrGut\Laravel5_Api\Context;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
-use SehrGut\Laravel5_Api\Hooks\FormatCollection;
 use SehrGut\Laravel5_Api\Hooks\BeforeRespond;
+use SehrGut\Laravel5_Api\Hooks\FormatCollection;
 
 /**
  * A basic paginator that takes `limit` and `page` from the

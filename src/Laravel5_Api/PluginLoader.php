@@ -7,7 +7,7 @@ use SehrGut\Laravel5_Api\Hooks\Hook;
 use SehrGut\Laravel5_Api\Plugins\Plugin;
 
 /**
- * Takes care of Controller Plugins loading, calling, configuring…
+ * Takes care of Controller Plugins loading, calling, configuring….
  */
 class PluginLoader
 {
@@ -31,7 +31,7 @@ class PluginLoader
      * @param Controller $controller The principal controller
      * @param array|null $plugins    List of plugin classes to load
      */
-    function __construct(Controller $controller, array $plugins = null)
+    public function __construct(Controller $controller, array $plugins = null)
     {
         // Register controller hooks
         $this->loadPlugin($controller);
@@ -45,7 +45,8 @@ class PluginLoader
     /**
      * Instantiate and remember Plugins of given types.
      *
-     * @param  array  $plugins Plugin types (order matters)
+     * @param array $plugins Plugin types (order matters)
+     *
      * @return void
      */
     public function loadPlugins(array $plugins)
@@ -58,15 +59,16 @@ class PluginLoader
     /**
      * Instantiate and remember a single Plugin of given type.
      *
-     * @param  String|Plugin $class Plugin type or instance
+     * @param string|Plugin $class Plugin type or instance
+     *
      * @return void
      */
     public function loadPlugin($class)
     {
-        if ($class instanceof Plugin OR $class instanceof Controller) {
+        if ($class instanceof Plugin or $class instanceof Controller) {
             $instance = $class;
             $class = get_class($class);
-        } elseif (is_string($class) AND class_exists($class)) {
+        } elseif (is_string($class) and class_exists($class)) {
             $instance = new $class();
         } else {
             throw new InvalidArgumentException();
@@ -84,8 +86,9 @@ class PluginLoader
     /**
      * Check if a Plugin was loaded already.
      *
-     * @param  String  $class Plugin type
-     * @return boolean
+     * @param string $class Plugin type
+     *
+     * @return bool
      */
     public function isLoaded(String $class)
     {
@@ -132,7 +135,8 @@ class PluginLoader
     /**
      * Register hooks for given plugin type.
      *
-     * @param  String $class Plugin type
+     * @param string $class Plugin type
+     *
      * @return void
      */
     protected function registerHooks(String $class)
@@ -146,8 +150,8 @@ class PluginLoader
     /**
      * Register a plugin to a single hook.
      *
-     * @param Plugin $class  The plugin class
-     * @param string $hook   FQN of the hook interface
+     * @param Plugin $class The plugin class
+     * @param string $hook  FQN of the hook interface
      *
      * @return void
      */
@@ -167,8 +171,9 @@ class PluginLoader
     /**
      * Check if there are any Plugins registered on a hook.
      *
-     * @param  String $hook  Hook Interface
-     * @return boolean
+     * @param string $hook Hook Interface
+     *
+     * @return bool
      */
     protected function hookExists(String $hook)
     {
@@ -178,7 +183,8 @@ class PluginLoader
     /**
      * Get all plugin instances for given hook in the order in which they were loaded.
      *
-     * @param  String $hook Hook Interface
+     * @param string $hook Hook Interface
+     *
      * @return array
      */
     protected function getPluginsForHook(String $hook)
@@ -197,12 +203,13 @@ class PluginLoader
     /**
      * Get all Plugin Types that are registered on given hook in the order they were loaded.
      *
-     * @param  String $hook Hook Interface
+     * @param string $hook Hook Interface
+     *
      * @return array
      */
     protected function getPluginClassesForHook(String $hook)
     {
-        if($this->hookExists($hook)) {
+        if ($this->hookExists($hook)) {
             return $this->hooks[$hook];
         }
 
@@ -224,9 +231,11 @@ class PluginLoader
     }
 
     /**
-     * Test whether a Hook is
-     * @param  String  $class [description]
-     * @return boolean        [description]
+     * Test whether a Hook is.
+     *
+     * @param string $class [description]
+     *
+     * @return bool [description]
      */
     public static function isHook(String $class)
     {
