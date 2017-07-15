@@ -33,3 +33,8 @@
 ### v0.5.3
 - Add Authorization Plugin
 - Prepare for Plugin testing
+
+## v0.6.0
+- Introduce controller `context` for plugin interaction
+- Allow controller to implement hooks itself
+- Migrate most deprecated hooks
