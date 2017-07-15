@@ -69,7 +69,7 @@ class SearchFilter extends Plugin implements AdaptCollectionQuery
     public function adaptCollectionQuery(Context $context)
     {
         $fields = $this->config['searchable'];
-        $condition = (string) $this->controller
+        $condition = (string) $context->controller
             ->request_adapter
             ->getValueByKey($this->config['search_param'], '');
 

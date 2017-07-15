@@ -67,7 +67,7 @@ class PluginLoaderTest extends TestCase
 
     public function test_it_loads_plugin_instances()
     {
-        $plugin = new Paginator($this->getController());
+        $plugin = new Paginator();
         $loader = new PluginLoader($this->getController());
 
         $this->assertFalse($loader->isLoaded(Paginator::class));
@@ -86,7 +86,7 @@ class PluginLoaderTest extends TestCase
     public function test_it_configures_plugins()
     {
         $controller = $this->getController();
-        $mock = Mockery::mock('SehrGut\Laravel5_Api\Plugins\Plugin', [$controller]);
+        $mock = Mockery::mock('SehrGut\Laravel5_Api\Plugins\Plugin');
         $mock->shouldReceive('configure')
             ->with(['option'=> 'value'])
             ->once();
@@ -102,7 +102,7 @@ class PluginLoaderTest extends TestCase
         $controller = $this->getController();
         $context = new Context();
 
-        $mock = Mockery::mock('SehrGut\Laravel5_Api\Plugins\TestPlugin', [$controller]);
+        $mock = Mockery::mock('SehrGut\Laravel5_Api\Plugins\TestPlugin');
         $mock->shouldReceive('authorizeResource')
             ->with($context)
             ->once()
@@ -123,9 +123,9 @@ class PluginLoaderTest extends TestCase
         $three2out = new Context();
 
         // Test one direction
-        $plugin_1 = Mockery::namedMock('Mock1', 'SehrGut\Laravel5_Api\Plugins\TestPlugin', [$controller]);
-        $plugin_2 = Mockery::namedMock('Mock2', 'SehrGut\Laravel5_Api\Plugins\TestPlugin', [$controller]);
-        $plugin_3 = Mockery::namedMock('Mock3', 'SehrGut\Laravel5_Api\Plugins\TestPlugin', [$controller]);
+        $plugin_1 = Mockery::namedMock('Mock1', 'SehrGut\Laravel5_Api\Plugins\TestPlugin');
+        $plugin_2 = Mockery::namedMock('Mock2', 'SehrGut\Laravel5_Api\Plugins\TestPlugin');
+        $plugin_3 = Mockery::namedMock('Mock3', 'SehrGut\Laravel5_Api\Plugins\TestPlugin');
         $plugin_1->shouldReceive('authorizeResource')
             ->with($in2one)
             ->once()

@@ -123,6 +123,7 @@ class Controller extends IlluminateController
         $this->loader = new PluginLoader($this, $this->plugins);
 
         $this->context = new Context([
+            'controller' => $this,
             'request' => $request,
             'model' => $this->model,
         ]);

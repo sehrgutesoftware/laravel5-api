@@ -57,11 +57,11 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
     {
         $total = $context->query->count();
 
-        $limit = (int) $this->controller->request_adapter->getValueByKey(
+        $limit = (int) $context->controller->request_adapter->getValueByKey(
             $this->config['limit_param'],
             $this->config['limit_default']
         );
-        $page = (int) $this->controller->request_adapter->getValueByKey(
+        $page = (int) $context->controller->request_adapter->getValueByKey(
             $this->config['page_param'],
             $this->config['page_default']
         );

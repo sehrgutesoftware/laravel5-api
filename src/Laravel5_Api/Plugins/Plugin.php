@@ -10,13 +10,6 @@ use SehrGut\Laravel5_Api\Controller;
 class Plugin
 {
     /**
-     * Holds a controller instance.
-     *
-     * @var Controller
-     */
-    protected $controller;
-
-    /**
      * Defualt configuration that should be overwritten by the child class.
      *
      * @var array
@@ -30,9 +23,8 @@ class Plugin
      */
     protected $config = [];
 
-    public function __construct(Controller $controller)
+    public function __construct()
     {
-        $this->controller = $controller;
         $this->config = $this->default_config;
     }
 

@@ -10,7 +10,7 @@ interface AuthorizeResource extends Hook
      * Hook in here to check authorization for a single resource (db record).
      *
      * Throw an exception if the check fails, otherwise return $action.
-     * The resource can be retrieved as `$this->controller->resource`.
+     * The resource can be retrieved as `$context->resource`.
      *
      * @param  Context $context
      * @return Context

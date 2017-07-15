@@ -14,6 +14,7 @@ namespace SehrGut\Laravel5_Api;
 class Context
 {
     // Read-only:
+    protected $controller;
     protected $model;
     protected $request;
 

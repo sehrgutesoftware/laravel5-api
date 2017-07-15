@@ -12,13 +12,6 @@ use SehrGut\Laravel5_Api\Plugins\Plugin;
 class PluginLoader
 {
     /**
-     * The controller (instance) this plugin loader belongs to.
-     *
-     * @var Controller
-     */
-    protected $controller;
-
-    /**
      * Instances of loaded plugins.
      *
      * @var array
@@ -26,7 +19,7 @@ class PluginLoader
     protected $plugins = [];
 
     /**
-     * Maps hooks to plugin instances. Don't add anything here manually!
+     * Maps hooks to plugin classes. Don't add anything here manually!
      *
      * @var array
      */
@@ -40,9 +33,8 @@ class PluginLoader
      */
     function __construct(Controller $controller, array $plugins = null)
     {
-        $this->controller = $controller;
-
-        $this->loadPlugin($this->controller);
+        // Register controller hooks
+        $this->loadPlugin($controller);
 
         // Load Plugins
         if ($plugins) {
@@ -75,7 +67,7 @@ class PluginLoader
             $instance = $class;
             $class = get_class($class);
         } elseif (is_string($class) AND class_exists($class)) {
-            $instance = new $class($this->controller);
+            $instance = new $class();
         } else {
             throw new InvalidArgumentException();
         }
