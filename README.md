@@ -19,7 +19,7 @@ A modular controller for exposing your Laravel 5 Eloquent models as a REST API. 
   * [RequestAdapter](#requestadapter)
 * [Customization](#customization)
   * [Plugins](#plugins)
-  * [Deprecated: Hooks](#deprecated-hooks)
+  * [Deprecated: Hook Methods](#deprecated-hook-methods)
 * [Changelog](#changelog)
 * [Compatibility](#compatibility)
 * [Testing](#testing)
@@ -264,6 +264,8 @@ class PostsController extends BaseController
 }
 ```
 
+##### Declaring Hooks on the Controller
+
 Instead of using Plugins, a controller can also implement any of the [Hooks](#plugin-hooks) itself, in order to influence the request/response lifecycle. In this case, it behaves the same as a Plugin:
 
 1. Declare that the controller `implements` the appropriate Hook Interface
@@ -307,7 +309,7 @@ Please [use the source](https://github.com/sehrgutesoftware/laravel5-api/tree/ma
 
 #### Writing Plugins
 
-A plugin is just a class that extends `SehrGut\Laravel5_Api\Plugins\Plugin` class. It can implement one or more *Hooks* in order to influence the controller's behaviour.
+A plugin is just a class that extends `SehrGut\Laravel5_Api\Plugins\Plugin`. It can implement one or more *Hooks* in order to influence the controller's behaviour.
 
 ##### Plugin Configuration
 
