@@ -355,25 +355,25 @@ Each hook interface declares exactly one method. The name of this method is the 
 
 ###### Available Hooks
 
-`AdaptResourceQuery::adaptResourceQuery(Builder $query)`
+`AdaptResourceQuery::adaptResourceQuery(Context $context)`
 Customize the query for fetching a single resource (`show`, `update` and `destroy` actions). Return the adapted query.
 
-`AdaptCollectionQuery::adaptCollectionQuery(Builder $query)`
+`AdaptCollectionQuery::adaptCollectionQuery(Context $context)`
 Customize the query for fetching a resource collection (`index` action). Return the adapted query.
 
-`AuthorizeAction::authorizeAction(String $action)`
+`AuthorizeAction::authorizeAction(Context $context)`
 Hook in here to perform authorization on action level. This hook is only called on the `index` and `store` actions.
 
-`AuthorizeResource::authorizeResource(String $action)`
+`AuthorizeResource::authorizeResource(Context $context)`
 Hook in here to perform authorization on a single resource. This hook is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
 
-`FormatCollection::formatCollection(Array $collection)`
+`FormatCollection::formatCollection(Context $context)`
 This hook receives a Collection of resources before they are transformed.
 
-`FormatResource::formatResource(Model $resource)`
+`FormatResource::formatResource(Context $context)`
 This hook receives a single resource before it is transformed.
 
-`ResponseHeaders::responseHeaders(Array $headers)`
+`ResponseHeaders::responseHeaders(Context $context)`
 Hook in here to manipulate the response headers.
 
 ###### Hook Context
