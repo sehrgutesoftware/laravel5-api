@@ -20,47 +20,47 @@ class RelationSplitterPluginTest extends TestCase
         $response = $this->get("/posts/$post->id");
         $response->assertJsonStructure([
             'result' => [
-                '*' => []
+                '*' => [],
             ],
             'includes' => [
                 'comments' => [
-                    '*' => []
-                ]
-            ]
+                    '*' => [],
+                ],
+            ],
         ]);
 
         $response->assertExactJson([
             'result' => [
-                'id' => 1,
+                'id'         => 1,
                 'publish_at' => null,
-                'title' => 'Test Post',
-                'content' => null,
-                'slug' => 'test-post',
+                'title'      => 'Test Post',
+                'content'    => null,
+                'slug'       => 'test-post',
                 'created_at' => $post->created_at->toDateTimeString(),
                 'updated_at' => $post->updated_at->toDateTimeString(),
-                'comments' => [
+                'comments'   => [
                     $comment_1->id,
-                    $comment_2->id
-                ]
+                    $comment_2->id,
+                ],
             ],
             'includes' => [
                 'comments' => [
                     [
-                        'id' => $comment_1->id,
-                        'text' => 'An opinion',
-                        'post_id' => "$post->id",
+                        'id'         => $comment_1->id,
+                        'text'       => 'An opinion',
+                        'post_id'    => "$post->id",
                         'created_at' => $comment_1->created_at->toDateTimeString(),
                         'updated_at' => $comment_1->updated_at->toDateTimeString(),
                     ],
                     [
-                        'id' => $comment_2->id,
-                        'text' => 'Another opinion',
-                        'post_id' => "$post->id",
+                        'id'         => $comment_2->id,
+                        'text'       => 'Another opinion',
+                        'post_id'    => "$post->id",
                         'created_at' => $comment_2->created_at->toDateTimeString(),
                         'updated_at' => $comment_2->updated_at->toDateTimeString(),
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ]);
     }
 }

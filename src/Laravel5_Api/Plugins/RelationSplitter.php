@@ -88,7 +88,7 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
     /**
      * Split away relations from a single resource.
      *
-     * @param  Model $model
+     * @param Model $model
      *
      * @return void
      */
@@ -104,8 +104,8 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
     /**
      * Add relatives to `$this->includes` and run them through the splitter in turn, recursively.
      *
-     * @param  string $name
-     * @param  array  $relatives
+     * @param string $name
+     * @param array  $relatives
      *
      * @return void
      */
@@ -137,15 +137,17 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
         $this->includeAs($name, $relatives);
 
         if ($this->config['replace_with_ids']) {
-            return array_map(function ($model) { return $model->getKey(); }, $relatives);
+            return array_map(function ($model) {
+                return $model->getKey();
+            }, $relatives);
         }
     }
 
     /**
      * Add given relatives to `$this->includes` under `$name`.
      *
-     * @param  string $name
-     * @param  array  $relatives
+     * @param string $name
+     * @param array  $relatives
      *
      * @return void
      */
@@ -161,15 +163,16 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
     /**
      * Replace related models with their ids.
      *
-     * @param  Model $model
+     * @param Model $model
      *
      * @return void
      */
     protected function replaceWithIdsOrClear($model)
     {
-        if (! $this->config['replace_with_ids']) {
+        if (!$this->config['replace_with_ids']) {
             // Remove all relatives from all relations on the model
             $model->setRelations([]);
+
             return $model;
         }
 
@@ -177,7 +180,9 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
             if (static::isSingularRelation($model, $name)) {
                 $model->setRelation($name, $relatives ? $relatives->getKey() : null);
             } else {
-                $model->setRelation($name, $relatives->map(function($relative) { return $relative->getKey(); }));
+                $model->setRelation($name, $relatives->map(function ($relative) {
+                    return $relative->getKey();
+                }));
             }
         }
     }
@@ -201,10 +206,10 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
      * Check if a relation on a model is singular, meaning that
      * it refers to a single record, as opposed to multiple.
      *
-     * @param  Model  $model     The model whose relation to check
-     * @param  string $relation  Name of the relation on the model
+     * @param Model  $model    The model whose relation to check
+     * @param string $relation Name of the relation on the model
      *
-     * @return boolean
+     * @return bool
      */
     protected static function isSingularRelation($model, $relation)
     {

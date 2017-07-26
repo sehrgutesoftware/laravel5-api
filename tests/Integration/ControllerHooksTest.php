@@ -2,12 +2,12 @@
 
 namespace Tests\Integration;
 
-use Tests\TestCase;
 use Closure;
 use Illuminate\Http\Request;
 use Mockery;
 use SehrGut\Laravel5_Api\Context;
 use SehrGut\Laravel5_Api\Hooks\TestHook;
+use Tests\TestCase;
 
 class ControllerHooksTest extends TestCase
 {
