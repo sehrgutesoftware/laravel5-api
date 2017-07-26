@@ -10,9 +10,11 @@ engines:
   phpmd:
     enabled: true
     checks:
+      Controversial/CamelCaseParameterName:
+        enabled: false
       Controversial/CamelCasePropertyName:
         enabled: false
-      Controversial/CamelCaseParameterName:
+      Controversial/CamelCaseVariableName:
         enabled: false
 ratings:
   paths:
