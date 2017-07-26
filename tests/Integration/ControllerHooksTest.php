@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Tests\Integration;
 
+use Tests\TestCase;
 use Closure;
 use Illuminate\Http\Request;
 use Mockery;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\PluginTests;
+namespace Tests\Integration\Plugins;
 
 use Illuminate\Support\Facades\Gate;
 use SehrGut\Laravel5_Api\Exceptions\Unauthorized;

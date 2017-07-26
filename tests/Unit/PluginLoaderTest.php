@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
+use Tests\TestCase;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
 use Mockery;

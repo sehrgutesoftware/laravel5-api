@@ -1,7 +1,8 @@
 <?php
 
-namespace Tests;
+namespace Tests\Integration;
 
+use Tests\TestCase;
 use Tests\Models\Post;
 
 class ControllerRelationsTest extends TestCase
