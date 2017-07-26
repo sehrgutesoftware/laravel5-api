@@ -132,7 +132,7 @@ class Transformer
             })->toArray();
         }
 
-        return [];
+        return $thing;
     }
 
     protected function dropAttributes()
