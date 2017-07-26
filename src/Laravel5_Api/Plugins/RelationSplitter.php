@@ -13,6 +13,13 @@ use SehrGut\Laravel5_Api\Hooks\FormatResource;
  */
 class RelationSplitter extends Plugin implements FormatCollection, FormatResource
 {
+    const SINGULAR_RELATIONS = [
+        'Illuminate\Database\Eloquent\Relations\BelongsTo',
+        'Illuminate\Database\Eloquent\Relations\HasOne',
+        'Illuminate\Database\Eloquent\Relations\MorphTo',
+        'Illuminate\Database\Eloquent\Relations\MorphOne',
+    ];
+
     /**
      * Config options for this plugin:.
      *
@@ -34,7 +41,7 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
     /** {@inheritdoc} */
     public function formatCollection(Context $context)
     {
-        $this->splitRelations($context->collection);
+        $this->splitRelationsFromCollection($context->collection);
 
         $context->collection = [
             $this->config['result_key']   => $context->collection,
@@ -47,7 +54,7 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
     /** {@inheritdoc} */
     public function formatResource(Context $context)
     {
-        $this->splitRelations($context->resource);
+        $this->splitRelationsFromCollection($context->resource);
 
         $context->resource = [
             $this->config['result_key']   => $context->resource,
@@ -64,39 +71,55 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
      *
      * @return void
      */
-    protected function splitRelations($collection)
+    protected function splitRelationsFromCollection($collection)
     {
-        $collection = $this->ensureArray($collection);
+        $collection = static::ensureArray($collection);
 
         foreach ($collection as $model) {
             // Check if the model has eloquent-like relations
-            if (is_callable([$model, 'getRelations'])) {
-
-                // Save away the ids for merging them later
-                $ids = [];
-
-                foreach ($model->getRelations() as $name => $relatives) {
-                    // Skip relations listed in config['ignore_relations']
-                    if (!in_array($name, $this->config['ignore_relations'])) {
-
-                        // Save the relatives to the "includes" array
-                        $ids[$name] = $this->includeRelatives($name, $relatives);
-                        // Repeat the entire process for relatives (recurse)
-                        $this->splitRelations($relatives);
-                    }
-                }
-
-                // Remove all relatives from all relations on the model
-                $model->setRelations([]);
-
-                // Add relative's ids instead to the model
-                if ($this->config['replace_with_ids']) {
-                    foreach ($ids as $relation => $relative_ids) {
-                        $model[$relation] = $relative_ids;
-                    }
-                }
+            if (!is_callable([$model, 'getRelations'])) {
+                continue;
             }
+
+            $this->splitRelationsFromModel($model);
         }
+    }
+
+    /**
+     * Split away relations from a single resource.
+     *
+     * @param Model $model
+     *
+     * @return void
+     */
+    protected function splitRelationsFromModel($model)
+    {
+        foreach ($model->getRelations() as $name => $relatives) {
+            $this->includeRelativesAndRecurse($name, $relatives);
+        }
+
+        $this->replaceWithIdsOrClear($model);
+    }
+
+    /**
+     * Add relatives to `$this->includes` and run them through the splitter in turn, recursively.
+     *
+     * @param string $name
+     * @param array  $relatives
+     *
+     * @return void
+     */
+    protected function includeRelativesAndRecurse(string $name, $relatives)
+    {
+        if (in_array($name, $this->config['ignore_relations'])) {
+            return;
+        }
+
+        // Save the relatives to the "includes" array
+        $this->includeRelatives($name, $relatives);
+
+        // Repeat the entire process for relatives (recurse)
+        $this->splitRelationsFromCollection($relatives);
     }
 
     /**
@@ -107,15 +130,11 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
      *
      * @return void
      */
-    protected function includeRelatives(String $name, $relatives)
+    protected function includeRelatives(string $name, $relatives)
     {
-        $relatives = $this->ensureArray($relatives);
+        $relatives = static::ensureArray($relatives);
 
-        if (!array_key_exists($name, $this->includes)) {
-            $this->includes[$name] = [];
-        }
-
-        $this->includes[$name] = array_merge($this->includes[$name], $relatives);
+        $this->includeAs($name, $relatives);
 
         if ($this->config['replace_with_ids']) {
             return array_map(function ($model) {
@@ -125,23 +144,47 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
     }
 
     /**
-     * Wrap the subject into an array if it's not already an
-     * array, convert it to array if it's a collection.
+     * Add given relatives to `$this->includes` under `$name`.
      *
-     * @param mixed $subject
+     * @param string $name
+     * @param array  $relatives
      *
-     * @return array
+     * @return void
      */
-    protected function ensureArray($subject)
+    protected function includeAs(string $name, $relatives)
     {
-        if (is_array($subject)) {
-            return $subject;
-        }
-        if ($subject instanceof Collection) {
-            return $subject->all();
+        if (!array_key_exists($name, $this->includes)) {
+            $this->includes[$name] = [];
         }
 
-        return [$subject];
+        $this->includes[$name] = array_merge($this->includes[$name], $relatives);
+    }
+
+    /**
+     * Replace related models with their ids.
+     *
+     * @param Model $model
+     *
+     * @return void
+     */
+    protected function replaceWithIdsOrClear($model)
+    {
+        if (!$this->config['replace_with_ids']) {
+            // Remove all relatives from all relations on the model
+            $model->setRelations([]);
+
+            return $model;
+        }
+
+        foreach ($model->getRelations() as $name => $relatives) {
+            if (static::isSingularRelation($model, $name)) {
+                $model->setRelation($name, $relatives ? $relatives->getKey() : null);
+                continue;
+            }
+            $model->setRelation($name, $relatives->map(function ($relative) {
+                return $relative->getKey();
+            }));
+        }
     }
 
     /**
@@ -157,5 +200,43 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
         }
 
         return $includes;
+    }
+
+    /**
+     * Check if a relation on a model is singular, meaning that
+     * it refers to a single record, as opposed to multiple.
+     *
+     * @param Model  $model    The model whose relation to check
+     * @param string $relation Name of the relation on the model
+     *
+     * @return bool
+     */
+    protected static function isSingularRelation($model, $relation)
+    {
+        $class = get_class($model->$relation());
+
+        return in_array($class, static::SINGULAR_RELATIONS);
+    }
+
+    /**
+     * Wrap subject into an array if it isn't one already, convert to array if it's a collection.
+     *
+     * @param mixed $subject
+     *
+     * @return array
+     */
+    protected static function ensureArray($subject)
+    {
+        if (is_array($subject)) {
+            return $subject;
+        }
+        if ($subject instanceof Collection) {
+            return $subject->all();
+        }
+        if (is_null($subject)) {
+            return [];
+        }
+
+        return [$subject];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\Unit;
 
 use Illuminate\Http\Request;
 use InvalidArgumentException;
@@ -15,6 +15,7 @@ use SehrGut\Laravel5_Api\Plugins\Paginator;
 use SehrGut\Laravel5_Api\Plugins\Plugin;
 use SehrGut\Laravel5_Api\Plugins\SearchFilter;
 use stdClass;
+use Tests\TestCase;
 
 class PluginLoaderTest extends TestCase
 {
