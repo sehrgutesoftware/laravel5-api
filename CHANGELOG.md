@@ -38,3 +38,6 @@
 - Introduce controller `context` for plugin interaction
 - Allow controller to implement hooks itself
 - Migrate most deprecated hooks
+
+## v0.6.1
+- Fix a bug in RelationSplitter, add tests and refactor
