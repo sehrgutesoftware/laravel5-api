@@ -12,6 +12,8 @@ engines:
     checks:
       Controversial/CamelCasePropertyName:
         enabled: false
+      Controversial/CamelCaseParameterName:
+        enabled: false
 ratings:
   paths:
   - "**.php"
