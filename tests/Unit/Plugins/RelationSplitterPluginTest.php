@@ -22,7 +22,7 @@ class RelationSplitterPluginTest extends TestCase
         $comment_2 = $comment_2->fresh();
 
         $original_context = new Context([
-            'resource' => Post::with('comments')->find($post->id)
+            'resource' => Post::with('comments')->find($post->id),
         ]);
 
         $plugin = new RelationSplitter();
@@ -48,7 +48,7 @@ class RelationSplitterPluginTest extends TestCase
         $comment_4 = $comment_4->fresh();
 
         $original_context = new Context([
-            'collection' => Post::with('comments')->get()
+            'collection' => Post::with('comments')->get(),
         ]);
 
         $plugin = new RelationSplitter();

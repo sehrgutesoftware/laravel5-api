@@ -2,8 +2,8 @@
 
 namespace Tests\Integration;
 
-use Tests\TestCase;
 use Tests\Models\Post;
+use Tests\TestCase;
 
 class ControllerRelationsTest extends TestCase
 {

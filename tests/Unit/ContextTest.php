@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use SehrGut\Laravel5_Api\Context;
+use Tests\TestCase;
 
 class ContextTest extends TestCase
 {

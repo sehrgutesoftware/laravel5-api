@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use Illuminate\Http\Request;
 use InvalidArgumentException;
 use Mockery;
@@ -16,6 +15,7 @@ use SehrGut\Laravel5_Api\Plugins\Paginator;
 use SehrGut\Laravel5_Api\Plugins\Plugin;
 use SehrGut\Laravel5_Api\Plugins\SearchFilter;
 use stdClass;
+use Tests\TestCase;
 
 class PluginLoaderTest extends TestCase
 {
