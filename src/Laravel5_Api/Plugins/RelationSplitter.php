@@ -140,12 +140,6 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
         $relatives = static::ensureArray($relatives);
 
         $this->includeAs($name, $relatives);
-
-        if ($this->config['replace_with_ids']) {
-            return array_map(function ($model) {
-                return $model->getKey();
-            }, $relatives);
-        }
     }
 
     /**
@@ -187,6 +181,11 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
 
         foreach ($model->getRelations() as $name => $relatives) {
             if ($name === 'pivot' or in_array($name, $this->config['ignore_relations'])) {
+                continue;
+            }
+
+            // Check if the relation was processed already
+            if (is_int($relatives) or ($relatives instanceof Collection and is_int($relatives->first()))) {
                 continue;
             }
 
