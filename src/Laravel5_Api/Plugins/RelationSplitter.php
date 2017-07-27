@@ -158,7 +158,7 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
      */
     protected function includeAs(string $name, $relatives)
     {
-        if ($name === 'pivot' AND $this->config['ignore_pivots']) {
+        if ($name === 'pivot' and $this->config['ignore_pivots']) {
             return;
         }
 
@@ -186,7 +186,7 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
         }
 
         foreach ($model->getRelations() as $name => $relatives) {
-            if ($name === 'pivot' OR in_array($name, $this->config['ignore_relations'])) {
+            if ($name === 'pivot' or in_array($name, $this->config['ignore_relations'])) {
                 continue;
             }
 
