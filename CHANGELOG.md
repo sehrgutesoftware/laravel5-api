@@ -41,3 +41,6 @@
 
 ## v0.6.1
 - Fix a bug in RelationSplitter, add tests and refactor
+
+## v0.6.2
+- RelationSplitter: Add `ignore_pivots` config options
