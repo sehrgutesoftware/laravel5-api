@@ -10,6 +10,14 @@ use SehrGut\Laravel5_Api\Hooks\FormatResource;
 /**
  * This plugin separates relations from the actually requested models
  * and puts them under separate keys in the response payload.
+ *
+ * ** Config options: **
+ *
+ * - `result_key`: The key under which the actual results will appear in the response payload (default: 'result')
+ * - `includes_key`: The key under which the extracted relations will appear in the response payload (default: 'includes')
+ * - `replace_with_ids`: Whether to replace the removed relations with their ids on the parent model (default: true)
+ * - `ignore_relations`: An array of relation names that are ingored when splitting (default: [])
+ * - `ignore_pivots`: Drop all pivots if true (default: true)
  */
 class RelationSplitter extends Plugin implements FormatCollection, FormatResource
 {
@@ -23,10 +31,6 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
     /**
      * Config options for this plugin:.
      *
-     * - `result_key`: The key under which the actual results will appear in the response payload
-     * - `includes_key`: The key under which the extracted relations will appear in the response payload
-     * - `replace_with_ids`: Whether to replace the removed relations with their ids on the parent model
-     *
      * @var array
      */
     protected $default_config = [
@@ -34,6 +38,7 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
         'includes_key'     => 'includes',
         'replace_with_ids' => true,
         'ignore_relations' => [],
+        'ignore_pivots'    => true,
     ];
 
     protected $includes = [];
@@ -153,6 +158,10 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
      */
     protected function includeAs(string $name, $relatives)
     {
+        if ($name === 'pivot' AND $this->config['ignore_pivots']) {
+            return;
+        }
+
         if (!array_key_exists($name, $this->includes)) {
             $this->includes[$name] = [];
         }
@@ -177,10 +186,15 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
         }
 
         foreach ($model->getRelations() as $name => $relatives) {
+            if ($name === 'pivot' OR in_array($name, $this->config['ignore_relations'])) {
+                continue;
+            }
+
             if (static::isSingularRelation($model, $name)) {
                 $model->setRelation($name, $relatives ? $relatives->getKey() : null);
                 continue;
             }
+
             $model->setRelation($name, $relatives->map(function ($relative) {
                 return $relative->getKey();
             }));
