@@ -10,4 +10,6 @@ class PostsWithCommentsController extends Controller
     protected $model = Post::class;
 
     protected $relations = ['comments'];
+
+    protected $counts = ['comments'];
 }
