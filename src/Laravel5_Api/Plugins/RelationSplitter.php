@@ -175,29 +175,29 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
         if (!$this->config['replace_with_ids']) {
             // Remove all relatives from all relations on the model
             $model->setRelations([]);
-
-            return $model;
+            return;
         }
+
+        $ids = [];
 
         foreach ($model->getRelations() as $name => $relatives) {
             if ($name === 'pivot' or in_array($name, $this->config['ignore_relations'])) {
                 continue;
             }
 
-            // Check if the relation was processed already
-            if (is_int($relatives) or ($relatives instanceof Collection and is_int($relatives->first()))) {
-                continue;
-            }
-
             if (static::isSingularRelation($model, $name)) {
-                $model->setRelation($name, $relatives ? $relatives->getKey() : null);
+                $ids[$name] = $relatives ? $relatives->getKey() : null;
                 continue;
             }
 
-            $model->setRelation($name, $relatives->map(function ($relative) {
+            $ids[$name] = $relatives->map(function ($relative) {
                 return $relative->getKey();
-            }));
+            });
         }
+
+        $model->setRelations([]);
+        $new_attributes = array_merge($model->getAttributes(), $ids);
+        $model->setRawAttributes($new_attributes);
     }
 
     /**
