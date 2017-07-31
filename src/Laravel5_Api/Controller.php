@@ -496,7 +496,7 @@ class Controller extends IlluminateController
             // Check if any counts should be performed on the relation
             if (array_key_exists($relation, $nested_counts)) {
                 $counts = $nested_counts[$relation];
-                $relations[$relation] = function($query) use ($counts) {
+                $relations[$relation] = function ($query) use ($counts) {
                     return $query->withCount($counts);
                 };
                 continue;
