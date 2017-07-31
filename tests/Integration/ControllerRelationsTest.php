@@ -26,9 +26,9 @@ class ControllerRelationsTest extends TestCase
         // …but after inserting one, it should appear
         $this->get('/posts/'.$post->id)
             ->assertJson([
-                'id'       => $post->id,
+                'id'             => $post->id,
                 'comments_count' => 1,
-                'comments' => [
+                'comments'       => [
                     [
                         'id'   => $comment->id,
                         'text' => 'An opinion on this…',
