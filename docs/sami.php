@@ -10,7 +10,7 @@ $iterator = Symfony\Component\Finder\Finder::create()
     ->in($dir);
 
 $versions = Sami\Version\GitVersionCollection::create($dir)
-    ->add('v0.6.4', 'Master');
+    ->add('v0.6.5', 'Master');
 
 $options = [
     'theme'                => 'default',

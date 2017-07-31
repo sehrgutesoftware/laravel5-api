@@ -47,3 +47,6 @@
 
 ## v0.6.4
 - Bugfix: RelationSplitted falsely added plain ids to includes
+
+## v0.6.5
+- Allow adding counts to side-loads (using dot-notation)
