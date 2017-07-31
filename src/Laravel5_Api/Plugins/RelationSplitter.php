@@ -175,6 +175,7 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
         if (!$this->config['replace_with_ids']) {
             // Remove all relatives from all relations on the model
             $model->setRelations([]);
+
             return;
         }
 
