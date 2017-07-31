@@ -267,7 +267,8 @@ class Controller extends IlluminateController
      */
     protected function getResource()
     {
-        $this->context->query = $this->model::with($this->relations)->withCount($this->counts);
+        $this->context->query = $this->model::with($this->getRelations())
+            ->withCount($this->getDirectCounts());
         $this->context->query = $this->filterByRequest($this->context->query);
 
         $this->applyHooks(AdaptResourceQuery::class);
@@ -286,7 +287,8 @@ class Controller extends IlluminateController
      */
     protected function getCollection()
     {
-        $this->context->query = $this->model::with($this->relations)->withCount($this->counts);
+        $this->context->query = $this->model::with($this->getRelations())
+            ->withCount($this->getDirectCounts());
         $this->context->query = $this->filterByRequest($this->context->query);
 
         $this->applyHooks(AdaptCollectionQuery::class);
@@ -464,7 +466,77 @@ class Controller extends IlluminateController
      */
     protected function refreshResource()
     {
-        $this->context->resource = $this->context->resource->fresh($this->relations);
+        $this->context->resource = $this->context->resource->fresh($this->getRelations());
+    }
+
+    /**
+     * Get an array of counts on the queried model, eliminating nested counts.
+     *
+     * @return array
+     */
+    protected function getDirectCounts()
+    {
+        return array_filter($this->counts, function ($count) {
+            return !str_contains($count, '.');
+        });
+    }
+
+    /**
+     * Get an array of relations to be side-loaded, taking care of nested counts.
+     *
+     * @return array
+     */
+    protected function getRelations()
+    {
+        $nested_counts = $this->getNestedCountsByRelation();
+
+        $relations = [];
+
+        foreach ($this->relations as $relation) {
+            // Check if any counts should be performed on the relation
+            if (array_key_exists($relation, $nested_counts)) {
+                $counts = $nested_counts[$relation];
+                $relations[$relation] = function($query) use ($counts) {
+                    return $query->withCount($counts);
+                };
+                continue;
+            }
+
+            // No counts defined for this relation, just add it plainly
+            $relations[] = $relation;
+        }
+
+        return $relations;
+    }
+
+    /**
+     * Get an array mapping relations to counts that should be included on the relation.
+     *
+     * @return array
+     */
+    private function getNestedCountsByRelation()
+    {
+        // Get all counts on related models (containing a dot)
+        $nested_counts = array_filter($this->counts, function ($count) {
+            return str_contains($count, '.');
+        });
+
+        $result = [];
+
+        // Group the counts by the relation on which they should be performed
+        foreach ($nested_counts as $value) {
+            $fragments = explode('.', $value);
+            $count = array_pop($fragments);
+            $relation = implode('.', $fragments);
+
+            if (!array_key_exists($relation, $result)) {
+                $result[$relation] = [];
+            }
+
+            $result[$relation][] = $count;
+        }
+
+        return $result;
     }
 
     /***
