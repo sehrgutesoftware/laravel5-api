@@ -26,7 +26,7 @@ A modular controller for exposing your Laravel 5 Eloquent models as a REST API. 
 * [License](#license)
 
 ## Documentation
-[API Reference v0.6.2](https://sehrgutesoftware.github.io/laravel5-api/api/v0.6.2) ([v0.5.3](https://sehrgutesoftware.github.io/laravel5-api/api/v0.5.3), [v0.4.2](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.2), [v0.3.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.3.0))
+[API Reference v0.6.4](https://sehrgutesoftware.github.io/laravel5-api/api/v0.6.4) ([v0.5.3](https://sehrgutesoftware.github.io/laravel5-api/api/v0.5.3), [v0.4.2](https://sehrgutesoftware.github.io/laravel5-api/api/v0.4.2), [v0.3.0](https://sehrgutesoftware.github.io/laravel5-api/api/v0.3.0))
 
 ## Getting Started
 

@@ -44,3 +44,6 @@
 
 ## v0.6.2
 - RelationSplitter: Add `ignore_pivots` config options
+
+## v0.6.4
+- Bugfix: RelationSplitted falsely added plain ids to includes
