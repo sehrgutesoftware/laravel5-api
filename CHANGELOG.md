@@ -39,14 +39,18 @@
 - Allow controller to implement hooks itself
 - Migrate most deprecated hooks
 
-## v0.6.1
+### v0.6.1
 - Fix a bug in RelationSplitter, add tests and refactor
 
-## v0.6.2
+### v0.6.2
 - RelationSplitter: Add `ignore_pivots` config options
 
-## v0.6.4
+### v0.6.4
 - Bugfix: RelationSplitted falsely added plain ids to includes
 
-## v0.6.5
+### v0.6.5
 - Allow adding counts to side-loads (using dot-notation)
+
+## v0.7.0
+- **Breaking:** Context is now a property of Plugins instead of an argument to Hooks
+- Introduce `BeginAction` and `AdaptRelations` hooks
