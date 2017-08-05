@@ -31,7 +31,7 @@ class ControllerHooksTest extends TestCase
             ->once()
             ->andReturn($new_context);
 
-        $controller->applyHooks(TestHook::class);
+        $controller->applyHooksToContext(TestHook::class);
 
         $this->assertEquals($new_context, $thief($controller));
     }

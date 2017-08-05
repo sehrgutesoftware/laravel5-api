@@ -5,6 +5,7 @@ namespace SehrGut\Laravel5_Api\Plugins;
 use Illuminate\Support\Facades\Log;
 use SehrGut\Laravel5_Api\Context;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
+use SehrGut\Laravel5_Api\Hooks\AdaptRelations;
 use SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeAction;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
@@ -19,6 +20,7 @@ use SehrGut\Laravel5_Api\Hooks\TestHook;
  */
 class TestPlugin extends Plugin implements
     AdaptCollectionQuery,
+    AdaptRelations,
     AdaptResourceQuery,
     AuthorizeResource,
     AuthorizeAction,
@@ -32,7 +34,14 @@ class TestPlugin extends Plugin implements
     {
         Log::info('TestPlugin: called adaptCollectionQuery', ['context' => $context]);
 
-        return $context;
+        return $context;return $context;
+    }
+
+    public function adaptRelations(array $relations)
+    {
+        Log::info('TestPlugin: called adaptRelations', ['relations' => $relations]);
+
+        return $relations;
     }
 
     public function adaptResourceQuery(Context $context)

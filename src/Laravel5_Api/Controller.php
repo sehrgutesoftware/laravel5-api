@@ -11,6 +11,7 @@ use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
 use SehrGut\Laravel5_Api\Exceptions\Http\NotFound;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
+use SehrGut\Laravel5_Api\Hooks\AdaptRelations;
 use SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery;
 use SehrGut\Laravel5_Api\Hooks\AfterSave;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeAction;
@@ -162,7 +163,20 @@ class Controller extends IlluminateController
      *
      * @return mixed Whatever the last plugin on that hook returns
      */
-    protected function applyHooks(String $hook, $deprecated = null)
+    protected function applyHooksToArgument(String $hook, $argument)
+    {
+        return $this->loader->applyHooks($hook, $argument);
+    }
+
+    /**
+     * Proxy: Run the `context` through all plugins registered for `$hook` and return their result.
+     *
+     * @param string $hook     Hook Interface
+     * @param mixed  $argument Whatever the hook requires
+     *
+     * @return mixed Whatever the last plugin on that hook returns
+     */
+    protected function applyHooksToContext(String $hook)
     {
         $this->context = $this->loader->applyHooks($hook, $this->context);
     }
@@ -181,7 +195,7 @@ class Controller extends IlluminateController
     public function index()
     {
         $this->beginAction('index');
-        $this->applyHooks(AuthorizeAction::class);
+        $this->applyHooksToContext(AuthorizeAction::class);
         $this->getCollection();
         $this->formatCollection();
 
@@ -196,7 +210,7 @@ class Controller extends IlluminateController
     public function store()
     {
         $this->beginAction('store');
-        $this->applyHooks(AuthorizeAction::class);
+        $this->applyHooksToContext(AuthorizeAction::class);
         $this->gatherInput();
         $this->validateInput();
         $this->createResource();
@@ -214,7 +228,7 @@ class Controller extends IlluminateController
     {
         $this->beginAction('show');
         $this->getResource();
-        $this->applyHooks(AuthorizeResource::class);
+        $this->applyHooksToContext(AuthorizeResource::class);
         $this->formatResource();
 
         return $this->makeResponse();
@@ -229,7 +243,7 @@ class Controller extends IlluminateController
     {
         $this->beginAction('update');
         $this->getResource();
-        $this->applyHooks(AuthorizeResource::class);
+        $this->applyHooksToContext(AuthorizeResource::class);
         $this->gatherInput();
         $this->validateInput(true);
         $this->updateResource();
@@ -247,7 +261,7 @@ class Controller extends IlluminateController
     {
         $this->beginAction('destroy');
         $this->getResource();
-        $this->applyHooks(AuthorizeResource::class);
+        $this->applyHooksToContext(AuthorizeResource::class);
         $this->destroyResource();
 
         return $this->makeResponse('', 204);
@@ -269,7 +283,7 @@ class Controller extends IlluminateController
     protected function beginAction(string $action)
     {
         $this->context->action = $action;
-        $this->applyHooks(BeginAction::class);
+        $this->applyHooksToContext(BeginAction::class);
     }
 
     /**
@@ -286,7 +300,7 @@ class Controller extends IlluminateController
 
         $this->filterByRequest($this->context->query);
 
-        $this->applyHooks(AdaptResourceQuery::class);
+        $this->applyHooksToContext(AdaptResourceQuery::class);
 
         try {
             $this->context->resource = $this->context->query->firstOrFail();
@@ -307,7 +321,7 @@ class Controller extends IlluminateController
 
         $this->filterByRequest($this->context->query);
 
-        $this->applyHooks(AdaptCollectionQuery::class);
+        $this->applyHooksToContext(AdaptCollectionQuery::class);
 
         $this->context->collection = $this->context->query->get();
     }
@@ -319,7 +333,7 @@ class Controller extends IlluminateController
      */
     protected function formatResource()
     {
-        $this->applyHooks(FormatResource::class);
+        $this->applyHooksToContext(FormatResource::class);
         $this->payload = $this->context->resource;
         $this->transformPayload();
     }
@@ -332,7 +346,7 @@ class Controller extends IlluminateController
     protected function formatCollection()
     {
         $this->context->collection = $this->context->collection->all();
-        $this->applyHooks(FormatCollection::class);
+        $this->applyHooksToContext(FormatCollection::class);
         $this->payload = $this->context->collection;
         $this->transformPayload();
     }
@@ -429,10 +443,10 @@ class Controller extends IlluminateController
             }
         }
 
-        $this->applyHooks(BeforeCreate::class);
-        $this->applyHooks(BeforeSave::class);
+        $this->applyHooksToContext(BeforeCreate::class);
+        $this->applyHooksToContext(BeforeSave::class);
         $this->context->resource->save();
-        $this->applyHooks(AfterSave::class);
+        $this->applyHooksToContext(AfterSave::class);
         $this->refreshResource();
     }
 
@@ -444,10 +458,10 @@ class Controller extends IlluminateController
     protected function updateResource()
     {
         $this->context->resource->fill($this->context->input);
-        $this->applyHooks(BeforeUpdate::class);
-        $this->applyHooks(BeforeSave::class);
+        $this->applyHooksToContext(BeforeUpdate::class);
+        $this->applyHooksToContext(BeforeSave::class);
         $this->context->resource->save();
-        $this->applyHooks(AfterSave::class);
+        $this->applyHooksToContext(AfterSave::class);
         $this->refreshResource();
     }
 
@@ -468,7 +482,7 @@ class Controller extends IlluminateController
 
         $this->context->response->headers->add(['Content-Type' => 'application/json']);
 
-        $this->applyHooks(BeforeResponse::class);
+        $this->applyHooksToContext(BeforeResponse::class);
 
         return $this->context->response;
     }
@@ -504,20 +518,34 @@ class Controller extends IlluminateController
     {
         $nested_counts = $this->getNestedCountsByRelation();
 
+        $relations = $this->relationsWithCounts($nested_counts);
+
+        return $this->applyHooksToArgument(AdaptRelations::class, $relations);
+    }
+
+    /**
+     * Return `$this->relations`, enriched with closures
+     * querying for counts on the related models.
+     *
+     * @param  array  $nested_counts
+     * @return array
+     */
+    private function relationsWithCounts(array $nested_counts)
+    {
         $relations = [];
 
-        foreach ($this->relations as $relation) {
-            // Check if any counts should be performed on the relation
-            if (array_key_exists($relation, $nested_counts)) {
-                $counts = $nested_counts[$relation];
-                $relations[$relation] = function ($query) use ($counts) {
+        foreach ($this->relations as $name) {
+
+            if (array_key_exists($name, $nested_counts)) {
+                // There are counts to be performed on this relation
+                $counts = $nested_counts[$name];
+                $relations[$name] = function ($query) use ($counts) {
                     return $query->withCount($counts);
                 };
-                continue;
             }
 
-            // No counts defined for this relation, just add it plainly
-            $relations[] = $relation;
+            // Fallback: No counts defined for this relation
+            $relations[] = $name;
         }
 
         return $relations;
@@ -535,9 +563,20 @@ class Controller extends IlluminateController
             return str_contains($count, '.');
         });
 
+        return $this->groupCountsByRelation($nested_counts);
+    }
+
+    /**
+     * Group the counts by the relation on which they should be performed.
+     *
+     * @param  array  $nested_counts
+     *
+     * @return array
+     */
+    private function groupCountsByRelation(array $nested_counts)
+    {
         $result = [];
 
-        // Group the counts by the relation on which they should be performed
         foreach ($nested_counts as $value) {
             $fragments = explode('.', $value);
             $count = array_pop($fragments);
