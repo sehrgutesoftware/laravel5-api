@@ -31,9 +31,7 @@ class TestPlugin extends Plugin implements
 {
     public function adaptCollectionQuery()
     {
-        Log::info('TestPlugin: called adaptCollectionQuery', ['context' => $context]);
-
-        return $context;return $context;
+        Log::info('TestPlugin: called adaptCollectionQuery', ['context' => $this->context]);
     }
 
     public function adaptRelations(array $relations)
@@ -45,41 +43,41 @@ class TestPlugin extends Plugin implements
 
     public function adaptResourceQuery()
     {
-        Log::info('TestPlugin: called adaptResourceQuery', ['context' => $context]);
+        Log::info('TestPlugin: called adaptResourceQuery', ['context' => $this->context]);
     }
 
     public function authorizeResource()
     {
-        Log::info('TestPlugin: called authorizeResource', ['context' => $context]);
+        Log::info('TestPlugin: called authorizeResource', ['context' => $this->context]);
     }
 
     public function authorizeAction()
     {
-        Log::info('TestPlugin: called authorizeAction', ['context' => $context]);
+        Log::info('TestPlugin: called authorizeAction', ['context' => $this->context]);
     }
 
     public function beginAction()
     {
-        Log::info('TestPlugin: called beginAction', ['context' => $context]);
+        Log::info('TestPlugin: called beginAction', ['context' => $this->context]);
     }
 
     public function beforeRespond()
     {
-        Log::info('TestPlugin: called beforeRespond', ['context' => $context]);
+        Log::info('TestPlugin: called beforeRespond', ['context' => $this->context]);
     }
 
     public function formatCollection()
     {
-        Log::info('TestPlugin: called formatCollection', ['context' => $context]);
+        Log::info('TestPlugin: called formatCollection', ['context' => $this->context]);
     }
 
     public function formatResource()
     {
-        Log::info('TestPlugin: called formatResource', ['context' => $context]);
+        Log::info('TestPlugin: called formatResource', ['context' => $this->context]);
     }
 
     public function testHook()
     {
-        Log::info('TestPlugin: called testHook', ['context' => $context]);
+        Log::info('TestPlugin: called testHook', ['context' => $this->context]);
     }
 }
