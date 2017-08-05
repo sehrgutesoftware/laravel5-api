@@ -2,16 +2,15 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-use SehrGut\Laravel5_Api\Context;
-
+/**
+ * This Hook is called before a resource created (on store action).
+ */
 interface BeforeCreate extends Hook
 {
     /**
-     * This Hook is called before a resource created (on store action).
+     * Apply the hook.
      *
-     * @param Context $context
-     *
-     * @return Context
+     * @return void
      */
-    public function beforeCreate(Context $context);
+    public function beforeCreate();
 }

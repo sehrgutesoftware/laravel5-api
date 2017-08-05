@@ -2,16 +2,16 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-use SehrGut\Laravel5_Api\Context;
-
+/**
+ * This hook is called after the singl record has been retrieved
+ * from the db and stored into `$context->resource`.
+ */
 interface FormatResource extends Hook
 {
     /**
-     * This hook receives a single resource before it is transformed.
+     * Apply the hook.
      *
-     * @param Context $context
-     *
-     * @return Context
+     * @return void
      */
-    public function formatResource(Context $context);
+    public function formatResource();
 }

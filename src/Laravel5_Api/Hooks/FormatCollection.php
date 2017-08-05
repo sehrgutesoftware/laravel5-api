@@ -2,16 +2,16 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-use SehrGut\Laravel5_Api\Context;
-
+/**
+ * This hook is called after the records have been retrieved
+ * from the db and stored into `$context->collection`.
+ */
 interface FormatCollection extends Hook
 {
     /**
-     * This hook receives a Collection of resources before they are transformed.
+     * Apply the hook.
      *
-     * @param Context $context
-     *
-     * @return Context
+     * @return void
      */
-    public function formatCollection(Context $context);
+    public function formatCollection();
 }

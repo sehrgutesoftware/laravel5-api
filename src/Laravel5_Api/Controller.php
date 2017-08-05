@@ -125,13 +125,13 @@ class Controller extends IlluminateController
         $this->model_mapping = $this->makeModelMapping();
         $this->request_adapter = $this->makeRequestAdapter($request);
 
-        $this->loader = new PluginLoader($this, $this->plugins);
-
         $this->context = new Context([
             'controller' => $this,
             'request'    => $request,
             'model'      => $this->model,
         ]);
+
+        $this->loader = new PluginLoader($this, $this->context, $this->plugins);
 
         $this->afterConstruct();
     }
@@ -156,19 +156,6 @@ class Controller extends IlluminateController
     }
 
     /**
-     * Proxy: Run `$argument` through all plugins registered for `$hook` and return their result.
-     *
-     * @param string $hook     Hook Interface
-     * @param mixed  $argument Whatever the hook requires
-     *
-     * @return mixed Whatever the last plugin on that hook returns
-     */
-    protected function applyHooksToArgument(String $hook, $argument)
-    {
-        return $this->loader->applyHooks($hook, $argument);
-    }
-
-    /**
      * Proxy: Run the `context` through all plugins registered for `$hook` and return their result.
      *
      * @param string $hook     Hook Interface
@@ -176,9 +163,22 @@ class Controller extends IlluminateController
      *
      * @return mixed Whatever the last plugin on that hook returns
      */
-    protected function applyHooksToContext(String $hook)
+    protected function applyHooks(String $hook)
     {
-        $this->context = $this->loader->applyHooks($hook, $this->context);
+        $this->loader->applyHooks($hook);
+    }
+
+    /**
+     * Proxy: Run `$argument` through all plugins registered for `$hook` and return their result.
+     *
+     * @param string $hook     Hook Interface
+     * @param mixed  $argument Whatever the hook requires
+     *
+     * @return mixed Whatever the last plugin on that hook returns
+     */
+    protected function applyHooksWithArgument(String $hook, $argument)
+    {
+        return $this->loader->applyHooksWithArgument($hook, $argument);
     }
 
     /***
@@ -195,7 +195,7 @@ class Controller extends IlluminateController
     public function index()
     {
         $this->beginAction('index');
-        $this->applyHooksToContext(AuthorizeAction::class);
+        $this->applyHooks(AuthorizeAction::class);
         $this->getCollection();
         $this->formatCollection();
 
@@ -210,7 +210,7 @@ class Controller extends IlluminateController
     public function store()
     {
         $this->beginAction('store');
-        $this->applyHooksToContext(AuthorizeAction::class);
+        $this->applyHooks(AuthorizeAction::class);
         $this->gatherInput();
         $this->validateInput();
         $this->createResource();
@@ -228,7 +228,7 @@ class Controller extends IlluminateController
     {
         $this->beginAction('show');
         $this->getResource();
-        $this->applyHooksToContext(AuthorizeResource::class);
+        $this->applyHooks(AuthorizeResource::class);
         $this->formatResource();
 
         return $this->makeResponse();
@@ -243,7 +243,7 @@ class Controller extends IlluminateController
     {
         $this->beginAction('update');
         $this->getResource();
-        $this->applyHooksToContext(AuthorizeResource::class);
+        $this->applyHooks(AuthorizeResource::class);
         $this->gatherInput();
         $this->validateInput(true);
         $this->updateResource();
@@ -261,7 +261,7 @@ class Controller extends IlluminateController
     {
         $this->beginAction('destroy');
         $this->getResource();
-        $this->applyHooksToContext(AuthorizeResource::class);
+        $this->applyHooks(AuthorizeResource::class);
         $this->destroyResource();
 
         return $this->makeResponse('', 204);
@@ -283,7 +283,7 @@ class Controller extends IlluminateController
     protected function beginAction(string $action)
     {
         $this->context->action = $action;
-        $this->applyHooksToContext(BeginAction::class);
+        $this->applyHooks(BeginAction::class);
     }
 
     /**
@@ -300,7 +300,7 @@ class Controller extends IlluminateController
 
         $this->filterByRequest($this->context->query);
 
-        $this->applyHooksToContext(AdaptResourceQuery::class);
+        $this->applyHooks(AdaptResourceQuery::class);
 
         try {
             $this->context->resource = $this->context->query->firstOrFail();
@@ -321,7 +321,7 @@ class Controller extends IlluminateController
 
         $this->filterByRequest($this->context->query);
 
-        $this->applyHooksToContext(AdaptCollectionQuery::class);
+        $this->applyHooks(AdaptCollectionQuery::class);
 
         $this->context->collection = $this->context->query->get();
     }
@@ -333,7 +333,7 @@ class Controller extends IlluminateController
      */
     protected function formatResource()
     {
-        $this->applyHooksToContext(FormatResource::class);
+        $this->applyHooks(FormatResource::class);
         $this->payload = $this->context->resource;
         $this->transformPayload();
     }
@@ -346,7 +346,7 @@ class Controller extends IlluminateController
     protected function formatCollection()
     {
         $this->context->collection = $this->context->collection->all();
-        $this->applyHooksToContext(FormatCollection::class);
+        $this->applyHooks(FormatCollection::class);
         $this->payload = $this->context->collection;
         $this->transformPayload();
     }
@@ -443,10 +443,10 @@ class Controller extends IlluminateController
             }
         }
 
-        $this->applyHooksToContext(BeforeCreate::class);
-        $this->applyHooksToContext(BeforeSave::class);
+        $this->applyHooks(BeforeCreate::class);
+        $this->applyHooks(BeforeSave::class);
         $this->context->resource->save();
-        $this->applyHooksToContext(AfterSave::class);
+        $this->applyHooks(AfterSave::class);
         $this->refreshResource();
     }
 
@@ -458,10 +458,10 @@ class Controller extends IlluminateController
     protected function updateResource()
     {
         $this->context->resource->fill($this->context->input);
-        $this->applyHooksToContext(BeforeUpdate::class);
-        $this->applyHooksToContext(BeforeSave::class);
+        $this->applyHooks(BeforeUpdate::class);
+        $this->applyHooks(BeforeSave::class);
         $this->context->resource->save();
-        $this->applyHooksToContext(AfterSave::class);
+        $this->applyHooks(AfterSave::class);
         $this->refreshResource();
     }
 
@@ -482,7 +482,7 @@ class Controller extends IlluminateController
 
         $this->context->response->headers->add(['Content-Type' => 'application/json']);
 
-        $this->applyHooksToContext(BeforeResponse::class);
+        $this->applyHooks(BeforeResponse::class);
 
         return $this->context->response;
     }
@@ -520,7 +520,7 @@ class Controller extends IlluminateController
 
         $relations = $this->relationsWithCounts($nested_counts);
 
-        return $this->applyHooksToArgument(AdaptRelations::class, $relations);
+        return $this->applyHooksWithArgument(AdaptRelations::class, $relations);
     }
 
     /**

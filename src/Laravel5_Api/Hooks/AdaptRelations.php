@@ -2,10 +2,13 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
+/**
+ * This hook receives an array of relations to be side-loaded with the queried model.
+ */
 interface AdaptRelations extends Hook
 {
     /**
-     * This hook receives an array of relations to be side-loaded with the queried model.
+     * Apply the hook.
      *
      * @param array $relations
      *

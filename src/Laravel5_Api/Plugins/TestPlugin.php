@@ -3,7 +3,6 @@
 namespace SehrGut\Laravel5_Api\Plugins;
 
 use Illuminate\Support\Facades\Log;
-use SehrGut\Laravel5_Api\Context;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
 use SehrGut\Laravel5_Api\Hooks\AdaptRelations;
 use SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery;
@@ -30,7 +29,7 @@ class TestPlugin extends Plugin implements
     FormatResource,
     TestHook
 {
-    public function adaptCollectionQuery(Context $context)
+    public function adaptCollectionQuery()
     {
         Log::info('TestPlugin: called adaptCollectionQuery', ['context' => $context]);
 
@@ -44,59 +43,43 @@ class TestPlugin extends Plugin implements
         return $relations;
     }
 
-    public function adaptResourceQuery(Context $context)
+    public function adaptResourceQuery()
     {
         Log::info('TestPlugin: called adaptResourceQuery', ['context' => $context]);
-
-        return $context;
     }
 
-    public function authorizeResource(Context $context)
+    public function authorizeResource()
     {
         Log::info('TestPlugin: called authorizeResource', ['context' => $context]);
-
-        return $context;
     }
 
-    public function authorizeAction(Context $context)
+    public function authorizeAction()
     {
         Log::info('TestPlugin: called authorizeAction', ['context' => $context]);
-
-        return $context;
     }
 
-    public function beginAction(Context $context)
+    public function beginAction()
     {
         Log::info('TestPlugin: called beginAction', ['context' => $context]);
-
-        return $context;
     }
 
-    public function beforeRespond(Context $context)
+    public function beforeRespond()
     {
         Log::info('TestPlugin: called beforeRespond', ['context' => $context]);
-
-        return $context;
     }
 
-    public function formatCollection(Context $context)
+    public function formatCollection()
     {
         Log::info('TestPlugin: called formatCollection', ['context' => $context]);
-
-        return $context;
     }
 
-    public function formatResource(Context $context)
+    public function formatResource()
     {
         Log::info('TestPlugin: called formatResource', ['context' => $context]);
-
-        return $context;
     }
 
-    public function testHook(Context $context)
+    public function testHook()
     {
         Log::info('TestPlugin: called testHook', ['context' => $context]);
-
-        return $context;
     }
 }

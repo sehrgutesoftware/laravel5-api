@@ -3,7 +3,6 @@
 namespace SehrGut\Laravel5_Api\Plugins;
 
 use Illuminate\Support\Collection;
-use SehrGut\Laravel5_Api\Context;
 use SehrGut\Laravel5_Api\Hooks\FormatCollection;
 use SehrGut\Laravel5_Api\Hooks\FormatResource;
 
@@ -44,29 +43,25 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
     protected $includes = [];
 
     /** {@inheritdoc} */
-    public function formatCollection(Context $context)
+    public function formatCollection()
     {
-        $this->splitRelationsFromCollection($context->collection);
+        $this->splitRelationsFromCollection($this->context->collection);
 
-        $context->collection = [
-            $this->config['result_key']   => $context->collection,
+        $this->context->collection = [
+            $this->config['result_key']   => $this->context->collection,
             $this->config['includes_key'] => $this->uniqueIncludes(),
         ];
-
-        return $context;
     }
 
     /** {@inheritdoc} */
-    public function formatResource(Context $context)
+    public function formatResource()
     {
-        $this->splitRelationsFromCollection($context->resource);
+        $this->splitRelationsFromCollection($this->context->resource);
 
-        $context->resource = [
-            $this->config['result_key']   => $context->resource,
+        $this->context->resource = [
+            $this->config['result_key']   => $this->context->resource,
             $this->config['includes_key'] => $this->uniqueIncludes(),
         ];
-
-        return $context;
     }
 
     /**

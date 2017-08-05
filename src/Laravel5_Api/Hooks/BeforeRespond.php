@@ -2,16 +2,15 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-use SehrGut\Laravel5_Api\Context;
-
+/**
+ * Hook in here to manipulate the response headers or other stuff before responding.
+ */
 interface BeforeRespond extends Hook
 {
     /**
-     * Hook in here to manipulate the response headers or other stuff before responding.
+     * Apply the hook.
      *
-     * @param Context $context
-     *
-     * @return Context
+     * @return void
      */
-    public function beforeRespond(Context $context);
+    public function beforeRespond();
 }

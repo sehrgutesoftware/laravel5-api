@@ -142,6 +142,31 @@ The logic is divided up into smaller components, each with their own responsibil
 - `update()` - Update a single resource
 - `destroy()` - Delete a single resource
 
+#### Side-loading and counting relations
+Side-loads and relationship counts can be added to the response by enumerating the names of the relation in the `$relations` or `$counts` properties on the controller. Both work recursively, allowing to side-load/count nested relations using dot-syntax.
+
+**Example:**
+
+```php
+use SehrGut\Laravel5_Api\Controller as ApiController;
+use App\Models\Post;
+
+class PostsController extends ApiController
+{
+    protected $model = Post::class;
+
+    protected $relations = [
+    	'comments',  // Side-load the 'comments' relation within posts
+    	'comments.author'  // Side-load the 'author' relation in nested comments
+    ];
+
+    protected $counts = [
+    	'comments',	 // Add 'comments_count' to posts
+    	'comments.responses'  // Add `responses_count` to nested comments
+    ];
+}
+```
+
 ### Validator
 In order to create a custom Validator for a model, you can subclass the `Validator` class and set the `$rules` array. After that, the Validator needs to be registered in the `ModelMapping` which is assigned to your Controller. Please refer to the [ModelMapping](#modelmapping) section on how to do this. A Validator could look like this:
 
@@ -321,7 +346,6 @@ The base `Plugin` class provides a `protected $config` attribute, to store confi
 <?php
 namespace App\Api\V1\Plugins;
 
-use Illuminate\Database\Eloquent\Builder;
 use SehrGut\Laravel5_Api\Plugins\Plugin;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
 use SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery;
@@ -335,14 +359,14 @@ class DieAndDumpQuery extends Plugin implements AdaptCollectionQuery, AdaptResou
 		'option' => 'Reasonable default',
 	];
 
-	protected function adaptCollectionQuery(Builder $query)
+	protected function adaptCollectionQuery()
 	{
-		dd($query);
+		dd($this->context->query);
 	}
 
-	protected function adaptResourceQuery(Builder $query)
+	protected function adaptResourceQuery()
 	{
-		dd($query);
+		dd($this->context->query);
 	}
 }
 ```
@@ -357,42 +381,48 @@ Each hook interface declares exactly one method. The name of this method is the 
 
 ###### Available Hooks
 
-`AdaptResourceQuery::adaptResourceQuery(Context $context)`
-Customize the query for fetching a single resource (`show`, `update` and `destroy` actions). Return the adapted query.
+**`AdaptCollectionQuery::adaptCollectionQuery()`**
+Customize the query for fetching a resource collection (`index` action).
 
-`AdaptCollectionQuery::adaptCollectionQuery(Context $context)`
-Customize the query for fetching a resource collection (`index` action). Return the adapted query.
+**`AdaptResourceQuery::adaptResourceQuery()`**
+Customize the query for fetching a single resource (`show`, `update` and `destroy` actions).
 
-`AuthorizeAction::authorizeAction(Context $context)`
+**`AdaptRelations::adaptRelations(array $relations)`**
+This hook receives an array of relations to be side-loaded with the queried model. Return the adapted array.
+
+**`BeginAction::beginAction()`**
+This is the first hook in any action, right after `$context->action` was set.
+
+**`AuthorizeAction::authorizeAction()`**
 Hook in here to perform authorization on action level. This hook is only called on the `index` and `store` actions.
 
-`AuthorizeResource::authorizeResource(Context $context)`
+**`AuthorizeResource::authorizeResource()`**
 Hook in here to perform authorization on a single resource. This hook is called from the `show`, `update` and `destroy` handler right after the resource was fetched from DB and stored into `$this->resource`.
 
-`FormatCollection::formatCollection(Context $context)`
+**`FormatCollection::formatCollection()`**
 This hook receives a Collection of resources before they are transformed.
 
-`FormatResource::formatResource(Context $context)`
+**`FormatResource::formatResource()`**
 This hook receives a single resource before it is transformed.
 
-`ResponseHeaders::responseHeaders(Context $context)`
+**`ResponseHeaders::responseHeaders()`**
 Hook in here to manipulate the response headers.
 
-`BeforeSave::beforeSave(Context $context)`
+**`BeforeSave::beforeSave()`**
 Is called on every `create` and `update` action after the model has been filled from `$context->input` right before the call to `$context->resource->save()`.
 
-`AfterSave::afterSave(Context $context)`
+**`AfterSave::afterSave()`**
 On every `create` and `update` action after the call to `$context->resource->save()`.
 
-`BeforeCreate::beforeCreate(Context $context)`
+**`BeforeCreate::beforeCreate()`**
 Hook just before `beforeSave()` but only in the `store` action.
 
-`BeforeUpdate::beforeUpdate(Context $context)`
+**`BeforeUpdate::beforeUpdate()`**
 Hook just before `beforeSave()` but only in the `update` action.
 
-###### Hook Context
+###### Controller / Plugin Context
 
-Each hook method receives a [Context](https://github.com/sehrgutesoftware/laravel5-api/blob/master/src/Laravel5_Api/Context.php) object as its first and only argument. It is required to return that same object, whether it's changed or not. The `Context` contains all relevant pieces of data, that a Plugin might manipulate:
+Each plugin has a reference to the controller's [Context](https://github.com/sehrgutesoftware/laravel5-api/blob/master/src/Laravel5_Api/Context.php) object stored in `Plugin::$context`. The `Context` contains all relevant pieces of data, that a Plugin might need to read or write:
 
 ```php
 // Read-only:

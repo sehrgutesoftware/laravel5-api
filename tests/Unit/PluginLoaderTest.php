@@ -28,7 +28,7 @@ class PluginLoaderTest extends TestCase
 
     public function test_it_initializes_properly_without_plugins()
     {
-        $loader = new PluginLoader($this->getController());
+        $loader = new PluginLoader($this->getController(), new Context());
         $this->assertTrue(true);
     }
 
@@ -36,7 +36,7 @@ class PluginLoaderTest extends TestCase
     {
         $plugins = [Paginator::class, SearchFilter::class];
 
-        $loader = new PluginLoader($this->getController(), $plugins);
+        $loader = new PluginLoader($this->getController(), new Context(), $plugins);
         $this->assertTrue($loader->isLoaded(Paginator::class));
         $this->assertTrue($loader->isLoaded(SearchFilter::class));
     }
@@ -44,7 +44,7 @@ class PluginLoaderTest extends TestCase
     public function test_it_loads_plugins()
     {
         $plugins = [Paginator::class, SearchFilter::class];
-        $loader = new PluginLoader($this->getController());
+        $loader = new PluginLoader($this->getController(), new Context());
 
         $loader->loadPlugins($plugins);
         $this->assertTrue($loader->isLoaded(Paginator::class));
@@ -54,7 +54,7 @@ class PluginLoaderTest extends TestCase
     public function test_it_loads_plugins_individually()
     {
         $plugins = [Paginator::class, SearchFilter::class];
-        $loader = new PluginLoader($this->getController());
+        $loader = new PluginLoader($this->getController(), new Context());
 
         $this->assertFalse($loader->isLoaded(Paginator::class));
         $this->assertFalse($loader->isLoaded(SearchFilter::class));
@@ -70,8 +70,9 @@ class PluginLoaderTest extends TestCase
 
     public function test_it_loads_plugin_instances()
     {
-        $plugin = new Paginator();
-        $loader = new PluginLoader($this->getController());
+        $context = new Context();
+        $plugin = new Paginator($context);
+        $loader = new PluginLoader($this->getController(), $context);
 
         $this->assertFalse($loader->isLoaded(Paginator::class));
         $loader->loadPlugin($plugin);
@@ -80,7 +81,7 @@ class PluginLoaderTest extends TestCase
 
     public function test_it_doesnt_take_fish_for_plugins()
     {
-        $loader = new PluginLoader($this->getController());
+        $loader = new PluginLoader($this->getController(), new Context());
 
         $this->expectException(InvalidArgumentException::class);
         $loader->loadPlugin(new stdClass());
@@ -94,7 +95,7 @@ class PluginLoaderTest extends TestCase
             ->with(['option'=> 'value'])
             ->once();
 
-        $loader = new PluginLoader($controller, [$mock]);
+        $loader = new PluginLoader($controller, new Context(), [$mock]);
         $result = $loader->configurePlugin(get_class($mock), ['option' => 'value']);
 
         $this->assertNull($result);  // Stop complaining about no assertions
@@ -103,50 +104,62 @@ class PluginLoaderTest extends TestCase
     public function test_it_applies_hooks()
     {
         $controller = $this->getController();
-        $context = new Context();
 
         $mock = Mockery::mock('SehrGut\Laravel5_Api\Plugins\TestPlugin');
         $mock->shouldReceive('authorizeResource')
-            ->with($context)
-            ->once()
-            ->andReturn('some output');
+            ->once();
 
-        $loader = new PluginLoader($controller, [$mock]);
-        $result = $loader->applyHooks(AuthorizeResource::class, $context);
+        $loader = new PluginLoader($controller, new Context(), [$mock]);
+        $loader->applyHooks(AuthorizeResource::class);
 
-        $this->assertEquals('some output', $result);
+        $this->assertTrue(true);  // Mute warning: Mock expectations do not count towards assertions count
     }
 
-    public function test_it_applies_hooks_in_correct_order()
-    {
-        $controller = $this->getController();
-        $in2one = new Context();
-        $one2two = new Context();
-        $two2three = new Context();
-        $three2out = new Context();
+    // public function test_it_applies_hooks()
+    // {
+    //     $controller = $this->getController();
 
-        // Test one direction
-        $plugin_1 = Mockery::namedMock('Mock1', 'SehrGut\Laravel5_Api\Plugins\TestPlugin');
-        $plugin_2 = Mockery::namedMock('Mock2', 'SehrGut\Laravel5_Api\Plugins\TestPlugin');
-        $plugin_3 = Mockery::namedMock('Mock3', 'SehrGut\Laravel5_Api\Plugins\TestPlugin');
-        $plugin_1->shouldReceive('authorizeResource')
-            ->with($in2one)
-            ->once()
-            ->andReturn($one2two);
-        $plugin_2->shouldReceive('authorizeResource')
-            ->with($one2two)
-            ->once()
-            ->andReturn($two2three);
-        $plugin_3->shouldReceive('authorizeResource')
-            ->with($two2three)
-            ->once()
-            ->andReturn($three2out);
+    //     $mock = Mockery::mock('SehrGut\Laravel5_Api\Plugins\TestPlugin');
+    //     $mock->shouldReceive('authorizeResource')
+    //         ->once()
+    //         ->andReturn('some output');
 
-        $loader = new PluginLoader($controller, [$plugin_1, $plugin_2, $plugin_3]);
-        $result = $loader->applyHooks(AuthorizeResource::class, $in2one);
+    //     $loader = new PluginLoader($controller, new Context(), [$mock]);
+    //     $result = $loader->applyHooks(AuthorizeResource::class);
 
-        $this->assertEquals($three2out, $result);
-    }
+    //     $this->assertEquals('some output', $result);
+    // }
+
+    // public function test_it_applies_hooks_in_correct_order()
+    // {
+    //     $controller = $this->getController();
+    //     $in2one = new Context();
+    //     $one2two = new Context();
+    //     $two2three = new Context();
+    //     $three2out = new Context();
+
+    //     // Test one direction
+    //     $plugin_1 = Mockery::namedMock('Mock1', 'SehrGut\Laravel5_Api\Plugins\TestPlugin');
+    //     $plugin_2 = Mockery::namedMock('Mock2', 'SehrGut\Laravel5_Api\Plugins\TestPlugin');
+    //     $plugin_3 = Mockery::namedMock('Mock3', 'SehrGut\Laravel5_Api\Plugins\TestPlugin');
+    //     $plugin_1->shouldReceive('authorizeResource')
+    //         ->with($in2one)
+    //         ->once()
+    //         ->andReturn($one2two);
+    //     $plugin_2->shouldReceive('authorizeResource')
+    //         ->with($one2two)
+    //         ->once()
+    //         ->andReturn($two2three);
+    //     $plugin_3->shouldReceive('authorizeResource')
+    //         ->with($two2three)
+    //         ->once()
+    //         ->andReturn($three2out);
+
+    //     $loader = new PluginLoader($controller, [$plugin_1, $plugin_2, $plugin_3]);
+    //     $result = $loader->applyHooks(AuthorizeResource::class, $in2one);
+
+    //     $this->assertEquals($three2out, $result);
+    // }
 
     public function test_it_generates_hook_methods_correctly()
     {

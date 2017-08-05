@@ -2,7 +2,6 @@
 
 namespace SehrGut\Laravel5_Api\Plugins;
 
-use SehrGut\Laravel5_Api\Context;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
 use SehrGut\Laravel5_Api\Hooks\BeforeRespond;
 use SehrGut\Laravel5_Api\Hooks\FormatCollection;
@@ -53,44 +52,38 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
     protected $meta_counts;
 
     /** {@inheritdoc} */
-    public function adaptCollectionQuery(Context $context)
+    public function adaptCollectionQuery()
     {
-        $total = $context->query->count();
+        $total = $this->context->query->count();
 
-        $limit = (int) $context->controller->request_adapter->getValueByKey(
+        $limit = (int) $this->context->controller->request_adapter->getValueByKey(
             $this->config['limit_param'],
             $this->config['limit_default']
         );
-        $page = (int) $context->controller->request_adapter->getValueByKey(
+        $page = (int) $this->context->controller->request_adapter->getValueByKey(
             $this->config['page_param'],
             $this->config['page_default']
         );
 
         $this->saveMetaCounts($total, $limit, $page);
 
-        $context->query->limit($limit)->skip(($page - 1) * $limit);
-
-        return $context;
+        $this->context->query->limit($limit)->skip(($page - 1) * $limit);
     }
 
     /** {@inheritdoc} */
-    public function formatCollection(Context $context)
+    public function formatCollection()
     {
         if ($meta_key = $this->config['meta_in_payload']) {
-            $context->collection[$meta_key] = $this->meta_counts;
+            $this->context->collection[$meta_key] = $this->meta_counts;
         }
-
-        return $context;
     }
 
     /** {@inheritdoc} */
-    public function beforeRespond(Context $context)
+    public function beforeRespond()
     {
         if ($this->config['meta_in_headers']) {
-            $context->response->headers->add($this->meta_counts);
+            $this->context->response->headers->add($this->meta_counts);
         }
-
-        return $context;
     }
 
     /**

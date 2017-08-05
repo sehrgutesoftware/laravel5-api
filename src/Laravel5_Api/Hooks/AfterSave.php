@@ -2,16 +2,15 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-use SehrGut\Laravel5_Api\Context;
-
+/**
+ * This Hook is called after a resource is saved (on store & update actions).
+ */
 interface AfterSave extends Hook
 {
     /**
-     * This Hook is called after a resource is saved (on store & update actions).
+     * Apply the hook.
      *
-     * @param Context $context
-     *
-     * @return Context
+     * @return void
      */
-    public function afterSave(Context $context);
+    public function afterSave();
 }

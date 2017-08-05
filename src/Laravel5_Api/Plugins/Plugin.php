@@ -2,6 +2,8 @@
 
 namespace SehrGut\Laravel5_Api\Plugins;
 
+use SehrGut\Laravel5_Api\Context;
+
 /**
  * Base plugin from which all plugins have to inherit.
  */
@@ -21,9 +23,22 @@ class Plugin
      */
     protected $config = [];
 
-    public function __construct()
+    /**
+     * The controller's current context.
+     *
+     * @var Context
+     */
+    protected $context;
+
+    /**
+     * Construct a new Context.
+     *
+     * @param Context $context
+     */
+    public function __construct(Context $context)
     {
         $this->config = $this->default_config;
+        $this->context = $context;
     }
 
     /**

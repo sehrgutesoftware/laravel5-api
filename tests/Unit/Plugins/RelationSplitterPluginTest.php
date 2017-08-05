@@ -21,12 +21,12 @@ class RelationSplitterPluginTest extends TestCase
         $comment_1 = $comment_1->fresh();
         $comment_2 = $comment_2->fresh();
 
-        $original_context = new Context([
+        $context = new Context([
             'resource' => Post::with('comments')->find($post->id),
         ]);
 
-        $plugin = new RelationSplitter();
-        $context = $plugin->formatResource($original_context);
+        $plugin = new RelationSplitter($context);
+        $plugin->formatResource();
 
         $this->assertEquals($post->id, $context->resource['result']->id);
         $this->assertEquals('Test Post', $context->resource['result']->title);
@@ -47,12 +47,12 @@ class RelationSplitterPluginTest extends TestCase
         $comment_3 = $comment_3->fresh();
         $comment_4 = $comment_4->fresh();
 
-        $original_context = new Context([
+        $context = new Context([
             'collection' => Post::with('comments')->get(),
         ]);
 
-        $plugin = new RelationSplitter();
-        $context = $plugin->formatCollection($original_context);
+        $plugin = new RelationSplitter($context);
+        $plugin->formatCollection();
 
         $this->assertEquals($post_1->id, $context->collection['result'][0]->id);
         $this->assertEquals('Test Post', $context->collection['result'][0]->title);

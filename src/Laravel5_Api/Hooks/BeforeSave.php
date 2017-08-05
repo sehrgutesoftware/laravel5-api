@@ -2,16 +2,15 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-use SehrGut\Laravel5_Api\Context;
-
+/**
+ * This Hook is called before a resource is saved (on store & update actions).
+ */
 interface BeforeSave extends Hook
 {
     /**
-     * This Hook is called before a resource is saved (on store & update actions).
+     * Apply the hook.
      *
-     * @param Context $context
-     *
-     * @return Context
+     * @return void
      */
-    public function beforeSave(Context $context);
+    public function beforeSave();
 }

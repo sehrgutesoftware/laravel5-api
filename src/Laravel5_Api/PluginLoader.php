@@ -25,14 +25,25 @@ class PluginLoader
      */
     private $hooks = [];
 
+
+    /**
+     * The controller's current context.
+     *
+     * @var Context
+     */
+    private $context;
+
     /**
      * Construct a new instance.
      *
      * @param Controller $controller The principal controller
+     * @param Context $context The controller's current context
      * @param array|null $plugins    List of plugin classes to load
      */
-    public function __construct(Controller $controller, array $plugins = null)
+    public function __construct(Controller $controller, Context $context, array $plugins = null)
     {
+        $this->context = $context;
+
         // Register controller hooks
         $this->loadPlugin($controller);
 
@@ -69,7 +80,7 @@ class PluginLoader
             $instance = $class;
             $class = get_class($class);
         } elseif (is_string($class) and class_exists($class)) {
-            $instance = new $class();
+            $instance = new $class($this->context);
         } else {
             throw new InvalidArgumentException();
         }
@@ -119,7 +130,7 @@ class PluginLoader
      *
      * @return mixed Return value of the last hook
      */
-    public function applyHooks(String $hook, $argument)
+    public function applyHooksWithArgument(String $hook, $argument)
     {
         $method_name = static::getHookMethodName($hook);
 
@@ -130,6 +141,22 @@ class PluginLoader
         }
 
         return $argument;
+    }
+
+    /**
+     * Run through all plugins registered on given hook, not passing any arguments.
+     *
+     * @param string $hook     FQN of the hook interface
+     *
+     * @return void
+     */
+    public function applyHooks(String $hook)
+    {
+        $method_name = static::getHookMethodName($hook);
+
+        foreach ($this->getPluginsForHook($hook) as $plugin) {
+            $plugin->$method_name();
+        }
     }
 
     /**

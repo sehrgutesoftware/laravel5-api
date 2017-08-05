@@ -13,26 +13,17 @@ class ControllerHooksTest extends TestCase
 {
     public function test_it_calls_the_hook_on_the_controller()
     {
-        $new_context = new Context();
-
         $request = new Request();
         $controller = Mockery::mock(
             'SehrGut\Laravel5_Api\Controller, SehrGut\Laravel5_Api\Hooks\TestHook',
             [$request]
         );
 
-        $thief = Closure::bind(function ($controller) {
-            return $controller->context;
-        }, null, $controller);
-        $context = $thief($controller);
-
         $controller->shouldReceive('testHook')
-            ->with($context)
-            ->once()
-            ->andReturn($new_context);
+            ->once();
 
-        $controller->applyHooksToContext(TestHook::class);
+        $controller->applyHooks(TestHook::class);
 
-        $this->assertEquals($new_context, $thief($controller));
+        $this->assertTrue(true);  // Mute warning: Mock expectations do not count towards assertions count
     }
 }

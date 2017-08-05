@@ -2,16 +2,15 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-use SehrGut\Laravel5_Api\Context;
-
+/**
+ * This is the first hook in any action, right after `$context->action` was set.
+ */
 interface BeginAction extends Hook
 {
     /**
-     * This is the first hook in any action, right after $context->action was set.
+     * Apply the hook.
      *
-     * @param Context $context
-     *
-     * @return Context
+     * @return void
      */
-    public function beginAction(Context $context);
+    public function beginAction();
 }

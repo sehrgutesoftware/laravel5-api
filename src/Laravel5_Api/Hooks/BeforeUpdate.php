@@ -2,16 +2,15 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-use SehrGut\Laravel5_Api\Context;
-
+/**
+ * This Hook is called before a resource is updated (update action).
+ */
 interface BeforeUpdate extends Hook
 {
     /**
-     * This Hook is called before a resource is update (on update action).
+     * Apply the hook.
      *
-     * @param Context $context
-     *
-     * @return Context
+     * @return void
      */
-    public function beforeUpdate(Context $context);
+    public function beforeUpdate();
 }

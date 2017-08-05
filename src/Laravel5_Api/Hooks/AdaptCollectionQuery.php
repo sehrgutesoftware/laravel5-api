@@ -2,17 +2,16 @@
 
 namespace SehrGut\Laravel5_Api\Hooks;
 
-use SehrGut\Laravel5_Api\Context;
-
+/**
+ * This is called on "index requests" after the request parameters
+ * have been applied, before the records are retrieved.
+ */
 interface AdaptCollectionQuery extends Hook
 {
     /**
-     * This hook receives the query on "index requests" after the request
-     * parameters have been applied, before the records are retrieved.
+     * Apply the hook.
      *
-     * @param Context $context
-     *
-     * @return Context
+     * @return void
      */
-    public function adaptCollectionQuery(Context $context);
+    public function adaptCollectionQuery();
 }
