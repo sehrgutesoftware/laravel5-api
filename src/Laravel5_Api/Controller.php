@@ -276,7 +276,7 @@ class Controller extends IlluminateController
     /**
      * Set the `action` property on the context and call the first hook.
      *
-     * @param  string $action
+     * @param string $action
      *
      * @return void
      */
@@ -527,7 +527,8 @@ class Controller extends IlluminateController
      * Return `$this->relations`, enriched with closures
      * querying for counts on the related models.
      *
-     * @param  array  $nested_counts
+     * @param array $nested_counts
+     *
      * @return array
      */
     private function relationsWithCounts(array $nested_counts)
@@ -535,7 +536,6 @@ class Controller extends IlluminateController
         $relations = [];
 
         foreach ($this->relations as $name) {
-
             if (array_key_exists($name, $nested_counts)) {
                 // There are counts to be performed on this relation
                 $counts = $nested_counts[$name];
@@ -569,7 +569,7 @@ class Controller extends IlluminateController
     /**
      * Group the counts by the relation on which they should be performed.
      *
-     * @param  array  $nested_counts
+     * @param array $nested_counts
      *
      * @return array
      */

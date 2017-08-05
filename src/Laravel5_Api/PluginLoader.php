@@ -25,7 +25,6 @@ class PluginLoader
      */
     private $hooks = [];
 
-
     /**
      * The controller's current context.
      *
@@ -37,7 +36,7 @@ class PluginLoader
      * Construct a new instance.
      *
      * @param Controller $controller The principal controller
-     * @param Context $context The controller's current context
+     * @param Context    $context    The controller's current context
      * @param array|null $plugins    List of plugin classes to load
      */
     public function __construct(Controller $controller, Context $context, array $plugins = null)
@@ -146,7 +145,7 @@ class PluginLoader
     /**
      * Run through all plugins registered on given hook, not passing any arguments.
      *
-     * @param string $hook     FQN of the hook interface
+     * @param string $hook FQN of the hook interface
      *
      * @return void
      */
