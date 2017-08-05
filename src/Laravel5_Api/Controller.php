@@ -542,6 +542,7 @@ class Controller extends IlluminateController
                 $relations[$name] = function ($query) use ($counts) {
                     return $query->withCount($counts);
                 };
+                continue;
             }
 
             // Fallback: No counts defined for this relation
