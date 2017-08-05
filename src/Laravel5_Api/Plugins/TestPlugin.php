@@ -9,6 +9,7 @@ use SehrGut\Laravel5_Api\Hooks\AdaptResourceQuery;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeAction;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
 use SehrGut\Laravel5_Api\Hooks\BeforeRespond;
+use SehrGut\Laravel5_Api\Hooks\BeginAction;
 use SehrGut\Laravel5_Api\Hooks\FormatCollection;
 use SehrGut\Laravel5_Api\Hooks\FormatResource;
 use SehrGut\Laravel5_Api\Hooks\TestHook;
@@ -21,6 +22,7 @@ class TestPlugin extends Plugin implements
     AdaptResourceQuery,
     AuthorizeResource,
     AuthorizeAction,
+    BeginAction,
     BeforeRespond,
     FormatCollection,
     FormatResource,
@@ -50,6 +52,13 @@ class TestPlugin extends Plugin implements
     public function authorizeAction(Context $context)
     {
         Log::info('TestPlugin: called authorizeAction', ['context' => $context]);
+
+        return $context;
+    }
+
+    public function beginAction(Context $context)
+    {
+        Log::info('TestPlugin: called beginAction', ['context' => $context]);
 
         return $context;
     }

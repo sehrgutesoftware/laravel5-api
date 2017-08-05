@@ -18,6 +18,7 @@ use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
 use SehrGut\Laravel5_Api\Hooks\BeforeCreate;
 use SehrGut\Laravel5_Api\Hooks\BeforeSave;
 use SehrGut\Laravel5_Api\Hooks\BeforeUpdate;
+use SehrGut\Laravel5_Api\Hooks\BeginAction;
 use SehrGut\Laravel5_Api\Hooks\FormatCollection;
 use SehrGut\Laravel5_Api\Hooks\FormatResource;
 use SehrGut\Laravel5_Api\Plugins\Plugin;
@@ -179,7 +180,7 @@ class Controller extends IlluminateController
      */
     public function index()
     {
-        $this->context->action = 'index';
+        $this->beginAction('index');
         $this->applyHooks(AuthorizeAction::class);
         $this->getCollection();
         $this->formatCollection();
@@ -194,7 +195,7 @@ class Controller extends IlluminateController
      */
     public function store()
     {
-        $this->context->action = 'store';
+        $this->beginAction('store');
         $this->applyHooks(AuthorizeAction::class);
         $this->gatherInput();
         $this->validateInput();
@@ -211,7 +212,7 @@ class Controller extends IlluminateController
      */
     public function show()
     {
-        $this->context->action = 'show';
+        $this->beginAction('show');
         $this->getResource();
         $this->applyHooks(AuthorizeResource::class);
         $this->formatResource();
@@ -226,7 +227,7 @@ class Controller extends IlluminateController
      */
     public function update()
     {
-        $this->context->action = 'update';
+        $this->beginAction('update');
         $this->getResource();
         $this->applyHooks(AuthorizeResource::class);
         $this->gatherInput();
@@ -244,7 +245,7 @@ class Controller extends IlluminateController
      */
     public function destroy()
     {
-        $this->context->action = 'destroy';
+        $this->beginAction('destroy');
         $this->getResource();
         $this->applyHooks(AuthorizeResource::class);
         $this->destroyResource();
@@ -259,6 +260,19 @@ class Controller extends IlluminateController
     ***/
 
     /**
+     * Set the `action` property on the context and call the first hook.
+     *
+     * @param  string $action
+     *
+     * @return void
+     */
+    protected function beginAction(string $action)
+    {
+        $this->context->action = $action;
+        $this->applyHooks(BeginAction::class);
+    }
+
+    /**
      * Fetch a single record from the DB and store it to $this->context->resource.
      *
      * @throws NotFound In case no record matches the query
@@ -269,7 +283,8 @@ class Controller extends IlluminateController
     {
         $this->context->query = $this->model::with($this->getRelations())
             ->withCount($this->getDirectCounts());
-        $this->context->query = $this->filterByRequest($this->context->query);
+
+        $this->filterByRequest($this->context->query);
 
         $this->applyHooks(AdaptResourceQuery::class);
 
@@ -289,7 +304,8 @@ class Controller extends IlluminateController
     {
         $this->context->query = $this->model::with($this->getRelations())
             ->withCount($this->getDirectCounts());
-        $this->context->query = $this->filterByRequest($this->context->query);
+
+        $this->filterByRequest($this->context->query);
 
         $this->applyHooks(AdaptCollectionQuery::class);
 
@@ -343,7 +359,7 @@ class Controller extends IlluminateController
      * @param Builder $query   The query to apply the filters to
      * @param array   $mapping (optional) A mapping to use instead of $this->key_mapping
      *
-     * @return Builder
+     * @return void
      */
     protected function filterByRequest($query, $mapping = null)
     {
@@ -356,7 +372,7 @@ class Controller extends IlluminateController
                 $relation = $db_key['relation'];
                 $mapping = $db_key['mapping'];
                 $query->whereHas($relation, function ($subquery) use ($that, $mapping) {
-                    return $that->filterByRequest($subquery, $mapping);
+                    $that->filterByRequest($subquery, $mapping);
                 });
             } else {
                 // Item is `key => value` -> directly map to model
@@ -368,8 +384,6 @@ class Controller extends IlluminateController
                 }
             }
         }
-
-        return $query;
     }
 
     /**
