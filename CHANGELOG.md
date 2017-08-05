@@ -54,3 +54,6 @@
 ## v0.7.0
 - **Breaking:** Context is now a property of Plugins instead of an argument to Hooks
 - Introduce `BeginAction` and `AdaptRelations` hooks
+
+### v0.7.1
+- Bugfix when loading relations with nested counts
