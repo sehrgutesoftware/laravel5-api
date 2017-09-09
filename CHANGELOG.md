@@ -57,3 +57,6 @@
 
 ### v0.7.1
 - Bugfix when loading relations with nested counts
+
+### v0.7.2
+- Performance improvement in RelationSplitter
