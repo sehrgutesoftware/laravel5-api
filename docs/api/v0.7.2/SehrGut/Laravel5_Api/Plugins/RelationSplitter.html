@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>SehrGut\Laravel5_Api\Plugins\RelationSplitter | Laravel5_API Package Documentation</title>
+
+            <link rel="stylesheet" type="text/css" href="../../../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../../../css/sami.css">
+        <script src="../../../js/jquery-1.11.1.min.js"></script>
+        <script src="../../../js/bootstrap.min.js"></script>
+        <script src="../../../js/typeahead.min.js"></script>
+        <script src="../../../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:SehrGut_Laravel5_Api_Plugins_RelationSplitter" data-root-path="../../../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                <script>
+            $('option[data-version="'+window.projectVersion+'"]').prop('selected', true);
+        </script>
+        <form id="search-form" action="../../../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../../index.html">Laravel5_API Package Documentation</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../../classes.html">Classes</a></li>
+                                            <li><a href="../../../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../../../interfaces.html">Interfaces</a></li>
+                    <li><a href="../../../traits.html">Traits</a></li>
+                    <li><a href="../../../doc-index.html">Index</a></li>
+                    <li><a href="../../../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                        <li><a href="../../../SehrGut.html">SehrGut</a></li><li class="backslash">\</li><li><a href="../../../SehrGut/Laravel5_Api.html">Laravel5_Api</a></li><li class="backslash">\</li><li><a href="../../../SehrGut/Laravel5_Api/Plugins.html">Plugins</a></li><li class="backslash">\</li><li>RelationSplitter</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>
+            RelationSplitter
+                
+        </h1>
+    </div>
+
+    <p>    class
+    <strong>RelationSplitter</strong>        extends <a href="../../../SehrGut/Laravel5_Api/Plugins/Plugin.html"><abbr title="SehrGut\Laravel5_Api\Plugins\Plugin">Plugin</abbr></a>        implements
+        <a href="../../../SehrGut/Laravel5_Api/Hooks/FormatCollection.html"><abbr title="SehrGut\Laravel5_Api\Hooks\FormatCollection">FormatCollection</abbr></a>, <a href="../../../SehrGut/Laravel5_Api/Hooks/FormatResource.html"><abbr title="SehrGut\Laravel5_Api\Hooks\FormatResource">FormatResource</abbr></a>
+</p>
+
+        
+    
+
+            <div class="description">
+            <p>This plugin separates relations from the actually requested models
+and puts them under separate keys in the response payload.</p>            <p>** Config options: **</p>
+
+<ul>
+<li><code>result_key</code>: The key under which the actual results will appear in the response payload (default: 'result')</li>
+<li><code>includes_key</code>: The key under which the extracted relations will appear in the response payload (default: 'includes')</li>
+<li><code>replace_with_ids</code>: Whether to replace the removed relations with their ids on the parent model (default: true)</li>
+<li><code>ignore_relations</code>: An array of relation names that are ingored when splitting (default: [])</li>
+<li><code>ignore_pivots</code>: Drop all pivots if true (default: true)</li>
+</ul>
+</p>                    </div>
+    
+    
+            <h2>Constants</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td>SINGULAR_RELATIONS</td>
+                <td class="last">
+                    <p><em></em></p>
+                    <p></p>
+                </td>
+            </tr>
+            </table>
+
+    
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_default_config">
+                                        protected                                        array
+                </td>
+                <td>$default_config</td>
+                <td class="last">Config options for this plugin:.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_config">
+                                        protected                                        array
+                </td>
+                <td>$config</td>
+                <td class="last">This should be set via the <code>configure</code> method on the instance.</td>
+                <td><small>from&nbsp;<a href="../../../SehrGut/Laravel5_Api/Plugins/Plugin.html#property_config"><abbr title="SehrGut\Laravel5_Api\Plugins\Plugin">Plugin</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_context">
+                                        protected                                        <a href="../../../SehrGut/Laravel5_Api/Context.html"><abbr title="SehrGut\Laravel5_Api\Context">Context</abbr></a>
+                </td>
+                <td>$context</td>
+                <td class="last">The controller's current context.</td>
+                <td><small>from&nbsp;<a href="../../../SehrGut/Laravel5_Api/Plugins/Plugin.html#property_context"><abbr title="SehrGut\Laravel5_Api\Plugins\Plugin">Plugin</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_includes">
+                                        protected                                        
+                </td>
+                <td>$includes</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+            </table>
+
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method___construct">__construct</a>(<a href="../../../SehrGut/Laravel5_Api/Context.html"><abbr title="SehrGut\Laravel5_Api\Context">Context</abbr></a> $context)
+        
+                                            <p>Construct a new Context.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../SehrGut/Laravel5_Api/Plugins/Plugin.html#method___construct"><abbr title="SehrGut\Laravel5_Api\Plugins\Plugin">Plugin</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="SehrGut\Laravel5_Api\Plugins\$this">$this</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_configure">configure</a>(array $options)
+        
+                                            <p>Set configuration options on the plugin.</p>                </div>
+                <div class="col-md-2"><small>from&nbsp;<a href="../../../SehrGut/Laravel5_Api/Plugins/Plugin.html#method_configure"><abbr title="SehrGut\Laravel5_Api\Plugins\Plugin">Plugin</abbr></a></small></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_formatCollection">formatCollection</a>()
+        
+                                            <p>Apply the hook.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_formatResource">formatResource</a>()
+        
+                                            <p>Apply the hook.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_splitRelationsFromCollection">splitRelationsFromCollection</a>(mixed $collection)
+        
+                                            <p>Separate the related models from each model in the passed-in collection.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_splitRelationsFromModel">splitRelationsFromModel</a>(<abbr title="SehrGut\Laravel5_Api\Plugins\Model">Model</abbr> $model)
+        
+                                            <p>Split away relations from a single resource.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_includeRelativesAndRecurse">includeRelativesAndRecurse</a>(string $name, array $relatives)
+        
+                                            <p>Add relatives to <code>$this-&gt;includes</code> and run them through the splitter in turn, recursively.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_includeRelatives">includeRelatives</a>(string $name, mixed $relatives)
+        
+                                            <p>Add passed-in relatives to <code>$this-&gt;includes</code> under the <code>$name</code> key.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_includeAs">includeAs</a>(string $name, array $relatives)
+        
+                                            <p>Add given relatives to <code>$this-&gt;includes</code> under <code>$name</code>.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_replaceWithIdsOrClear">replaceWithIdsOrClear</a>(<abbr title="SehrGut\Laravel5_Api\Plugins\Model">Model</abbr> $model)
+        
+                                            <p>Replace related models with their ids.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_uniqueIncludes">uniqueIncludes</a>()
+        
+                                            <p>Return all includes after removing duplicates.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;bool
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_isSingularRelation">isSingularRelation</a>(<abbr title="SehrGut\Laravel5_Api\Plugins\Model">Model</abbr> $model, string $relation)
+        
+                                            <p>Check if a relation on a model is singular, meaning that
+it refers to a single record, as opposed to multiple.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    static&nbsp;array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_ensureArray">ensureArray</a>(mixed $subject)
+        
+                                            <p>Wrap subject into an array if it isn't one already, convert to array if it's a collection.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method___construct">
+        <div class="location">in <a href="../../../SehrGut/Laravel5_Api/Plugins/Plugin.html#method___construct"><abbr title="SehrGut\Laravel5_Api\Plugins\Plugin">Plugin</abbr></a> at         line 38</div>
+        <code>                    
+    <strong>__construct</strong>(<a href="../../../SehrGut/Laravel5_Api/Context.html"><abbr title="SehrGut\Laravel5_Api\Context">Context</abbr></a> $context)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Construct a new Context.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../../SehrGut/Laravel5_Api/Context.html"><abbr title="SehrGut\Laravel5_Api\Context">Context</abbr></a></td>
+                <td>$context</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_configure">
+        <div class="location">in <a href="../../../SehrGut/Laravel5_Api/Plugins/Plugin.html#method_configure"><abbr title="SehrGut\Laravel5_Api\Plugins\Plugin">Plugin</abbr></a> at         line 51</div>
+        <code>                    <abbr title="SehrGut\Laravel5_Api\Plugins\$this">$this</abbr>
+    <strong>configure</strong>(array $options)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Set configuration options on the plugin.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$options</td>
+                <td>New options (Previously set values not present here remain unchanged)</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="SehrGut\Laravel5_Api\Plugins\$this">$this</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_formatCollection">
+        <div class="location">at         line 46</div>
+        <code>                    void
+    <strong>formatCollection</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Apply the hook.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_formatResource">
+        <div class="location">at         line 57</div>
+        <code>                    void
+    <strong>formatResource</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Apply the hook.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_splitRelationsFromCollection">
+        <div class="location">at         line 74</div>
+        <code>            protected        void
+    <strong>splitRelationsFromCollection</strong>(mixed $collection)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Separate the related models from each model in the passed-in collection.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>mixed</td>
+                <td>$collection</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_splitRelationsFromModel">
+        <div class="location">at         line 95</div>
+        <code>            protected        void
+    <strong>splitRelationsFromModel</strong>(<abbr title="SehrGut\Laravel5_Api\Plugins\Model">Model</abbr> $model)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Split away relations from a single resource.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="SehrGut\Laravel5_Api\Plugins\Model">Model</abbr></td>
+                <td>$model</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_includeRelativesAndRecurse">
+        <div class="location">at         line 112</div>
+        <code>            protected        void
+    <strong>includeRelativesAndRecurse</strong>(string $name, array $relatives)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Add relatives to <code>$this-&gt;includes</code> and run them through the splitter in turn, recursively.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$name</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$relatives</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_includeRelatives">
+        <div class="location">at         line 133</div>
+        <code>            protected        void
+    <strong>includeRelatives</strong>(string $name, mixed $relatives)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Add passed-in relatives to <code>$this-&gt;includes</code> under the <code>$name</code> key.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$name</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>mixed</td>
+                <td>$relatives</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_includeAs">
+        <div class="location">at         line 148</div>
+        <code>            protected        void
+    <strong>includeAs</strong>(string $name, array $relatives)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Add given relatives to <code>$this-&gt;includes</code> under <code>$name</code>.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$name</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$relatives</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_replaceWithIdsOrClear">
+        <div class="location">at         line 168</div>
+        <code>            protected        void
+    <strong>replaceWithIdsOrClear</strong>(<abbr title="SehrGut\Laravel5_Api\Plugins\Model">Model</abbr> $model)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Replace related models with their ids.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="SehrGut\Laravel5_Api\Plugins\Model">Model</abbr></td>
+                <td>$model</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_uniqueIncludes">
+        <div class="location">at         line 200</div>
+        <code>            protected        array
+    <strong>uniqueIncludes</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Return all includes after removing duplicates.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_isSingularRelation">
+        <div class="location">at         line 219</div>
+        <code>        static    protected        bool
+    <strong>isSingularRelation</strong>(<abbr title="SehrGut\Laravel5_Api\Plugins\Model">Model</abbr> $model, string $relation)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Check if a relation on a model is singular, meaning that
+it refers to a single record, as opposed to multiple.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="SehrGut\Laravel5_Api\Plugins\Model">Model</abbr></td>
+                <td>$model</td>
+                <td>The model whose relation to check</td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$relation</td>
+                <td>Name of the relation on the model</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>bool</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_ensureArray">
+        <div class="location">at         line 233</div>
+        <code>        static    protected        array
+    <strong>ensureArray</strong>(mixed $subject)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Wrap subject into an array if it isn't one already, convert to array if it's a collection.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>mixed</td>
+                <td>$subject</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>
