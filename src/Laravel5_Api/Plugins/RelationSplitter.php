@@ -177,7 +177,12 @@ class RelationSplitter extends Plugin implements FormatCollection, FormatResourc
         $relations = $model->getRelations();
         $model->setRelations([]);
         foreach ($relations as $name => $relatives) {
-            if ($name === 'pivot' or in_array($name, $this->config['ignore_relations'])) {
+            if ($name === 'pivot') {
+                continue;
+            }
+
+            if (in_array($name, $this->config['ignore_relations'])) {
+                $model->setRelation($name, $relatives);
                 continue;
             }
 
