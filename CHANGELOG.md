@@ -46,7 +46,7 @@
 - RelationSplitter: Add `ignore_pivots` config options
 
 ### v0.6.4
-- Bugfix: RelationSplitted falsely added plain ids to includes
+- Bugfix: RelationSplitter falsely added plain ids to includes
 
 ### v0.6.5
 - Allow adding counts to side-loads (using dot-notation)
@@ -60,3 +60,6 @@
 
 ### v0.7.2
 - Performance improvement in RelationSplitter
+
+### v0.7.3
+- Bugfix RelationSplitter
