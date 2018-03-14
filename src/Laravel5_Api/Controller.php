@@ -353,7 +353,7 @@ class Controller extends IlluminateController
     /**
      * Apply transformers recusively to the payload.
      *
-     * @param Model|Collection $subject
+     * @param  Model|Collection $subject
      * @return $this
      */
     protected function transform($subject)
