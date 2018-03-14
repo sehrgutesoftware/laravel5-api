@@ -63,3 +63,6 @@
 
 ### v0.7.3
 - Bugfix RelationSplitter
+
+### v0.7.4
+- Slightly optimize the way Transformation works

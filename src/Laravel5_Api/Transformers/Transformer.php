@@ -118,7 +118,7 @@ class Transformer
      *
      * @return array
      */
-    protected function transformAny($thing)
+    public function transformAny($thing)
     {
         if ($thing instanceof Model) {
             $transformer = $this->model_mapping->getTransformerFor(get_class($thing));
@@ -152,7 +152,7 @@ class Transformer
     protected function formatAttributes()
     {
         foreach (array_keys($this->output) as $key) {
-            $method_name = camel_case('format_'.$key);
+            $method_name = camel_case('format_' . $key);
             if (method_exists($this, $method_name)) {
                 $value = $this->model[$key];
                 $this->output[$key] = call_user_func([$this, $method_name], $value);

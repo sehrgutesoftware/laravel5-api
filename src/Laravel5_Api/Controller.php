@@ -23,6 +23,7 @@ use SehrGut\Laravel5_Api\Hooks\BeginAction;
 use SehrGut\Laravel5_Api\Hooks\FormatCollection;
 use SehrGut\Laravel5_Api\Hooks\FormatResource;
 use SehrGut\Laravel5_Api\Plugins\Plugin;
+use SehrGut\Laravel5_Api\Transformers\Transformer;
 
 /**
  * The main Controller to inherit from.
@@ -127,8 +128,8 @@ class Controller extends IlluminateController
 
         $this->context = new Context([
             'controller' => $this,
-            'request'    => $request,
-            'model'      => $this->model,
+            'request' => $request,
+            'model' => $this->model,
         ]);
 
         $this->loader = new PluginLoader($this, $this->context, $this->plugins);
@@ -334,8 +335,7 @@ class Controller extends IlluminateController
     protected function formatResource()
     {
         $this->applyHooks(FormatResource::class);
-        $this->payload = $this->context->resource;
-        $this->transformPayload();
+        $this->payload = $this->transform($this->context->resource);
     }
 
     /**
@@ -345,25 +345,20 @@ class Controller extends IlluminateController
      */
     protected function formatCollection()
     {
-        $this->context->collection = $this->context->collection->all();
+        $this->context->collection = $this->context->collection;
         $this->applyHooks(FormatCollection::class);
-        $this->payload = $this->context->collection;
-        $this->transformPayload();
+        $this->payload = $this->transform($this->context->collection);
     }
 
     /**
      * Apply transformers recusively to the payload.
      *
+     * @param Model|Collection $subject
      * @return $this
      */
-    protected function transformPayload()
+    protected function transform($subject)
     {
-        array_walk_recursive($this->payload, function (&$leaf) {
-            if ($leaf instanceof Model) {
-                $transformer = $this->model_mapping->getTransformerFor(get_class($leaf));
-                $leaf = $transformer->transform($leaf);
-            }
-        });
+        return (new Transformer($this->model_mapping))->transformAny($subject);
     }
 
     /**
