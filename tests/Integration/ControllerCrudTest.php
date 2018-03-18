@@ -135,7 +135,7 @@ class ControllerCrudTest extends TestCase
                 'title' => 'Test 5',
                 'slug' => 'test-5',
                 'content' => 'Veggies es bonus vobis.',
-            ]
+            ],
         ])
             ->assertStatus(200)
             ->assertJson([
@@ -150,7 +150,7 @@ class ControllerCrudTest extends TestCase
                     'title' => 'Test 5',
                     'slug' => 'test-5',
                     'content' => 'Veggies es bonus vobis.',
-                ]
+                ],
             ]);
 
         // Ensure boths records are persisted properly
