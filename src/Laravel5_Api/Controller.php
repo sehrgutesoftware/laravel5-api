@@ -426,7 +426,7 @@ class Controller extends IlluminateController
      * Validate the input data using the appropriate validator.
      *
      * @param bool $only_present Whether to only validate fields present in $this->context->input
-     * @param bool $many Whether to validate an array of records
+     * @param bool $many         Whether to validate an array of records
      *
      * @return void
      */
