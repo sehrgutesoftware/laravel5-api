@@ -69,3 +69,7 @@
 
 ### v0.7.5
 - Introduce `saveMany` action
+
+### v0.7.6
+- Bugfix
+- Compatibility Laravel 5.6, PHP 7.2
