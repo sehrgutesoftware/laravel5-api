@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as IlluminateController;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use SehrGut\Laravel5_Api\Exceptions\Http\NotFound;
 use SehrGut\Laravel5_Api\Hooks\AdaptCollectionQuery;
 use SehrGut\Laravel5_Api\Hooks\AdaptRelations;
@@ -221,6 +222,23 @@ class Controller extends IlluminateController
     }
 
     /**
+     * Request Handler: Create multiple new new resources at a time.
+     *
+     * @return Response
+     */
+    public function storeMany()
+    {
+        $this->beginAction('storeMany');
+        $this->applyHooks(AuthorizeAction::class);
+        $this->gatherInput();
+        $this->validateInput($only_present = false, $many = true);
+        $this->createMany();
+        $this->formatCollection();
+
+        return $this->makeResponse();
+    }
+
+    /**
      * Request Handler: Show a single resource.
      *
      * @return Response
@@ -345,7 +363,6 @@ class Controller extends IlluminateController
      */
     protected function formatCollection()
     {
-        $this->context->collection = $this->context->collection;
         $this->applyHooks(FormatCollection::class);
         $this->payload = $this->transform($this->context->collection);
     }
@@ -409,25 +426,43 @@ class Controller extends IlluminateController
      * Validate the input data using the appropriate validator.
      *
      * @param bool $only_present Whether to only validate fields present in $this->context->input
+     * @param bool $many Whether to validate an array of records
      *
      * @return void
      */
-    protected function validateInput($only_present = false)
+    protected function validateInput($only_present = false, $many = false)
     {
         $validator = $this->model_mapping->getValidatorFor($this->model);
-        $rules = $this->adaptRules($validator::getRules());
-        $this->context->input = $validator::validate($this->context->input, $rules, $only_present);
+        $raw_rules = $many ? $validator::getRulesMany() : $validator::getRules();
+        $rules = $this->adaptRules($raw_rules);
+
+        // Drop attributes from the input that have no rules
+        if (!empty($rules)) {
+            $input_whitelist = array_keys($rules);
+            if ($many) {
+                foreach ($this->context->input as &$item) {
+                    $item = array_only($item, $input_whitelist);
+                }
+            } else {
+                $this->context->input = array_only($this->context->input, $input_whitelist);
+            }
+        }
+
+        $validator::validate($this->context->input, $rules, $only_present);
     }
 
     /**
      * Create a new instance of the current Model, fill it with the input data,
-     * save it tothe database and load it anew to get all attributes populated.
+     * save it to the database and refresh it to get all attributes populated.
+     *
+     * @param array $attributes (optional) Override attributes to set on creation
      *
      * @return void
      */
-    protected function createResource()
+    protected function createResource(array $attributes = null)
     {
-        $this->context->resource = new $this->model($this->context->input);
+        $input = is_null($attributes) ? $this->context->input : $attributes;
+        $this->context->resource = new $this->model($input);
 
         // Add values for parent records
         foreach ($this->key_mapping as $request_key => $db_key) {
@@ -443,6 +478,24 @@ class Controller extends IlluminateController
         $this->context->resource->save();
         $this->applyHooks(AfterSave::class);
         $this->refreshResource();
+    }
+
+    /**
+     * Store many models to the database.
+     *
+     * @return void
+     */
+    protected function createMany()
+    {
+        $this->context->collection = new Collection();
+
+        DB::transaction(function () {
+            foreach ($this->context->input as $attributes) {
+                $this->createResource($attributes);
+                $this->context->collection->push($this->context->resource);
+            }
+            $this->context->resource = null;
+        });
     }
 
     /**

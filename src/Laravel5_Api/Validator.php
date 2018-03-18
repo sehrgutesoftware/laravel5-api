@@ -38,6 +38,18 @@ class Validator
     }
 
     /**
+     * Retrieve the rules of this validator when validating an array of records.
+     *
+     * @return array
+     */
+    public static function getRulesMany()
+    {
+        return array_map(function ($rule) {
+            return '*.' . $rule;
+        }, static::$rules);
+    }
+
+    /**
      * Validate the input using $rules.
      *
      * Drop any keys that are not present in $rules.
@@ -57,10 +69,7 @@ class Validator
             return $input;
         }
 
-        $input_whitelist = array_keys($rules);
-        $whitelisted_input = array_only($input, $input_whitelist);
-
-        // TODO - refactor this crazyness...
+        // TODO - refactor this craziness...
         if ($only_present) {
             $rules_whitelist = array_keys($input);
             $rules = array_filter($rules, function ($rule) use ($rules_whitelist) {
@@ -76,11 +85,11 @@ class Validator
             }, ARRAY_FILTER_USE_KEY);
         }
 
-        $validator = BaseValidator::make($whitelisted_input, $rules);
+        $validator = BaseValidator::make($input, $rules);
         if ($validator->fails()) {
             throw new InvalidInput($validator->errors());
         }
 
-        return $whitelisted_input;
+        return $input;
     }
 }

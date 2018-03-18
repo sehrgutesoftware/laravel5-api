@@ -17,19 +17,19 @@ class ControllerCrudTest extends TestCase
         $posts = [];
 
         $posts[] = Post::create([
-            'title'   => 'Test 1',
+            'title' => 'Test 1',
             'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
-            'slug'    => 'test-1',
+            'slug' => 'test-1',
         ]);
         $posts[] = Post::create([
-            'title'   => 'Test 2',
+            'title' => 'Test 2',
             'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
-            'slug'    => 'test-2',
+            'slug' => 'test-2',
         ]);
         $posts[] = Post::create([
-            'title'   => 'Test 3',
+            'title' => 'Test 3',
             'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
-            'slug'    => 'test-3',
+            'slug' => 'test-3',
         ]);
 
         return $posts;
@@ -43,19 +43,19 @@ class ControllerCrudTest extends TestCase
             ->assertStatus(200)
             ->assertJson([
                 [
-                    'id'    => '1',
+                    'id' => '1',
                     'title' => 'Test 1',
-                    'slug'  => 'test-1',
+                    'slug' => 'test-1',
                 ],
                 [
-                    'id'    => '2',
+                    'id' => '2',
                     'title' => 'Test 2',
-                    'slug'  => 'test-2',
+                    'slug' => 'test-2',
                 ],
                 [
-                    'id'    => '3',
+                    'id' => '3',
                     'title' => 'Test 3',
-                    'slug'  => 'test-3',
+                    'slug' => 'test-3',
                 ],
             ]);
     }
@@ -67,10 +67,10 @@ class ControllerCrudTest extends TestCase
         $this->get('/posts/2')
             ->assertStatus(200)
             ->assertExactJson([
-                'id'         => 2,
-                'title'      => 'Test 2',
-                'slug'       => 'test-2',
-                'content'    => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
+                'id' => 2,
+                'title' => 'Test 2',
+                'slug' => 'test-2',
+                'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
                 'created_at' => $posts[1]->created_at->toDateTimeString(),
                 'updated_at' => $posts[1]->updated_at->toDateTimeString(),
                 'publish_at' => null,
@@ -102,20 +102,60 @@ class ControllerCrudTest extends TestCase
 
         // Ensure the new record is returned properly
         $this->post('/posts', [
-            'title'   => 'Test 4',
-            'slug'    => 'test-4',
+            'title' => 'Test 4',
+            'slug' => 'test-4',
             'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
         ])
             ->assertStatus(200)
             ->assertJson([
-                'id'      => 4,
-                'title'   => 'Test 4',
-                'slug'    => 'test-4',
+                'id' => 4,
+                'title' => 'Test 4',
+                'slug' => 'test-4',
                 'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
             ]);
 
         // Ensure the record is persisted properly
         $this->assertDatabaseHas('posts', ['id' => 4, 'title' => 'Test 4']);
+    }
+
+    public function test_it_creates_many_records()
+    {
+        $posts = $this->createPosts();
+        $this->assertDatabaseHas('posts', ['id' => 3, 'title' => 'Test 3']);
+        $this->assertDatabaseMissing('posts', ['title' => 'Test 4']);
+
+        // Ensure the new record is returned properly
+        $this->post('/posts/many', [
+            [
+                'title' => 'Test 4',
+                'slug' => 'test-4',
+                'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
+            ],
+            [
+                'title' => 'Test 5',
+                'slug' => 'test-5',
+                'content' => 'Veggies es bonus vobis.',
+            ]
+        ])
+            ->assertStatus(200)
+            ->assertJson([
+                [
+                    'id' => 4,
+                    'title' => 'Test 4',
+                    'slug' => 'test-4',
+                    'content' => 'Veggies es bonus vobis, proinde vos postulo essum magis kohlrabi welsh onion daikon amaranth tatsoi tomatillo melon azuki bean garlic.',
+                ],
+                [
+                    'id' => 5,
+                    'title' => 'Test 5',
+                    'slug' => 'test-5',
+                    'content' => 'Veggies es bonus vobis.',
+                ]
+            ]);
+
+        // Ensure boths records are persisted properly
+        $this->assertDatabaseHas('posts', ['id' => 4, 'title' => 'Test 4']);
+        $this->assertDatabaseHas('posts', ['id' => 5, 'title' => 'Test 5']);
     }
 
     public function test_it_deletes_a_record()

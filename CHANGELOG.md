@@ -66,3 +66,6 @@
 
 ### v0.7.4
 - Slightly optimize the way Transformation works
+
+### v0.7.5
+- Introduce `saveMany` action

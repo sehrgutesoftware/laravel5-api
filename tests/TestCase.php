@@ -21,7 +21,7 @@ class TestCase extends BaseTestCase
      */
     public function createApplication()
     {
-        $app = require __DIR__.'/../vendor/laravel/laravel/bootstrap/app.php';
+        $app = require __DIR__ . '/../vendor/laravel/laravel/bootstrap/app.php';
         $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
 
         return $app;
@@ -67,10 +67,11 @@ class TestCase extends BaseTestCase
      */
     protected function registerRoutes()
     {
-        Route::get('/posts', static::$controller.'@index');
-        Route::post('/posts', static::$controller.'@store');
-        Route::get('/posts/{id}', static::$controller.'@show');
-        Route::put('/posts/{id}', static::$controller.'@update');
-        Route::delete('/posts/{id}', static::$controller.'@destroy');
+        Route::get('/posts', static::$controller . '@index');
+        Route::post('/posts', static::$controller . '@store');
+        Route::post('/posts/many', static::$controller . '@storeMany');
+        Route::get('/posts/{id}', static::$controller . '@show');
+        Route::put('/posts/{id}', static::$controller . '@update');
+        Route::delete('/posts/{id}', static::$controller . '@destroy');
     }
 }
