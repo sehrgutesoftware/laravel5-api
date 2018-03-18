@@ -438,7 +438,7 @@ class Controller extends IlluminateController
 
         // Drop attributes from the input that have no rules
         if (!empty($rules)) {
-            $input_whitelist = array_keys($rules);
+            $input_whitelist = array_keys($validator::getRules());
             if ($many) {
                 foreach ($this->context->input as &$item) {
                     $item = array_only($item, $input_whitelist);
