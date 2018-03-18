@@ -463,8 +463,8 @@ Please refer to [CHANGELOG.md](CHANGELOG.md).
 
 ## Compatibility
 
-* Tested with Laravel 5.2 - 5.6
-* Tested with PHP 7.0 - 7.2
+* Tested with Laravel 5.3 - 5.6
+* Tested with PHP 7.1 - 7.2
 
 
 ## Testing
