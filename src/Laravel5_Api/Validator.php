@@ -44,9 +44,13 @@ class Validator
      */
     public static function getRulesMany()
     {
-        return array_map(function ($rule) {
-            return '*.' . $rule;
-        }, static::$rules);
+        $rules = [];
+
+        foreach (static::$rules as $key => $value) {
+            $rules['*.' . $key] = $value;
+        }
+
+        return $rules;
     }
 
     /**
