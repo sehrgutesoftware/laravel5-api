@@ -73,3 +73,6 @@
 ### v0.7.6
 - Bugfix
 - Compatibility Laravel 5.6, PHP 7.2
+
+### v0.7.7
+- Bugfix in Paginator plugin
