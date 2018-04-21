@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="index, follow, all" />
+    <title>SehrGut\Laravel5_Api\Controller | Laravel5_API Package Documentation</title>
+
+            <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="../../css/sami.css">
+        <script src="../../js/jquery-1.11.1.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        <script src="../../js/typeahead.min.js"></script>
+        <script src="../../sami.js"></script>
+        <meta name="MobileOptimized" content="width">
+        <meta name="HandheldFriendly" content="true">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    
+    
+    </head>
+
+    <body id="class" data-name="class:SehrGut_Laravel5_Api_Controller" data-root-path="../../">
+            <div id="content">
+        <div id="left-column">
+                <div id="control-panel">
+                <script>
+            $('option[data-version="'+window.projectVersion+'"]').prop('selected', true);
+        </script>
+        <form id="search-form" action="../../search.html" method="GET">
+            <span class="glyphicon glyphicon-search"></span>
+            <input name="search"
+                   class="typeahead form-control"
+                   type="search"
+                   placeholder="Search">
+        </form>
+    </div>
+
+                <div id="api-tree"></div>
+
+        </div>
+        <div id="right-column">
+                <nav id="site-nav" class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-elements">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="../../index.html">Laravel5_API Package Documentation</a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-elements">
+                <ul class="nav navbar-nav">
+                    <li><a href="../../classes.html">Classes</a></li>
+                                            <li><a href="../../namespaces.html">Namespaces</a></li>
+                                        <li><a href="../../interfaces.html">Interfaces</a></li>
+                    <li><a href="../../traits.html">Traits</a></li>
+                    <li><a href="../../doc-index.html">Index</a></li>
+                    <li><a href="../../search.html">Search</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+                        <div class="namespace-breadcrumbs">
+            <ol class="breadcrumb">
+                <li><span class="label label-default">class</span></li>
+                        <li><a href="../../SehrGut.html">SehrGut</a></li><li class="backslash">\</li><li><a href="../../SehrGut/Laravel5_Api.html">Laravel5_Api</a></li><li class="backslash">\</li><li>Controller</li>
+            </ol>
+        </div>
+                <div id="page-content">
+                
+    <div class="page-header">
+        <h1>
+            Controller
+                
+        </h1>
+    </div>
+
+    <p>    class
+    <strong>Controller</strong>        extends <abbr title="Illuminate\Routing\Controller">Controller</abbr>
+</p>
+
+        
+    
+
+            <div class="description">
+            <p>The main Controller to inherit from.</p>                                </div>
+    
+    
+    
+            <h2>Properties</h2>
+
+            <table class="table table-condensed">
+                    <tr>
+                <td class="type" id="property_key_mapping">
+                                        protected                                        array
+                </td>
+                <td>$key_mapping</td>
+                <td class="last">Maps request parameters to database columns.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_relations">
+                                        protected                                        array
+                </td>
+                <td>$relations</td>
+                <td class="last">The relations to load with the model from the DB.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_counts">
+                                        protected                                        array
+                </td>
+                <td>$counts</td>
+                <td class="last">The relations to fetch counts for.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_plugins">
+                                        protected                                        array
+                </td>
+                <td>$plugins</td>
+                <td class="last">Use these plugins. List all Plugin classes here.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_model_mapping_class">
+                                        protected                                        <a href="../../SehrGut/Laravel5_Api/ModelMapping.html"><abbr title="SehrGut\Laravel5_Api\ModelMapping">ModelMapping</abbr></a>
+                </td>
+                <td>$model_mapping_class</td>
+                <td class="last">Use this to simply override the ModelMapping.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_request_adapter_class">
+                                        protected                                        <a href="../../SehrGut/Laravel5_Api/RequestAdapter.html"><abbr title="SehrGut\Laravel5_Api\RequestAdapter">RequestAdapter</abbr></a>
+                </td>
+                <td>$request_adapter_class</td>
+                <td class="last">Use this to simply override the RequestAdapter.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_model">
+                                        protected                                        <abbr title="Illuminate\Database\Eloquent\Model">Model</abbr>
+                </td>
+                <td>$model</td>
+                <td class="last">The Eloquent Model that is exposed/accessed through this controller.</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_request_adapter">
+                                                                                
+                </td>
+                <td>$request_adapter</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_model_mapping">
+                                                                                
+                </td>
+                <td>$model_mapping</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_loader">
+                                        protected                                        
+                </td>
+                <td>$loader</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type" id="property_context">
+                                        protected                                        
+                </td>
+                <td>$context</td>
+                <td class="last"></td>
+                <td></td>
+            </tr>
+            </table>
+
+    
+            <h2>Methods</h2>
+
+            <div class="container-fluid underlined">
+                    <div class="row">
+                <div class="col-md-2 type">
+                    
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method___construct">__construct</a>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        
+                                            <p class="no-description">No description</p>
+                                    </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    mixed
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_configurePlugin">configurePlugin</a>(string $class, array $options)
+        
+                                            <p>Proxy: Pass configuration options to a plugin on the loader.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    mixed
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_applyHooks">applyHooks</a>(string $hook)
+        
+                                            <p>Proxy: Run the <code>context</code> through all plugins registered for <code>$hook</code> and return their result.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    mixed
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_applyHooksWithArgument">applyHooksWithArgument</a>(string $hook, mixed $argument)
+        
+                                            <p>Proxy: Run <code>$argument</code> through all plugins registered for <code>$hook</code> and return their result.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Illuminate\Http\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_index">index</a>()
+        
+                                            <p>Request Handler: List all resources.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Illuminate\Http\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_store">store</a>()
+        
+                                            <p>Request Handler: Create a new resource.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Illuminate\Http\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_storeMany">storeMany</a>()
+        
+                                            <p>Request Handler: Create multiple new new resources at a time.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Illuminate\Http\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_show">show</a>()
+        
+                                            <p>Request Handler: Show a single resource.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Illuminate\Http\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_update">update</a>()
+        
+                                            <p>Request Handler: Update a resource.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Illuminate\Http\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_destroy">destroy</a>()
+        
+                                            <p>Request Handler: Delete a resource.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_beginAction">beginAction</a>(string $action)
+        
+                                            <p>Set the <code>action</code> property on the context and call the first hook.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getResource">getResource</a>()
+        
+                                            <p>Fetch a single record from the DB and store it to $this->context->resource.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getCollection">getCollection</a>()
+        
+                                            <p>Fetch a Collection of Resources from the databse and store it to $this->context->collection.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_formatResource">formatResource</a>()
+        
+                                            <p>Populate payload, applying hooks before transforming.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_formatCollection">formatCollection</a>()
+        
+                                            <p>Populate payload, applying hooks before transforming.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="SehrGut\Laravel5_Api\$this">$this</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_transform">transform</a>(<abbr title="Illuminate\Database\Eloquent\Model">Model</abbr>|<abbr title="Illuminate\Support\Collection">Collection</abbr> $subject)
+        
+                                            <p>Apply transformers recusively to the payload.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_filterByRequest">filterByRequest</a>(<abbr title="Illuminate\Database\Eloquent\Builder">Builder</abbr> $query, array $mapping = null)
+        
+                                            <p>Apply filters based on the $key_mapping. If a key is present in the
+request, an appropriate where clause will be added to the query.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_gatherInput">gatherInput</a>()
+        
+                                            <p>Get the request data from the adapter and store it to $this->context->input.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_validateInput">validateInput</a>(bool $only_present = false, bool $many = false)
+        
+                                            <p>Validate the input data using the appropriate validator.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_createResource">createResource</a>(array $attributes = null)
+        
+                                            <p>Create a new instance of the current Model, fill it with the input data,
+save it to the database and refresh it to get all attributes populated.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_createMany">createMany</a>()
+        
+                                            <p>Store many models to the database.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_updateResource">updateResource</a>()
+        
+                                            <p>Update the resource with the input data.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_destroyResource">destroyResource</a>()
+        
+                                            <p>Delete the resource.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <abbr title="Illuminate\Http\Response">Response</abbr>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_makeResponse">makeResponse</a>(mixed $payload = null, integer $status_code = 200)
+        
+                                            <p>Turn the response payload into a response.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_refreshResource">refreshResource</a>()
+        
+                                            <p>Load a fresh instance of the current resource from the database.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getDirectCounts">getDirectCounts</a>()
+        
+                                            <p>Get an array of counts on the queried model, eliminating nested counts.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_getRelations">getRelations</a>()
+        
+                                            <p>Get an array of relations to be side-loaded, taking care of nested counts.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../SehrGut/Laravel5_Api/ModelMapping.html"><abbr title="SehrGut\Laravel5_Api\ModelMapping">ModelMapping</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_makeModelMapping">makeModelMapping</a>()
+        
+                                            <p>Return a ModelMapping instance.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    <a href="../../SehrGut/Laravel5_Api/RequestAdapter.html"><abbr title="SehrGut\Laravel5_Api\RequestAdapter">RequestAdapter</abbr></a>
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_makeRequestAdapter">makeRequestAdapter</a>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        
+                                            <p>Return a RequestAdapter instance.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    array
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_adaptRules">adaptRules</a>(array $rules)
+        
+                                            <p>This is the place to manipulate the validation rules at runtime.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+                    <div class="row">
+                <div class="col-md-2 type">
+                    void
+                </div>
+                <div class="col-md-8 type">
+                    <a href="#method_afterConstruct">afterConstruct</a>()
+        
+                                            <p>Use this hook to apply custom logic after the controller instance has been created.</p>                </div>
+                <div class="col-md-2"></div>
+            </div>
+            </div>
+
+
+        <h2>Details</h2>
+
+            <div id="method-details">
+                    <div class="method-item">
+                    <h3 id="method___construct">
+        <div class="location">at         line 126</div>
+        <code>                    
+    <strong>__construct</strong>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Illuminate\Http\Request">Request</abbr></td>
+                <td>$request</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_configurePlugin">
+        <div class="location">at         line 156</div>
+        <code>                    mixed
+    <strong>configurePlugin</strong>(string $class, array $options)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Proxy: Pass configuration options to a plugin on the loader.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$class</td>
+                <td>Plugin type</td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$options</td>
+                <td>Config parameters (individual per plugin)</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>mixed</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_applyHooks">
+        <div class="location">at         line 169</div>
+        <code>            protected        mixed
+    <strong>applyHooks</strong>(string $hook)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Proxy: Run the <code>context</code> through all plugins registered for <code>$hook</code> and return their result.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$hook</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>mixed</td>
+            <td>Whatever the last plugin on that hook returns</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_applyHooksWithArgument">
+        <div class="location">at         line 182</div>
+        <code>            protected        mixed
+    <strong>applyHooksWithArgument</strong>(string $hook, mixed $argument)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Proxy: Run <code>$argument</code> through all plugins registered for <code>$hook</code> and return their result.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$hook</td>
+                <td>Hook Interface</td>
+            </tr>
+                    <tr>
+                <td>mixed</td>
+                <td>$argument</td>
+                <td>Whatever the hook requires</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>mixed</td>
+            <td>Whatever the last plugin on that hook returns</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_index">
+        <div class="location">at         line 198</div>
+        <code>                    <abbr title="Illuminate\Http\Response">Response</abbr>
+    <strong>index</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Request Handler: List all resources.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Illuminate\Http\Response">Response</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_store">
+        <div class="location">at         line 213</div>
+        <code>                    <abbr title="Illuminate\Http\Response">Response</abbr>
+    <strong>store</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Request Handler: Create a new resource.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Illuminate\Http\Response">Response</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_storeMany">
+        <div class="location">at         line 230</div>
+        <code>                    <abbr title="Illuminate\Http\Response">Response</abbr>
+    <strong>storeMany</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Request Handler: Create multiple new new resources at a time.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Illuminate\Http\Response">Response</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_show">
+        <div class="location">at         line 247</div>
+        <code>                    <abbr title="Illuminate\Http\Response">Response</abbr>
+    <strong>show</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Request Handler: Show a single resource.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Illuminate\Http\Response">Response</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_update">
+        <div class="location">at         line 262</div>
+        <code>                    <abbr title="Illuminate\Http\Response">Response</abbr>
+    <strong>update</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Request Handler: Update a resource.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Illuminate\Http\Response">Response</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_destroy">
+        <div class="location">at         line 280</div>
+        <code>                    <abbr title="Illuminate\Http\Response">Response</abbr>
+    <strong>destroy</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Request Handler: Delete a resource.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Illuminate\Http\Response">Response</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_beginAction">
+        <div class="location">at         line 303</div>
+        <code>            protected        void
+    <strong>beginAction</strong>(string $action)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Set the <code>action</code> property on the context and call the first hook.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>string</td>
+                <td>$action</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getResource">
+        <div class="location">at         line 316</div>
+        <code>            protected        void
+    <strong>getResource</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Fetch a single record from the DB and store it to $this->context->resource.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><a href="../../SehrGut/Laravel5_Api/Exceptions/Http/NotFound.html"><abbr title="SehrGut\Laravel5_Api\Exceptions\Http\NotFound">NotFound</abbr></a></td>
+                <td>In case no record matches the query</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getCollection">
+        <div class="location">at         line 337</div>
+        <code>            protected        void
+    <strong>getCollection</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Fetch a Collection of Resources from the databse and store it to $this->context->collection.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_formatResource">
+        <div class="location">at         line 354</div>
+        <code>            protected        void
+    <strong>formatResource</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Populate payload, applying hooks before transforming.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_formatCollection">
+        <div class="location">at         line 365</div>
+        <code>            protected        void
+    <strong>formatCollection</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Populate payload, applying hooks before transforming.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_transform">
+        <div class="location">at         line 377</div>
+        <code>            protected        <abbr title="SehrGut\Laravel5_Api\$this">$this</abbr>
+    <strong>transform</strong>(<abbr title="Illuminate\Database\Eloquent\Model">Model</abbr>|<abbr title="Illuminate\Support\Collection">Collection</abbr> $subject)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Apply transformers recusively to the payload.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Illuminate\Database\Eloquent\Model">Model</abbr>|<abbr title="Illuminate\Support\Collection">Collection</abbr></td>
+                <td>$subject</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="SehrGut\Laravel5_Api\$this">$this</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_filterByRequest">
+        <div class="location">at         line 391</div>
+        <code>            protected        void
+    <strong>filterByRequest</strong>(<abbr title="Illuminate\Database\Eloquent\Builder">Builder</abbr> $query, array $mapping = null)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Apply filters based on the $key_mapping. If a key is present in the
+request, an appropriate where clause will be added to the query.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Illuminate\Database\Eloquent\Builder">Builder</abbr></td>
+                <td>$query</td>
+                <td>The query to apply the filters to</td>
+            </tr>
+                    <tr>
+                <td>array</td>
+                <td>$mapping</td>
+                <td>(optional) A mapping to use instead of $this->key_mapping</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_gatherInput">
+        <div class="location">at         line 421</div>
+        <code>            protected        void
+    <strong>gatherInput</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get the request data from the adapter and store it to $this->context->input.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_validateInput">
+        <div class="location">at         line 434</div>
+        <code>            protected        void
+    <strong>validateInput</strong>(bool $only_present = false, bool $many = false)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Validate the input data using the appropriate validator.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>bool</td>
+                <td>$only_present</td>
+                <td>Whether to only validate fields present in $this->context->input</td>
+            </tr>
+                    <tr>
+                <td>bool</td>
+                <td>$many</td>
+                <td>Whether to validate an array of records</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_createResource">
+        <div class="location">at         line 463</div>
+        <code>            protected        void
+    <strong>createResource</strong>(array $attributes = null)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Create a new instance of the current Model, fill it with the input data,
+save it to the database and refresh it to get all attributes populated.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$attributes</td>
+                <td>(optional) Override attributes to set on creation</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_createMany">
+        <div class="location">at         line 489</div>
+        <code>            protected        void
+    <strong>createMany</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Store many models to the database.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_updateResource">
+        <div class="location">at         line 507</div>
+        <code>            protected        void
+    <strong>updateResource</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Update the resource with the input data.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_destroyResource">
+        <div class="location">at         line 522</div>
+        <code>            protected        void
+    <strong>destroyResource</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Delete the resource.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_makeResponse">
+        <div class="location">at         line 534</div>
+        <code>            protected        <abbr title="Illuminate\Http\Response">Response</abbr>
+    <strong>makeResponse</strong>(mixed $payload = null, integer $status_code = 200)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Turn the response payload into a response.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>mixed</td>
+                <td>$payload</td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td>integer</td>
+                <td>$status_code</td>
+                <td></td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><abbr title="Illuminate\Http\Response">Response</abbr></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_refreshResource">
+        <div class="location">at         line 551</div>
+        <code>            protected        void
+    <strong>refreshResource</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Load a fresh instance of the current resource from the database.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getDirectCounts">
+        <div class="location">at         line 561</div>
+        <code>            protected        array
+    <strong>getDirectCounts</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get an array of counts on the queried model, eliminating nested counts.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_getRelations">
+        <div class="location">at         line 573</div>
+        <code>            protected        array
+    <strong>getRelations</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Get an array of relations to be side-loaded, taking care of nested counts.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_makeModelMapping">
+        <div class="location">at         line 666</div>
+        <code>            protected        <a href="../../SehrGut/Laravel5_Api/ModelMapping.html"><abbr title="SehrGut\Laravel5_Api\ModelMapping">ModelMapping</abbr></a>
+    <strong>makeModelMapping</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Return a ModelMapping instance.</p>                    <p>This can be used to dynamically customize the
+mapping, for example based on Auth/Roles.</p>                            </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../SehrGut/Laravel5_Api/ModelMapping.html"><abbr title="SehrGut\Laravel5_Api\ModelMapping">ModelMapping</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_makeRequestAdapter">
+        <div class="location">at         line 680</div>
+        <code>            protected        <a href="../../SehrGut/Laravel5_Api/RequestAdapter.html"><abbr title="SehrGut\Laravel5_Api\RequestAdapter">RequestAdapter</abbr></a>
+    <strong>makeRequestAdapter</strong>(<abbr title="Illuminate\Http\Request">Request</abbr> $request)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Return a RequestAdapter instance.</p>                    <p>This can be used to dynamically customize the adapter.</p>                            </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td><abbr title="Illuminate\Http\Request">Request</abbr></td>
+                <td>$request</td>
+                <td>The current Request object</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td><a href="../../SehrGut/Laravel5_Api/RequestAdapter.html"><abbr title="SehrGut\Laravel5_Api\RequestAdapter">RequestAdapter</abbr></a></td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_adaptRules">
+        <div class="location">at         line 692</div>
+        <code>            protected        array
+    <strong>adaptRules</strong>(array $rules)
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>This is the place to manipulate the validation rules at runtime.</p>                                                </div>
+                <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table class="table table-condensed">
+                    <tr>
+                <td>array</td>
+                <td>$rules</td>
+                <td>The original rules from the Validator</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>array</td>
+            <td>The adapted rules</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+                    <div class="method-item">
+                    <h3 id="method_afterConstruct">
+        <div class="location">at         line 702</div>
+        <code>            protected        void
+    <strong>afterConstruct</strong>()
+        </code>
+    </h3>
+    <div class="details">
+            
+    
+
+                    <div class="method-description">
+                                    <p>Use this hook to apply custom logic after the controller instance has been created.</p>                                                </div>
+                <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table class="table table-condensed">
+        <tr>
+            <td>void</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+            </div>
+            </div>
+
+    
+            </div>
+                <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/">Sami, the API Documentation Generator</a>.
+    </div>
+
+        </div>
+    </div>
+    </body>
+
+</html>
