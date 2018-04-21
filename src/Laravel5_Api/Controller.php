@@ -527,8 +527,8 @@ class Controller extends IlluminateController
     /**
      * Turn the response payload into a response.
      *
-     * @param  mixed  $payload
-     * @param  integer $status_code
+     * @param  mixed    $payload
+     * @param  int      $status_code
      * @return Response
      */
     protected function makeResponse($payload = null, $status_code = 200)
