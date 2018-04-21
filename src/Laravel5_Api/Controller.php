@@ -18,6 +18,7 @@ use SehrGut\Laravel5_Api\Hooks\AfterSave;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeAction;
 use SehrGut\Laravel5_Api\Hooks\AuthorizeResource;
 use SehrGut\Laravel5_Api\Hooks\BeforeCreate;
+use SehrGut\Laravel5_Api\Hooks\BeforeRespond;
 use SehrGut\Laravel5_Api\Hooks\BeforeSave;
 use SehrGut\Laravel5_Api\Hooks\BeforeUpdate;
 use SehrGut\Laravel5_Api\Hooks\BeginAction;
@@ -523,6 +524,13 @@ class Controller extends IlluminateController
         $this->context->resource->delete();
     }
 
+    /**
+     * Turn the response payload into a response.
+     *
+     * @param  mixed  $payload
+     * @param  integer $status_code
+     * @return Response
+     */
     protected function makeResponse($payload = null, $status_code = 200)
     {
         $payload = is_null($payload) ? $this->payload : $payload;
@@ -530,7 +538,7 @@ class Controller extends IlluminateController
 
         $this->context->response->headers->add(['Content-Type' => 'application/json']);
 
-        $this->applyHooks(BeforeResponse::class);
+        $this->applyHooks(BeforeRespond::class);
 
         return $this->context->response;
     }

@@ -36,16 +36,17 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
      * @var array
      */
     protected $default_config = [
-        'limit_param'     => 'limit',
-        'page_param'      => 'page',
-        'limit_default'   => 10,
-        'page_default'    => 1,
+        'limit_param' => 'limit',
+        'page_param' => 'page',
+        'limit_default' => 10,
+        'page_default' => 1,
+        'max_limit' => 25,
         'meta_in_payload' => false,
         'meta_in_headers' => true,
-        'meta_structure'  => [
+        'meta_structure' => [
             'X-Pagination-Total' => '$total',
             'X-Pagination-Limit' => '$limit',
-            'X-Pagination-Page'  => '$page',
+            'X-Pagination-Page' => '$page',
         ],
     ];
 
@@ -60,6 +61,8 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
             $this->config['limit_param'],
             $this->config['limit_default']
         );
+        $limit = min($limit, $this->config['max_limit']);
+
         $page = (int) $this->context->controller->request_adapter->getValueByKey(
             $this->config['page_param'],
             $this->config['page_default']
@@ -99,9 +102,9 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
     protected function saveMetaCounts(int $total, int $limit, int $page)
     {
         $values = [
-            '$total'     => $total,
-            '$limit'     => $limit,
-            '$page'      => $page,
+            '$total' => $total,
+            '$limit' => $limit,
+            '$page' => $page,
             '$last_page' => ceil($total / $limit),
         ];
         $this->meta_counts = $this->config['meta_structure'];
