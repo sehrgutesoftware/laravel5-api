@@ -84,7 +84,7 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
     /** {@inheritdoc} */
     public function beforeRespond()
     {
-        if ($this->config['meta_in_headers']) {
+        if ($this->config['meta_in_headers'] && $this->meta_counts) {
             $this->context->response->headers->add($this->meta_counts);
         }
     }
