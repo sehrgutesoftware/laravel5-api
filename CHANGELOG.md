@@ -76,3 +76,6 @@
 
 ### v0.7.7
 - Bugfix in Paginator plugin
+
+### v0.7.8
+- Slight improvement in Paginator plugin
