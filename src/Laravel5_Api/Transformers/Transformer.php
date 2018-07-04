@@ -124,12 +124,14 @@ class Transformer
             $transformer = $this->model_mapping->getTransformerFor(get_class($thing));
 
             return $transformer->transform($thing);
-        } elseif ($thing instanceof Collection and $thing->count() > 0) {
-            $transformer = $this->model_mapping->getTransformerFor(get_class($thing->first()));
-
-            return $thing->map(function ($model) use ($transformer) {
-                return $transformer->transform($model);
-            })->toArray();
+        } elseif ($thing instanceof Collection) {
+            return $thing->map(function ($item) {
+                return $this->transformAny($item);
+            });
+        } elseif (is_array($thing)) {
+            return array_map(function ($item) {
+                return $this->transformAny($item);
+            }, $thing);
         }
 
         return $thing;
@@ -182,6 +184,7 @@ class Transformer
      */
     protected function beforeSerialize()
     {
+        //
     }
 
     /**
