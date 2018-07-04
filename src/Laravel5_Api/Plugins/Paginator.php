@@ -101,11 +101,12 @@ class Paginator extends Plugin implements AdaptCollectionQuery, FormatCollection
      */
     protected function saveMetaCounts(int $total, int $limit, int $page)
     {
+        $last_page = $limit > 0 ? ceil($total / $limit) : null;
         $values = [
             '$total' => $total,
             '$limit' => $limit,
             '$page' => $page,
-            '$last_page' => ceil($total / $limit),
+            '$last_page' => $last_page,
         ];
         $this->meta_counts = $this->config['meta_structure'];
         array_walk_recursive($this->meta_counts, function (&$node) use ($values) {
